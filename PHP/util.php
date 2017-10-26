@@ -9,7 +9,7 @@ function getPkiExpressConfig()
 {
     // -----------------------------------------------------------------------------------------------------------------
     // PLACE YOUR LICENSE'S PATH HERE
-    $licensePath = 'LacunaPkiLicense.config';
+    $licensePath = 'PLACE YOUR LICENSE\'S PATH HERE';
     //
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ function getPkiExpressConfig()
 
     // If you have installed PKI Express on a custom path, you have to paste the path were your executable is placed.
     // But, if you have installed on a recommended path, the library will search for that standard path automatically.
-    $pkiExpressHome = 'pkie';
+    $pkiExpressHome = 'PLACE YOUR CUSTOM PATH WHERE PKI EXPRESS IS INSTALLED';
     // Pass to the constructor in the following way: new PkiExpressConfig($licensePath, $pkiExpressHome, ...);
 
     // Alternatively, you can inform a temporary folder where the library will store some temporary files needed on
