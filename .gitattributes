@@ -1,2 +1,3 @@
 # Enable automatic line ending normalization
 * text=auto
+*.md text eol=crlf
