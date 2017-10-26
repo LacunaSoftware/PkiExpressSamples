@@ -1,6 +1,6 @@
 # PKI Express Samples
 
-Sample projects that demonstrate the usage of PKI Express
+Sample projects demonstrating the usage of PKI Express
 
 ## Documentation
 
