@@ -6,6 +6,6 @@
     ]
   },
   "require": {
-    "lacuna/pkiexpress-client": "^1.0.0"
+    "lacuna/pkiexpress-client": "^1.0.1"
   }
 }

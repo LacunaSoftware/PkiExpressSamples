@@ -20,16 +20,16 @@ function getPkiExpressConfig()
 
     // If you have installed PKI Express on a custom path, you have to paste the path were your executable is placed.
     // But, if you have installed on a recommended path, the library will search for that standard path automatically.
-    $pkiExpressHome = 'PLACE YOUR CUSTOM PATH WHERE PKI EXPRESS IS INSTALLED';
+    $pkiExpressHome = null;
     // Pass to the constructor in the following way: new PkiExpressConfig($licensePath, $pkiExpressHome, ...);
 
     // Alternatively, you can inform a temporary folder where the library will store some temporary files needed on
     // some signature processes.
-    $tempFolder = 'PLACE YOUR TEMPORARY FOLDER\'S PATH';
+    $tempFolder = null;
     // Pass to the constructor in the following way: new PkiExpressConfig($licensePath, $pkiExpressHome, $tempFolder);
 
     // Instantiate the PkiExpressConfig class with the fields informed on this method.
-    return new PkiExpressConfig($licensePath, $pkiExpressHome);
+    return new PkiExpressConfig($licensePath, $pkiExpressHome, $tempFolder);
 }
 
 function createAppData()
