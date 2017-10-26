@@ -3,3 +3,4 @@
 
 # Set CRLF line endings on checkout for certain file extensions
 *.md text eol=crlf
+*.txt text eol=crlf
