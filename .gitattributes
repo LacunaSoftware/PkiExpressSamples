@@ -1,6 +1,11 @@
 # Enable automatic line ending normalization
 * text=auto
 
-# Set CRLF line endings on checkout for certain file extensions
-*.md text eol=crlf
-*.txt text eol=crlf
+# Set CRLF line endings on checkout for certain file extensions to
+# avoid Windows users getting LF line endings when downloading ZIP
+# of repository from GitHub
+*.md   text eol=crlf
+*.txt  text eol=crlf
+*.php  text eol=crlf
+*.cs   text eol=crlf
+*.java text eol=crlf
