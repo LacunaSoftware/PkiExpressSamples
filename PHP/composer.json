@@ -1,0 +1,11 @@
+{
+  "autoload": {
+    "files": [
+      "util.php",
+      "util-pades.php"
+    ]
+  },
+  "require": {
+    "lacuna/pkiexpress-client": "^1.0.0"
+  }
+}
