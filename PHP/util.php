@@ -8,25 +8,22 @@ use Lacuna\PkiExpress\PkiExpressConfig;
 function getPkiExpressConfig()
 {
     // -----------------------------------------------------------------------------------------------------------------
-    // PLACE YOUR LICENSE'S PATH HERE
-    $licensePath = 'PLACE YOUR LICENSE\'S PATH HERE';
-    //
+    // PLACE THE PATH OF THE LacunaPkiLicense.config FILE BELOW
+    $licensePath = 'PLACE THE PATH OF LacunaPkiLicense.config HERE';
+    //              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // -----------------------------------------------------------------------------------------------------------------
 
     // Throw exception if licensePath is not set (this check is here just for the sake of newcomers, you can remove it)
-    if (strpos($licensePath, ' LICENSE\'S ') !== false) {
+    if (strpos($licensePath, ' PATH OF ') !== false) {
         throw new \Exception("The license's path was not set! Hint: to run this sample you must have a license file and its path pasted on the util.php");
     }
 
-    // If you have installed PKI Express on a custom path, you have to paste the path were your executable is placed.
-    // But, if you have installed on a recommended path, the library will search for that standard path automatically.
+    // If you installed PKI Express on a custom path, paste the installation path below. If you installed
+    // it on the default path, the library will find it automatically.
     $pkiExpressHome = null;
-    // Pass to the constructor in the following way: new PkiExpressConfig($licensePath, $pkiExpressHome, ...);
 
-    // Alternatively, you can inform a temporary folder where the library will store some temporary files needed on
-    // some signature processes.
+    // Optionally, you can inform a temporary folder where the library will store temporary files.
     $tempFolder = null;
-    // Pass to the constructor in the following way: new PkiExpressConfig($licensePath, $pkiExpressHome, $tempFolder);
 
     // Instantiate the PkiExpressConfig class with the fields informed on this method.
     return new PkiExpressConfig($licensePath, $pkiExpressHome, $tempFolder);
