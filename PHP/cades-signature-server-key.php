@@ -14,7 +14,7 @@ $userfile = isset($_GET['userfile']) ? $_GET['userfile'] : null;
 
 try {
 
-    // Verify if the provided userfile exists
+    // Verify if the provided userfile exists.
     if (!file_exists("app-data/$userfile")) {
         throw new \Exception('File not found!');
     }
@@ -28,10 +28,10 @@ try {
     //#signer->setDataFile($dataFile);
     $signer->setFileToSign("app-data/{$userfile}");
 
-    // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1)
+    // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
     $signer->setCertificateThumbprint('f6c24db85cb0187c73014cc3834e5a96b8c458bc');
 
-    // Set 'encapsulate content' option (default: true)
+    // Set 'encapsulate content' option (default: true).
     $signer->encapsulateContent = true;
 
     // Generate path for output file and add to signer object.
@@ -39,7 +39,7 @@ try {
     $outputFile = uniqid() . ".p7s";
     $signer->setOutputFile("app-data/{$outputFile}");
 
-    // Perform the signature
+    // Perform the signature.
     $signer->sign();
 
 } catch(Exception $e) {

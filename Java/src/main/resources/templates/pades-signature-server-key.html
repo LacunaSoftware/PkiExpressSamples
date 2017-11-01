@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="head"></head>
+<body>
+
+<div th:replace="menu"></div>
+
+<div class="container">
+
+    <div th:if="${errorMessage} == null">
+
+        <h2>PAdES Signature with a server key</h2>
+
+        <!--/* If no errors have occurred, this page is shown for the user, with the link to the signed file. */-->
+        <p>File signed sucessfully!</p>
+        <p>
+            <a th:href="'/files/' + ${outputFile}" class="btn btn-default">Download the signed file</a>
+        </p>
+
+    </div>
+
+    <div th:if="${errorMessage} != null">
+
+        <!--/*
+            If some error has occurred, the error message is show with a "Try Again" button to return to the upload
+            page.
+         */-->
+        <div class="alert alert-danger" role="alert" style="margin-top: 2%;">
+            <label for="errorMsg">Signature Failed</label><br />
+            <span id="errorMsg" th:text="${errorMessage}"></span>
+        </div>
+        <a class="btn btn-default" href="/upload?goto=pades-signature-server-key">Try Again</a>
+
+    </div>
+
+</div>
+</body>
+</html>
