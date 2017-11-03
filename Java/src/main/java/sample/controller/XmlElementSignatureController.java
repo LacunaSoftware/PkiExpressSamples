@@ -33,14 +33,14 @@ public class XmlElementSignatureController {
         // Set the state as "initial" to be passed to javascript to perform the relative step.
         String state = "initial";
 
-        // Render the signature page (templates/pades-signature.html)
+        // Render the signature page (templates/pades-signature.html).
         model.addAttribute("state", state);
         return "xml-element-signature";
     }
 
     /**
-     * This action receives the form submission from the signature page. It will perform a CAdES signature in three
-     * steps using PKI Express and Web PKI.
+     * This action receives the form submission from the signature page. It will perform a XML signature of an element
+     * of the XML in three steps using PKI Express and Web PKI.
      */
     @RequestMapping(value = "/xml-element-signature", method = {RequestMethod.POST})
     public String post(
@@ -71,11 +71,11 @@ public class XmlElementSignatureController {
                 // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
                 signatureStarter.setXmlToSign(Util.getSampleNFePath());
 
-                // Set the ID of the element to be signed.
-                signatureStarter.setToSignElementId("NFe35141214314050000662550010001084271182362300");
-
                 // Set the signature policy.
                 signatureStarter.setSignaturePolicy(XmlSignaturePolicies.NFe);
+
+                // Set the ID of the element to be signed.
+                signatureStarter.setToSignElementId("NFe35141214314050000662550010001084271182362300");
 
                 // Start the signature process. Receive as response a SignatureStartResult instance containing the
                 // following fields:

@@ -93,7 +93,7 @@ public class CadesSignatureController {
 
 				// Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign
 				// that file. But, if the CMS was a "detached" signature, the original file must be provided with one of
-				// the setDataFile() methods;
+				// the setDataFile(path) methods;
 				//signatureStarter.setDataFile(content | path | stream);
 				signatureStarter.setFileToSign(fileToSign);
 

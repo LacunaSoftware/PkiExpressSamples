@@ -15,8 +15,8 @@
         </dependency>  
         <dependency>
 	        <groupId>com.lacunasoftware.pkiexpress</groupId>
-	        <artifactId>restpki-client</artifactId>
-	        <version>1.8.1</version>
+	        <artifactId>pki-express</artifactId>
+	        <version>1.0.0</version>
         </dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

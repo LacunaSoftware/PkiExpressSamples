@@ -62,7 +62,7 @@ public class PadesSignatureController {
 	}
 
 	/**
-	 * This action receives the form submission from the signature page. It will perform a CAdES signature in three
+	 * This action receives the form submission from the signature page. It will perform a PAdES signature in three
 	 * steps using PKI Express and Web PKI.
 	 */
 	@RequestMapping(value = "/pades-signature", method = {RequestMethod.POST})
@@ -97,10 +97,10 @@ public class PadesSignatureController {
 
 				// Set a file reference for the stamp file. Note that this file can be referenced later by
 				// "fref://stamp" at the "url" field on the visual representation (see content/vr.json file or
-				// getVisualRepresentation($case) method).
+				// getVisualRepresentation(case) method).
 				signatureStarter.addFileReference("stamp", Util.getPdfStampPath());
 
-				// Set visual representation. We provide a PHP-based class that represents the visual representation
+				// Set visual representation. We provide a Java class that represents the visual representation
 				// model.
 				signatureStarter.setVisualRepresentation(PadesVisualElements.getVisualRepresentation(1));
 				// Alternatively, we can provide a javascript file that represents json-encoded the model
