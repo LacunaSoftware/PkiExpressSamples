@@ -115,6 +115,10 @@ public class PadesSignatureController {
 				// - transferFile: A temporary file to be passed to "complete" step.
 				SignatureStartResult result = signatureStarter.start();
 
+				// If you want to delete the temporary files created by this step use the method dispose(). This method
+				// MUST be called after the start() method, because it deletes some files needed by the method.
+				signatureStarter.dispose();
+
 				// Render the fields received form start() method as hidden fields to be used on the javascript or on
 				// the "complete" step.
 				model.addAttribute("state", state);
@@ -159,6 +163,10 @@ public class PadesSignatureController {
 
 				// Complete the signature process.
 				signatureFinisher.complete();
+
+				// If you want to delete the temporary files created by this step, use the method dispose(). This method
+				// MUST be called after the complete() method, because it deletes some files needed by the method.
+				signatureFinisher.dispose();
 
 				// Update signature state to "completed".
 				state = "completed";

@@ -66,6 +66,10 @@ public class PadesSignatureServerKeyController {
             // Perform the signature.
             signer.sign();
 
+            // If you want to delete the temporary files created by this step, use the method dispose(). This method
+            // MUST be called after the sign() method, because it deletes some files needed by the method.
+            signer.dispose();
+
             // Render the link to download the signed file on signature page.
             model.addAttribute("outputFile", filename);
 
