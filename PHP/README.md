@@ -1,6 +1,9 @@
 # PKI Express - PHP sample project
 
-This project shows how to use PKI Express on PHP.
+This project shows how to use [PKI Express](https://docs.lacunasoftware.com/articles/pki-express/) on PHP.
+
+> To use PKI Express, you'll need a license file. Please [contact us](https://www.lacunasoftware.com/en/home/purchase)
+> to get a free trial license.
 
 ## Running the project
 
@@ -15,4 +18,4 @@ This project shows how to use PKI Express on PHP.
 
 ## Documentation
 
-https://docs.lacunasoftware.com/pt-br/articles/pki-express/php/
+https://docs.lacunasoftware.com/articles/pki-express/php/
