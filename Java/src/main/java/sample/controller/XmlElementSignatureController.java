@@ -115,7 +115,7 @@ public class XmlElementSignatureController {
                 // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
                 SignatureFinisher signatureFinisher = new SignatureFinisher(Util.getPkiExpressConfig());
 
-                // Set file to be signed. It's the same we used on "start" step.
+                // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
                 signatureFinisher.setFileToSign(Util.getSampleNFePath());
 
                 // Set transfer file.

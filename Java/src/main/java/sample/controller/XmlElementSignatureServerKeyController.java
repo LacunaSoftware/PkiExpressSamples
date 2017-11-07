@@ -34,7 +34,7 @@ public class XmlElementSignatureServerKeyController {
             // the local signature.
             XmlSigner signer = new XmlSigner(Util.getPkiExpressConfig());
 
-            // Set PDF to be signed.
+            // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
             signer.setXmlToSign(Util.getSampleNFePath());
 
             // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).

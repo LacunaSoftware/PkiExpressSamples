@@ -144,10 +144,10 @@ public class CadesSignatureController {
 				// Get an instance of the SignatureFinisher class, responsible for completing the signature process.
 				SignatureFinisher signatureFinisher = new SignatureFinisher(Util.getPkiExpressConfig());
 
-				// Set file to be signed. It's the same we used on "start" step.
+				// Set file to be signed. It's the same file we used on "start" step.
 				signatureFinisher.setFileToSign(fileToSign);
 
-				// Fot the same reason on "start" step, we set have to set the data file.
+				// For the same reason on "start" step, we have to set the data file in this step.
 				//signatureStarter.setDataFile(content | path | stream);
 
 				// Set transfer file.
