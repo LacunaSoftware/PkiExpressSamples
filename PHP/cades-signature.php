@@ -30,7 +30,7 @@ if (!empty($userfile)) {
     $fileToSign = './content/SampleDocument.pdf';
 }
 
-// Declare variables used on the page
+// Declare variables used on the page.
 $certThumb = null;
 $certContent = null;
 $toSignHash = null;
@@ -63,7 +63,7 @@ if ($state == 'start') {
         // Set Base64-encoded certificate's content to signature starter.
         $signatureStarter->setCertificateBase64($certContent);
 
-        // Set 'encapsulate content' option (default: true)
+        // Set 'encapsulate content' option (default: true).
         $signatureStarter->encapsulateContent = true;
 
         // Start the signature process. Receive as response the following fields:
@@ -104,8 +104,11 @@ if ($state == 'start') {
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
         $signatureFinisher = new SignatureFinisher(getPkiExpressConfig());
 
-        // Set file to be signed. It's the same we used on "start" step.
+        // Set file to be signed. It's the same file we used on "start" step.
         $signatureFinisher->setFileToSign($fileToSign);
+
+        // For the same reason on "start" step, we have to set the data file in this step.
+        //$signatureFinisher->setDataFile($dataFile);
 
         // Set transfer file.
         $signatureFinisher->setTransferFile($transferFile);
@@ -223,7 +226,7 @@ if ($state == 'start') {
         <script>
 
             $(document).ready(function () {
-                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js)
+                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js).
                 signatureForm.init({
                     form: $('#signForm'),                       // the form that should be submitted when the operation is complete
                     certificateSelect: $('#certificateSelect'), // the select element (combo box) to list the certificates

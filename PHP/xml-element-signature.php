@@ -33,7 +33,7 @@ if ($state == 'start') {
         $certThumb = !empty($_POST['certThumb']) ? $_POST['certThumb'] : null;
         $certContent = !empty($_POST['certContent']) ? $_POST['certContent'] : null;
 
-        // Get an instance of the PadesSignatureStarter class, responsible for receiving the signature elements and
+        // Get an instance of the XmlSignatureStarter class, responsible for receiving the signature elements and
         // start the signature process.
         $signatureStarter = new XmlSignatureStarter(getPkiExpressConfig());
 
@@ -43,15 +43,15 @@ if ($state == 'start') {
         // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
         $signatureStarter->setXmlToSign('content/SampleNFe.xml');
 
-        // Set the ID of the element to be signed.
-        $signatureStarter->setToSignElementId('NFe35141214314050000662550010001084271182362300');
-
         // Set the signature policy.
         $signatureStarter->setSignaturePolicy(XmlSignaturePolicies::NFE);
 
+        // Set the ID of the element to be signed.
+        $signatureStarter->setToSignElementId('NFe35141214314050000662550010001084271182362300');
+
         // Start the signature process. Receive as response the following fields:
         // - $toSignHash: The hash to be signed.
-        // - $digestAlgorithm: The difest algorithm that will inform the Web PKI component to compute the signature.
+        // - $digestAlgorithm: The digest algorithm that will inform the Web PKI component to compute the signature.
         // - $transferFile: A temporary file to be passed to "complete" step.
         $response = $signatureStarter->start();
 
@@ -63,7 +63,7 @@ if ($state == 'start') {
 
     } catch(Exception $e) {
 
-        // Return to "initial" state rendering the error message
+        // Return to "initial" state rendering the error message.
         $errorMessage = $e->getMessage();
         $errorTitle = 'Signature Initialization Failed';
         $state = 'initial';
@@ -76,7 +76,7 @@ if ($state == 'start') {
     // content/js/signature-form.js).
     try {
 
-        // Recover variables from the POST arguments to be used on this step
+        // Recover variables from the POST arguments to be used on this step.
         $certThumb = !empty($_POST['certThumb']) ? $_POST['certThumb'] : null;
         $toSignHash = !empty($_POST['toSignHash']) ? $_POST['toSignHash'] : null;
         $transferFile = !empty($_POST['transferFile']) ? $_POST['transferFile'] : null;
@@ -86,7 +86,7 @@ if ($state == 'start') {
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
         $signatureFinisher = new SignatureFinisher(getPkiExpressConfig());
 
-        // Set file to be signed. It's the same we used on "start" step.
+        // Set the XML to be signed. It's the same we used on "start" step.
         $signatureFinisher->setFileToSign('content/SampleNFe.xml');
 
         // Set transfer file.
@@ -96,7 +96,7 @@ if ($state == 'start') {
         $signatureFinisher->setSignature($signature);
 
         // Generate path for output file and add to signature finisher.
-        createAppData(); // make sure the "app-data" folder exists (util.php)
+        createAppData(); // make sure the "app-data" folder exists (util.php).
         $outputFile = uniqid() . ".xml";
         $signatureFinisher->setOutputFile("app-data/{$outputFile}");
 
@@ -203,7 +203,7 @@ if ($state == 'start') {
         <script>
 
             $(document).ready(function () {
-                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js)
+                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js).
                 signatureForm.init({
                     form: $('#signForm'),                       // the form that should be submitted when the operation is complete
                     certificateSelect: $('#certificateSelect'), // the select element (combo box) to list the certificates

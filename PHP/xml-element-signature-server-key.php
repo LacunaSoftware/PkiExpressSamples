@@ -22,11 +22,11 @@ try {
     // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1)
     $signer->setCertificateThumbprint('f6c24db85cb0187c73014cc3834e5a96b8c458bc');
 
-    // Set the ID of the element to be signed.
-    $signer->setToSignElementId('NFe35141214314050000662550010001084271182362300');
-
     // Set the signature policy.
     $signer->setSignaturePolicy(XmlSignaturePolicies::NFE);
+
+    // Set the ID of the element to be signed.
+    $signer->setToSignElementId('NFe35141214314050000662550010001084271182362300');
 
     // Generate path for output file and add to signer object.
     createAppData(); // make sure the "app-data" folder exists (util.php)'

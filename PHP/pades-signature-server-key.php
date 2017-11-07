@@ -34,9 +34,9 @@ try {
     // "url" field on the visual representation (see content/vr.json file or getVisualRepresentation($case) method).
     $signer->addFileReference('stamp', 'content/stamp.png');
 
-    // Set visual representation. We provide a PHP-based class that represents the visual representation model.
+    // Set visual representation. We provide a PHP class that represents the visual representation model.
     $signer->setVisualRepresentation(getVisualRepresentation(1));
-    // Alternatively, we can provide a javascript file that represents json-encoded the model (see content/vr.json).
+    // Alternatively, we can provide a javascript file that contains a json-encoded model (see content/vr.json).
     //$signer->setVisualRepresentationFromFile("content/vr.json");
 
     // Generate path for output file and add to signer object.

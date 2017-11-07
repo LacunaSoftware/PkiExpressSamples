@@ -67,9 +67,9 @@ if ($state == 'start') {
         // "url" field on the visual representation (see content/vr.json file or getVisualRepresentation($case) method).
         $signatureStarter->addFileReference('stamp', 'content/stamp.png');
 
-        // Set visual representation. We provide a PHP-based class that represents the visual representation model.
+        // Set visual representation. We provide a PHP class that represents the visual representation model.
         $signatureStarter->setVisualRepresentation(getVisualRepresentation(1));
-        // Alternatively, we can provide a javascript file that represents json-encoded the model (see content/vr.json).
+        // Alternatively, you can provide a javascript file that contains a json-encoded model (see content/vr.json).
         //$signatureStarter->setVisualRepresentationFromFile("content/vr.json");
 
         // Start the signature process. Receive as response the following fields:
@@ -86,7 +86,7 @@ if ($state == 'start') {
 
     } catch(Exception $e) {
 
-        // Return to "initial" state rendering the error message
+        // Return to "initial" state rendering the error message.
         $errorMessage = $e->getMessage();
         $errorTitle = 'Signature Initialization Failed';
         $state = 'initial';
@@ -110,7 +110,7 @@ if ($state == 'start') {
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
         $signatureFinisher = new SignatureFinisher(getPkiExpressConfig());
 
-        // Set file to be signed. It's the same we used on "start" step.
+        // Set PDF to be signed. It's the same file we used on "start" step.
         $signatureFinisher->setFileToSign($fileToSign);
 
         // Set transfer file.
@@ -190,7 +190,7 @@ if ($state == 'start') {
         ?>
         <form id="signForm" action="pades-signature.php" method="POST">
 
-            <?php // Hidden fields used to pass data from the server-side to the javascript and vice-versa ?>
+            <?php // Hidden fields used to pass data from the server-side to the javascript and vice-versa. ?>
             <input type="hidden" id="stateField" name="state" value="<?= $state ?>">
             <input type="hidden" id="certThumbField" name="certThumb" value="<?= $certThumb ?>">
             <input type="hidden" id="certContentField" name="certContent" value="<?= $certContent ?>">
@@ -229,7 +229,7 @@ if ($state == 'start') {
         <script>
 
             $(document).ready(function () {
-                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js)
+                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js).
                 signatureForm.init({
                     form: $('#signForm'),                       // the form that should be submitted when some step is completed
                     certificateSelect: $('#certificateSelect'), // the select element (combo box) to list the certificates
