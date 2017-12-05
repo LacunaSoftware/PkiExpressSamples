@@ -6,6 +6,6 @@
     ]
   },
   "require": {
-    "lacuna/pki-express": "^1.0.1"
+    "lacuna/pki-express": "^1.1.0"
   }
 }
