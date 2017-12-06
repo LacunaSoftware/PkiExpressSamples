@@ -12,12 +12,6 @@ import java.nio.file.Path;
 
 public class Util {
 
-	// ----------------------------------------------------------------------------------------------------------------
-	// PASTE THE PATH OF THE LacunaPkiLicense.config FILE BELOW
-	private static final String licensePath = "PLACE THE PATH OF LacunaPkiLicense.config HERE";
-	//                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	// ----------------------------------------------------------------------------------------------------------------
-
 	// If you have installed PKI Express on a custom path, you have to paste the path were your executable is placed.
 	// But, if you have installed on a recommended path, the library will search for the standard path automatically, so
 	// in this case, this field is not necessary.
@@ -36,13 +30,8 @@ public class Util {
 
 	public static PkiExpressConfig getPkiExpressConfig() throws IOException {
 
-		// Throw exception if token is not set (this check is here just for the sake of newcomers, you can remove it)
-		if (licensePath.contains(" PATH OF ")) {
-			throw new RuntimeException("The license's path was not set! Hint: to run this sample you must have a license file and its path pasted on the file src/main/java/sample/util/Util.java");
-		}
-
 		// Instantiate of the PkiExpressConfig class with the fields informed on this method.
-		return new PkiExpressConfig(licensePath, pkiExpressHome, tempFolder, transferFilesFolder);
+		return new PkiExpressConfig(pkiExpressHome, tempFolder, transferFilesFolder);
 	}
 
 	public static void setNoCacheHeaders(HttpServletResponse response) {

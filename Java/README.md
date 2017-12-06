@@ -11,10 +11,6 @@ This project shows how to use [PKI Express](https://docs.lacunasoftware.com/arti
 
 1. [Download the project](https://github.com/LacunaSoftware/PkiExpressSamples/archive/master.zip) or clone the repository
 
-1. Copy your license file **LacunaPkiLicense.config** to a directory readable by the application
-
-1. Fill the path to the license file on the class [sample/util/Util.java](src/main/java/sample/util/Util.java)
-
 1. In a command prompt, navigate to the folder `Java` and run the command `gradlew run` (on Linux `./gradlew run`).
    If you are using Windows, you can alternatively double-click the file `Run-Sample.bat`.
 
