@@ -5,9 +5,6 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-// The file util-pades.php contains sample settings for visual representations (see below).
-require_once 'util-pades.php';
-
 use Lacuna\PkiExpress\PadesSignatureStarter;
 use Lacuna\PkiExpress\SignatureFinisher;
 

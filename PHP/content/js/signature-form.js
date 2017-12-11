@@ -15,8 +15,9 @@ var signatureForm = (function() {
         // Receive form parameters received as arguments.
         formElements = fe;
 
-        // Instance Web PKI object.
-        pki = new LacunaWebPKI();
+        // Instance Web PKI object. If the Web PKI license is informed on config.php file, it is here where
+        // we use its value.
+        pki = new LacunaWebPKI(_webPkiLicense);
 
         if (formElements.stateField.val() == 'initial') {
 
