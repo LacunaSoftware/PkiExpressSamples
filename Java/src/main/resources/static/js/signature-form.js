@@ -16,7 +16,7 @@ var signatureForm = (function() {
         formElements = fe;
 
         // Instance Web PKI object.
-        pki = new LacunaWebPKI();
+        pki = new LacunaWebPKI(_webPkiLicense);
 
         if (formElements.stateField.val() == 'initial') {
 
