@@ -15,10 +15,12 @@ public class Util {
 
 	public static PkiExpressConfig getPkiExpressConfig() throws IOException {
 
-		// Instantiate of the PkiExpressConfig class with the fields informed on this method.
+		// Retrieve configuration from application.properties file
 		String pkiExpressHome = Application.environment.getProperty("pkiExpress.home");
 		String pkiExpressTempFolder = Application.environment.getProperty("pkiExpress.tempFolder");
 		String pkiExpressTransferFilesFolder = Application.environment.getProperty("pkiExpress.transferFilesFolder");
+
+		// Instantiate of the PkiExpressConfig class.
 		return new PkiExpressConfig(pkiExpressHome, pkiExpressTempFolder, pkiExpressTransferFilesFolder);
 	}
 

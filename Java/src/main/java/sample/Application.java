@@ -1,7 +1,7 @@
 package sample;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -27,9 +27,7 @@ public class Application {
 		// performed by your application's database.
 		tempFolderPath = Files.createTempDirectory("PkiExpressSample");
 
-		ConfigurableApplicationContext ctx = new SpringApplicationBuilder(Application.class)
-				.properties("spring.config.name=application,configuration")
-				.build().run(args);
+		ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
 
 		environment = ctx.getEnvironment();
 	}
