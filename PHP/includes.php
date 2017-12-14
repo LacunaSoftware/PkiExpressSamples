@@ -1,8 +1,9 @@
 <?php
-    // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI
-    // component).
     require __DIR__ . '/vendor/autoload.php';
     $config = getConfig();
+
+    // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI
+    // component).
 ?>
 <link href="content/css/bootstrap.css" rel="stylesheet"/>
 <link href="content/css/bootstrap-theme.css" rel="stylesheet"/>

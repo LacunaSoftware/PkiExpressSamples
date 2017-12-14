@@ -3,7 +3,7 @@
 function getConfig() {
     return array(
 
-        // WEB PKI Configuration
+        // Web PKI Configuration
         // -------------------------------------------------------------------------------------------------------------
 
         "webPki" => array(
@@ -31,7 +31,8 @@ function getConfig() {
             // Alternatively, you can inform a folder where the library will store the transfer files, that are used
             // between signature steps. For the case your application uses more than one server, we recommend to set
             // this field with the path of the directory shared between the servers. If this field is not set, the field
-            // tempFolder is used. If the later is not set too, the library will store the transfer files on the standard temp directory.
+            // tempFolder is used. If the later is not set too, the library will store the transfer files on the
+            // standard temp directory.
             "transferFilesFolder" => null
         )
 
