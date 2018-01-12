@@ -65,6 +65,9 @@ public class XmlElementSignatureController {
                 // and start the signature process.
                 XmlSignatureStarter signatureStarter = new XmlSignatureStarter(Util.getPkiExpressConfig());
 
+                // Set PKI default options (see Util.java)
+                Util.setPkiDefaults(signatureStarter);
+
                 // Set Base64-encoded certificate's content to signature starter.
                 signatureStarter.setCertificateBase64(certContent);
 
@@ -114,6 +117,9 @@ public class XmlElementSignatureController {
 
                 // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
                 SignatureFinisher signatureFinisher = new SignatureFinisher(Util.getPkiExpressConfig());
+
+                // Set PKI default options (see Util.java)
+                Util.setPkiDefaults(signatureFinisher);
 
                 // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
                 signatureFinisher.setFileToSign(Util.getSampleNFePath());

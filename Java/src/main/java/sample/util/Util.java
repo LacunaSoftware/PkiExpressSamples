@@ -1,6 +1,7 @@
 package sample.util;
 
 import com.lacunasoftware.pkiexpress.PkiExpressConfig;
+import com.lacunasoftware.pkiexpress.PkiExpressOperator;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import sample.Application;
@@ -22,6 +23,23 @@ public class Util {
 
 		// Instantiate of the PkiExpressConfig class.
 		return new PkiExpressConfig(pkiExpressHome, pkiExpressTempFolder, pkiExpressTransferFilesFolder);
+	}
+
+	public static void setPkiDefaults(PkiExpressOperator operator) {
+
+		// If you want the operator to trust in a custom trusted root, you need to inform to the operator class. You can
+		// trust on more than one roots by uncommenting the following lines:
+		//operator.addTrustedRoot(path1);
+		//operator.addTrustedRoot(path2);
+		//operator.addTrustedRoot(path3);
+
+		// If you want the operator to trust on Lacuna Test Root (default: false), uncomment the following line:
+		//operator.setTrustLacunaTestRoot(true);
+		// THIS SHOULD NEVER BE USED ON A PRODUCTION ENVIRONMENT!
+
+		// If you want the operator to perfom its action on "OFFLINE MODE" (default: false), uncomment the following
+		// line:
+		//operator.setOffline(true);
 	}
 
 	public static void setNoCacheHeaders(HttpServletResponse response) {

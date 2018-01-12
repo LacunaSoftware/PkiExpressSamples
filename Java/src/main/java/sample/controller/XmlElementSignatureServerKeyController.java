@@ -34,6 +34,9 @@ public class XmlElementSignatureServerKeyController {
             // the local signature.
             XmlSigner signer = new XmlSigner(Util.getPkiExpressConfig());
 
+            // Set PKI default options (see Util.java)
+            Util.setPkiDefaults(signer);
+
             // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
             signer.setXmlToSign(Util.getSampleNFePath());
 

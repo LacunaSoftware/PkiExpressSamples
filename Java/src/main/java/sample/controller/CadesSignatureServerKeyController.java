@@ -40,6 +40,9 @@ public class CadesSignatureServerKeyController {
             // the local signature.
             CadesSigner signer = new CadesSigner(Util.getPkiExpressConfig());
 
+            // Set PKI default options (see Util.java)
+            Util.setPkiDefaults(signer);
+
             // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign that
             // file. But, if the CMS was a "detached" signature, the original file must be provided with the
             // setDataFile(path) method:
@@ -50,7 +53,7 @@ public class CadesSignatureServerKeyController {
             signer.setCertificateThumbprint("f6c24db85cb0187c73014cc3834e5a96b8c458bc");
 
             // Set 'encapsulate content' option (default: true).
-            signer.encapsulateContent = true;
+            signer.setEncapsulateContent(true);
 
             // Generate path for output file and add to singer object.
             String filename = UUID.randomUUID() + ".p7s";

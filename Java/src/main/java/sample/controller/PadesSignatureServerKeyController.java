@@ -41,6 +41,9 @@ public class PadesSignatureServerKeyController {
             // the local signature.
             PadesSigner signer = new PadesSigner(Util.getPkiExpressConfig());
 
+            // Set PKI default options (see Util.java)
+            Util.setPkiDefaults(signer);
+
             // Set PDF to be signed.
             signer.setPdfToSign(Application.getTempFolderPath().resolve(userfile));
 

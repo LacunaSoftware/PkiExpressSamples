@@ -91,6 +91,9 @@ public class CadesSignatureController {
 				// and start the signature process.
 				CadesSignatureStarter signatureStarter = new CadesSignatureStarter(Util.getPkiExpressConfig());
 
+				// Set PKI default options (see Util.java)
+				Util.setPkiDefaults(signatureStarter);
+
 				// Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign
 				// that file. But, if the CMS was a "detached" signature, the original file must be provided with one of
 				// the setDataFile(path) methods;
@@ -101,7 +104,7 @@ public class CadesSignatureController {
 				signatureStarter.setCertificateBase64(certContent);
 
 				// Set 'encapsulate content' option (default: true).
-				signatureStarter.encapsulateContent = true;
+				signatureStarter.setEncapsulateContent(true);
 
 				// Start the signature process. Receive as response a SignatureStartResult instance containing the
 				// following fields:
@@ -143,6 +146,9 @@ public class CadesSignatureController {
 
 				// Get an instance of the SignatureFinisher class, responsible for completing the signature process.
 				SignatureFinisher signatureFinisher = new SignatureFinisher(Util.getPkiExpressConfig());
+
+				// Set PKI default options (see Util.java)
+				Util.setPkiDefaults(signatureFinisher);
 
 				// Set file to be signed. It's the same file we used on "start" step.
 				signatureFinisher.setFileToSign(fileToSign);
