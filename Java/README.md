@@ -5,7 +5,7 @@ This project shows how to use [PKI Express](https://docs.lacunasoftware.com/arti
 > To use PKI Express, you'll need a license file. Please [contact us](https://www.lacunasoftware.com/en/home/purchase)
 > to get a free trial license.
 
-## Running with Gradle
+### Running with Gradle
 
 1. [Install PKI Express](https://docs.lacunasoftware.com/articles/pki-express/setup/)
 
