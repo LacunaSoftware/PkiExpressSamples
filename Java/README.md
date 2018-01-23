@@ -17,7 +17,6 @@ This project shows how to use [PKI Express](https://docs.lacunasoftware.com/arti
 1. Once you see the message "Started Application in x.xxx seconds" (the on-screen percentage
    will *not* reach 100%), open a web browser and go the URL [http://localhost:60833/](http://localhost:60833/)
 
-> [!NOTE]
 > If you are using a Spring Boot version lower than 1.3.x, you need to run the task `run` instead of `bootRun`.
 
 ### Running with Maven
