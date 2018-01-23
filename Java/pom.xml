@@ -5,33 +5,39 @@
   <version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.boot>1.2.5.RELEASE</spring.boot>
-	</properties>    
-  <dependencies>
+		<spring.boot>1.5.9.RELEASE</spring.boot>
+	</properties>
+
+
+
+	<dependencies>
+
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            <version>${spring.boot}</version>
-        </dependency>  
-        <dependency>
-	        <groupId>com.lacunasoftware.pkiexpress</groupId>
-	        <artifactId>pki-express</artifactId>
-	        <version>1.2.1</version>
-        </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>${spring.boot}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lacunasoftware.pkiexpress</groupId>
+			<artifactId>pki-express</artifactId>
+			<version>1.2.1</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-        
-  </dependencies>
+
+	</dependencies>
+
 	<build>
 
 		<plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.2.3.RELEASE</version>
+                <version>1.5.9.RELEASE</version>
 				<configuration>
 					<mainClass>sample.Application</mainClass>
 					<source>1.7</source>
@@ -47,8 +53,11 @@
 					</execution>
 				</executions>
             </plugin>
+
  		</plugins>
-	</build>	  
+
+	</build>
+
 	<repositories>
 		<repository>
 			<id>lacuna.repository</id>
