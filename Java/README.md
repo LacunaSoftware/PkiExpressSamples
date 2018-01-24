@@ -24,7 +24,7 @@ To run the project, it's necessary to have the Java Development Kit installed. Y
 > If you are on Linux, you may have to add the execution permission to *gradlew* file by executing the command 
 `chmod +x gradlew`.
 
-**Running with Maven**
+**Using Maven**
 
 1. [Install PKI Express](../setup/index.md)
 
