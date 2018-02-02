@@ -18,6 +18,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="pades-signature.php">With file already on server</a></li>
                         <li><a href="upload.php?goto=pades-signature">With file uploaded by user</a></li>
+                        <li><a href="upload.php?goto=open-pades-signature">Open/validate existing signature</a></li>
                         <li><a href="upload.php?goto=pades-signature-server-key">Using a server key</a></li>
                     </ul>
                 </li>

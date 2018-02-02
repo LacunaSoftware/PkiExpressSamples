@@ -37,6 +37,9 @@ if ($state == 'start') {
         // start the signature process.
         $signatureStarter = new XmlSignatureStarter(getPkiExpressConfig());
 
+        // Set PKI default options. (see Util.php)
+        getPkiDefaults($signatureStarter);
+
         // Set Base64-encoded certificate's content to signature starter.
         $signatureStarter->setCertificateBase64($certContent);
 
@@ -44,10 +47,10 @@ if ($state == 'start') {
         $signatureStarter->setXmlToSign('content/SampleNFe.xml');
 
         // Set the signature policy.
-        $signatureStarter->setSignaturePolicy(XmlSignaturePolicies::NFE);
+        $signatureStarter->signaturePolicy = XmlSignaturePolicies::NFE;
 
         // Set the ID of the element to be signed.
-        $signatureStarter->setToSignElementId('NFe35141214314050000662550010001084271182362300');
+        $signatureStarter->toSignElementId = 'NFe35141214314050000662550010001084271182362300';
 
         // Start the signature process. Receive as response the following fields:
         // - $toSignHash: The hash to be signed.
@@ -85,6 +88,9 @@ if ($state == 'start') {
 
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
         $signatureFinisher = new SignatureFinisher(getPkiExpressConfig());
+
+        // Set PKI default options. (see Util.php)
+        getPkiDefaults($signatureFinisher);
 
         // Set the XML to be signed. It's the same we used on "start" step.
         $signatureFinisher->setFileToSign('content/SampleNFe.xml');

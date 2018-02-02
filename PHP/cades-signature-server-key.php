@@ -23,13 +23,16 @@ try {
     // local signature.
     $signer = new CadesSigner(getPkiExpressConfig());
 
+    // Set PKI default options (see Util.php)
+    getPkiDefaults($signer);
+
     // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign that file. But,
     // if the CMS was a "detached" signature, the original file must be provided with the setDataFile($path) method:
     //$signer->setDataFile($dataFile);
     $signer->setFileToSign("app-data/{$userfile}");
 
     // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
-    $signer->setCertificateThumbprint('f6c24db85cb0187c73014cc3834e5a96b8c458bc');
+    $signer->certThumb = 'f6c24db85cb0187c73014cc3834e5a96b8c458bc';
 
     // Set 'encapsulate content' option (default: true).
     $signer->encapsulateContent = true;

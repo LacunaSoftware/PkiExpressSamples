@@ -24,11 +24,14 @@ try {
     // local signature.
     $signer = new PadesSigner(getPkiExpressConfig());
 
+    // Set PKI default options. (see Util.php)
+    getPkiDefaults($signer);
+
     // Set PDF to be signed.
     $signer->setPdfToSign("app-data/$userfile");
 
     // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
-    $signer->setCertificateThumbprint('f6c24db85cb0187c73014cc3834e5a96b8c458bc');
+    $signer->certThumb  = 'f6c24db85cb0187c73014cc3834e5a96b8c458bc';
 
     // Set a file reference for the stamp file. Note that this file can be referenced later by "fref://stamp" at the
     // "url" field on the visual representation (see content/vr.json file or getVisualRepresentation($case) method).
@@ -72,9 +75,8 @@ try {
         <h2>PAdES Signature with a server key</h2>
 
         <p>File signed successfully!</p>
-        <p>
-            <a href="app-data/<?= $outputFile ?>" class="btn btn-default">Download the signed file</a>
-        </p>
+        <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
+        <a href="printer-friendly-version.php?file=<?= $outputFile ?>" class="btn btn-default">Download a printer-friendly version of the signed file</a>
 
 
     <?php } else { ?>

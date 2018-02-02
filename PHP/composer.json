@@ -3,6 +3,7 @@
     "files": [
       "util.php",
       "util-pades.php",
+      "storage-mock.php",
       "config.php"
     ]
   },

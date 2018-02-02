@@ -54,6 +54,9 @@ if ($state == 'start') {
         // start the signature process.
         $signatureStarter = new PadesSignatureStarter(getPkiExpressConfig());
 
+        // Set PKI default options. (see Util.php)
+        getPkiDefaults($signatureStarter);
+
         // Set PDF to be signed.
         $signatureStarter->setPdfToSign($fileToSign);
 
@@ -106,6 +109,9 @@ if ($state == 'start') {
 
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
         $signatureFinisher = new SignatureFinisher(getPkiExpressConfig());
+
+        // Set PKI default options. (see Util.php)
+        getPkiDefaults($signatureFinisher);
 
         // Set PDF to be signed. It's the same file we used on "start" step.
         $signatureFinisher->setFileToSign($fileToSign);
@@ -247,9 +253,9 @@ if ($state == 'start') {
 
         <?php // This page is shown when the signature is completed with success. ?>
         <p>File signed successfully!</p>
-        <p>
-            <a href="app-data/<?= $outputFile ?>" class="btn btn-default">Download the signed file</a>
-        </p>
+
+        <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
+        <a href="printer-friendly-version.php?file=<?= $outputFile ?>" class="btn btn-default">Download a printer-friendly version of the signed file</a>
 
     <?php } ?>
 
