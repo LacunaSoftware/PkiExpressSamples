@@ -299,7 +299,7 @@ public class PrinterFriendlyVersionController {
         StringBuilder sb = new StringBuilder();
         sb.append(getDescription(signer.getCertificate()));
         if (signer.getSigningTime() != null) {
-            DateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm");
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             sb.append(String.format(" em %s", df.format(signer.getSigningTime())));
         }
         return sb.toString();
