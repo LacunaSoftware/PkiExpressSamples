@@ -19,9 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class PrinterFriendlyVersionController {
@@ -42,8 +41,11 @@ public class PrinterFriendlyVersionController {
     // "Normal" font size. Sizes of header fonts are defined based on this size.
     private final int normalFontSize = 12;
 
+    // Date format to be used when converting dates to string
+    public static final String dateFormat = "dd/MM/yyyy HH:mm";
+
     // Display name of the time zone chosen above
-    public final String timeZoneDisplayName = "horário de Brasília";
+    public static final String timeZoneDisplayName = "horário de Brasília";
 
     // You may also change texts, positions and more by editing directly the method generatePrinterFriendlyVersion below
     // #################################################################################################################
@@ -299,8 +301,7 @@ public class PrinterFriendlyVersionController {
         StringBuilder sb = new StringBuilder();
         sb.append(getDescription(signer.getCertificate()));
         if (signer.getSigningTime() != null) {
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            sb.append(String.format(" em %s", df.format(signer.getSigningTime())));
+            sb.append(String.format(" em %s", new SimpleDateFormat(dateFormat).format(signer.getSigningTime())));
         }
         return sb.toString();
     }
