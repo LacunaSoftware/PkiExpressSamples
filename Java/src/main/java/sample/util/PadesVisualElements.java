@@ -1,8 +1,7 @@
-package sample.controller.util;
+package sample.util;
 
 
 import com.lacunasoftware.pkiexpress.*;
-import sample.util.Util;
 
 import java.io.IOException;
 

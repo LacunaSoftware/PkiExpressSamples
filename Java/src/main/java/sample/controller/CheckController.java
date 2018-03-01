@@ -13,14 +13,13 @@ import sample.util.Util;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Controller
 public class CheckController {
 
-    @RequestMapping(value = "/check", method = {RequestMethod.GET})
-    public String get(
+    @RequestMapping(value = "/check-pades", method = {RequestMethod.GET})
+    public String getPades(
             @RequestParam(value = "code") String code,
             Model model,
             HttpSession session,
@@ -48,7 +47,7 @@ public class CheckController {
         Path filePath = Application.getTempFolderPath().resolve(fileId);
 
         // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
-        PadesSignatureExplorer sigExplorer = new PadesSignatureExplorer(Util.getPkiExpressConfig());
+        PadesSignatureExplorer sigExplorer = new PadesSignatureExplorer();
 
         // Set PKI defaults options. (see Util.java)
         Util.setPkiDefaults(sigExplorer);
@@ -66,6 +65,58 @@ public class CheckController {
         // returned)
         model.addAttribute("fileId", fileId);
         model.addAttribute("signature", signature);
+        model.addAttribute("sigType", "pades");
+        return "check";
+    }
+
+    @RequestMapping(value = "/check-cades", method = {RequestMethod.GET})
+    public String getCades(
+            @RequestParam(value = "code") String code,
+            Model model,
+            HttpSession session,
+            HttpServletResponse response
+    ) throws IOException, InterruptedException {
+
+        // On PrinterFriendlyVersionController, we stored the unformatted version of the verification code (without
+        // hyphens) but used the formatted version (with hyphens) on the printer-friendly PDF. Now, we remove the
+        // hyphens before looking it up.
+        String verificationCode = Util.parseVerificationCode(code);
+
+        // Get document associated with verification code
+        String fileId = StorageMock.lookupVerificationCode(session, verificationCode);
+        if (fileId == null) {
+            // Invalid code given!
+            // Small delay to slow down brute-force attacks (if you want to be extra careful you might want to add a
+            // CAPTCHA to the process)
+            Thread.sleep(2000);
+            // Return Not Found
+            response.setStatus(404);
+            return "";
+        }
+
+        // Locate document from storage
+        Path filePath = Application.getTempFolderPath().resolve(fileId);
+
+        // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
+        CadesSignatureExplorer sigExplorer = new CadesSignatureExplorer();
+
+        // Set PKI defaults options. (see Util.java)
+        Util.setPkiDefaults(sigExplorer);
+
+        // Specify that we want to validate the signatures in the file, not only inspect them.
+        sigExplorer.setValidate(true);
+
+        // Set the PDF file to be inspected.
+        sigExplorer.setSignatureFile(filePath);
+
+        // Call the open() method, which returns the signature file's information.
+        CadesSignature signature = sigExplorer.open();
+
+        // Render the information (see file resources/templates/check.html for more information on the information
+        // returned)
+        model.addAttribute("fileId", fileId);
+        model.addAttribute("signature", signature);
+        model.addAttribute("sigType", "cades");
         return "check";
     }
 }

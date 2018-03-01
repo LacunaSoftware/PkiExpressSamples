@@ -12,12 +12,10 @@ import sample.util.Util;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -35,8 +33,9 @@ public class PrinterFriendlyVersionController {
     // Publicly accessible URL of your website. Preferably HTTPS.
     private final String verificationSite = "http://localhost:60833/";
 
-    // Format of the verification link, with "%s" as the verification code placeholder
-    private final String verificationLinkFormat = "http://localhost:60833/check?code=%s";
+    // Format of the verification link, with "%s" as the verification code placeholder and as the signature type to be
+    // checked placeholder.
+    private final String verificationLinkFormat = "http://localhost:60833/check-%s?code=%s";
 
     // "Normal" font size. Sizes of header fonts are defined based on this size.
     private final int normalFontSize = 12;
@@ -50,11 +49,11 @@ public class PrinterFriendlyVersionController {
     // You may also change texts, positions and more by editing directly the method generatePrinterFriendlyVersion below
     // #################################################################################################################
 
-    @RequestMapping(value = "/printer-friendly-version", method = {RequestMethod.GET})
-    public void get(
+    @RequestMapping(value = "/pades-printer-friendly-version", method = {RequestMethod.GET})
+    public void getPades(
+            @RequestParam(value = "fileId") String fileId,
             HttpServletResponse httpResponse,
-            HttpSession session,
-            @RequestParam(value = "fileId") String fileId
+            HttpSession session
     ) throws IOException {
 
         // Locate document
@@ -68,8 +67,29 @@ public class PrinterFriendlyVersionController {
             StorageMock.setVerificationCode(session, fileId, verificationCode);
         }
 
-        // Generate the printer-friendly version
-        Path pfvPath = generatePrinterFriendlyVersion(filePath, verificationCode);
+        // 1. Inspect signatures on the uploaded PDF
+
+        // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
+        PadesSignatureExplorer  sigExplorer = new PadesSignatureExplorer();
+        // Set PKI defaults options. (see Util.java)
+        Util.setPkiDefaults(sigExplorer);
+        // Specify that we want to validate the signatures in the file, not only inspect them.
+        sigExplorer.setValidate(true);
+        // Set the PDF file to be inspected.
+        sigExplorer.setSignatureFile(filePath);
+        // Call the open() method, which returns the signature file's information.
+        PadesSignature signature = sigExplorer.open();
+
+        // 2. Create PDF with the verification information from uploaded PDF.
+
+        // Get an instance of the PdfMarker class, used to apply marks on the PDF.
+        PdfMarker pdfMarker = new PdfMarker();
+        // Set PKI default options. (see Util.java)
+        Util.setPkiDefaults(pdfMarker);
+        // Specify the file to be marked
+        pdfMarker.setFile(filePath);
+        // Generate marks on printer-friendly version
+        Path pfvPath = generatePrinterFriendlyVersion(pdfMarker, signature.getSigners(), verificationCode, "pades");
 
         // Return printer-friendly version as a downloadable file
         httpResponse.setHeader("Content-Disposition", "attachment; filename=printer-friendly.pdf");
@@ -78,7 +98,58 @@ public class PrinterFriendlyVersionController {
         outStream.close();
     }
 
-    private Path generatePrinterFriendlyVersion(Path pdfPath, String verificationCode) throws IOException {
+    @RequestMapping(value = "/cades-printer-friendly-version", method = {RequestMethod.GET})
+    public void getCades(
+            @RequestParam(value = "fileId") String fileId,
+            HttpServletResponse httpResponse,
+            HttpSession session
+    ) throws IOException {
+
+        // Locate document
+        Path filePath = Application.getTempFolderPath().resolve(fileId);
+
+        // Check if doc already has a verification code registered on storage
+        String verificationCode = StorageMock.getVerificationCode(session, fileId);
+        if (verificationCode == null) {
+            // If not, generate and register it
+            verificationCode = Util.generateVerificationCode();
+            StorageMock.setVerificationCode(session, fileId, verificationCode);
+        }
+
+        // 1. Inspect signatures on the uploaded PDF
+
+        // Get an instance of the CadesSignatureExplorer class, used to open/validate CAdES signatures.
+        CadesSignatureExplorer sigExplorer = new CadesSignatureExplorer();
+        // Set PKI defaults options. (see Util.java)
+        Util.setPkiDefaults(sigExplorer);
+        // Specify that we want to validate the signatures in the file, not only inspect them.
+        sigExplorer.setValidate(true);
+        // Set the PDF file to be inspected.
+        sigExplorer.setSignatureFile(filePath);
+        // Call the open() method, which returns the signature file's information.
+        CadesSignature signature = sigExplorer.open();
+        // Obtain encapsulated content from the signature
+        byte[] encapsulatedContent = signature.getEncapsulatedContent();
+
+        // 2. Create PDF with the verification information from uploaded PDF.
+
+        // Get an instance of the PdfMarker class, used to apply marks on the PDF.
+        PdfMarker pdfMarker = new PdfMarker();
+        // Set PKI default options. (see Util.java)
+        Util.setPkiDefaults(pdfMarker);
+        // Specify the file to be marked
+        pdfMarker.setFile(encapsulatedContent);
+        // Generate marks on printer-friendly version
+        Path pfvPath = generatePrinterFriendlyVersion(pdfMarker, signature.getSigners(), verificationCode, "cades");
+
+        // Return printer-friendly version as a downloadable file
+        httpResponse.setHeader("Content-Disposition", "attachment; filename=printer-friendly.pdf");
+        OutputStream outStream = httpResponse.getOutputStream();
+        Files.copy(pfvPath, outStream);
+        outStream.close();
+    }
+
+    private <T extends CadesSignerInfo> Path generatePrinterFriendlyVersion(PdfMarker pdfMarker, List<T> signers, String verificationCode, String sigType) throws IOException {
 
         // The verification code is generated without hyphens to save storage space and avoid copy-and-paste problems.
         // On the PDF generation, we use the "formatted" version, with hyphens (which will later be discarded on the
@@ -87,35 +158,11 @@ public class PrinterFriendlyVersionController {
 
         // Build the verification link from the constant "VerificationLinkFormat" (see above) and the formatted
         // verification code
-        String verificationLink = String.format(verificationLinkFormat, formattedVerificationCode);
-
-        // 1. Inspect signatures on the uploaded PDF
-
-        // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
-        PadesSignatureExplorer  sigExplorer = new PadesSignatureExplorer(Util.getPkiExpressConfig());
-        // Set PKI defaults options. (see Util.java)
-        Util.setPkiDefaults(sigExplorer);
-        // Specify that we want to validate the signatures in the file, not only inspect them.
-        sigExplorer.setValidate(true);
-        // Set the PDF file to be inspected.
-        sigExplorer.setSignatureFile(pdfPath);
-        // Call the open() method, which returns the signature file's information.
-        PadesSignature signature = sigExplorer.open();
-
-        // 2. Create PDF with verification information from uploaded PDF
-
-        // Get an instance of the PdfMarker class, used to apply marks on the PDF.
-        PdfMarker pdfMarker = new PdfMarker(Util.getPkiExpressConfig());
-
-        // Set the PKI default options. (Util.java)
-        Util.setPkiDefaults(pdfMarker);
-
-        // Specify the PDF file to be marked
-        pdfMarker.setFile(pdfPath);
+        String verificationLink = String.format(verificationLinkFormat, sigType, formattedVerificationCode);
 
         // Build string with joined names of signers (see method getDisplayName below)
         List<String> signerNamesList = new ArrayList<String>();
-        for (PadesSignerInfo signer : signature.getSigners()) {
+        for (T signer : signers) {
             signerNamesList.add(getDisplayName(signer.getCertificate()));
         }
         String signerNames = Util.joinStringsPt(signerNamesList);
@@ -219,7 +266,7 @@ public class PrinterFriendlyVersionController {
         verticalOffset += elementHeight;
 
         // Iterate signers
-        for (PadesSignerInfo signer : signature.getSigners()) {
+        for (T signer : signers) {
 
             elementHeight = 1.5;
             manifestMark
@@ -297,7 +344,7 @@ public class PrinterFriendlyVersionController {
         return sb.toString();
     }
 
-    private static String getSignerDescription(PadesSignerInfo signer) {
+    private static <T extends CadesSignerInfo> String getSignerDescription(T signer) {
         StringBuilder sb = new StringBuilder();
         sb.append(getDescription(signer.getCertificate()));
         if (signer.getSigningTime() != null) {

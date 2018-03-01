@@ -89,7 +89,7 @@ public class CadesSignatureController {
 
 				// Get an instance of the CadesSignatureStarter class, responsible for receiving the signature elements
 				// and start the signature process.
-				CadesSignatureStarter signatureStarter = new CadesSignatureStarter(Util.getPkiExpressConfig());
+				CadesSignatureStarter signatureStarter = new CadesSignatureStarter();
 
 				// Set PKI default options (see Util.java)
 				Util.setPkiDefaults(signatureStarter);
@@ -145,7 +145,7 @@ public class CadesSignatureController {
 			try {
 
 				// Get an instance of the SignatureFinisher class, responsible for completing the signature process.
-				SignatureFinisher signatureFinisher = new SignatureFinisher(Util.getPkiExpressConfig());
+				SignatureFinisher signatureFinisher = new SignatureFinisher();
 
 				// Set PKI default options (see Util.java)
 				Util.setPkiDefaults(signatureFinisher);

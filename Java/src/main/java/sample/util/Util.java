@@ -1,10 +1,8 @@
 package sample.util;
 
-import com.lacunasoftware.pkiexpress.PkiExpressConfig;
 import com.lacunasoftware.pkiexpress.PkiExpressOperator;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import sample.Application;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -12,25 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Util {
 
 	public static SecureRandom rng = new SecureRandom();
-
-	public static PkiExpressConfig getPkiExpressConfig() throws IOException {
-
-		// Retrieve configuration from application.properties file
-		String pkiExpressHome = Application.environment.getProperty("pkiExpress.home");
-		String pkiExpressTempFolder = Application.environment.getProperty("pkiExpress.tempFolder");
-		String pkiExpressTransferFilesFolder = Application.environment.getProperty("pkiExpress.transferFilesFolder");
-
-		// Instantiate of the PkiExpressConfig class.
-		return new PkiExpressConfig(pkiExpressHome, pkiExpressTempFolder, pkiExpressTransferFilesFolder);
-	}
 
 	public static void setPkiDefaults(PkiExpressOperator operator) {
 
@@ -41,7 +25,7 @@ public class Util {
 		//operator.addTrustedRoot(path3);
 
 		// If you want the operator to trust on Lacuna Test Root (default: false), uncomment the following line:
-		//operator.setTrustLacunaTestRoot(true);
+		operator.setTrustLacunaTestRoot(true);
 		// THIS SHOULD NEVER BE USED ON A PRODUCTION ENVIRONMENT!
 
 		// If you want the operator to perfom its action on "OFFLINE MODE" (default: false), uncomment the following

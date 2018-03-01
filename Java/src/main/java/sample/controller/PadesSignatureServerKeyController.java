@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import sample.Application;
-import sample.controller.util.PadesVisualElements;
+import sample.util.PadesVisualElements;
 import sample.util.Util;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +39,7 @@ public class PadesSignatureServerKeyController {
 
             // Get an instance of the PadesSigner class, responsible for receiving the signature elements and performing
             // the local signature.
-            PadesSigner signer = new PadesSigner(Util.getPkiExpressConfig());
+            PadesSigner signer = new PadesSigner();
 
             // Set PKI default options (see Util.java)
             Util.setPkiDefaults(signer);
