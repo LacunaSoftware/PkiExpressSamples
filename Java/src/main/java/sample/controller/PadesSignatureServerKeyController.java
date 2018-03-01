@@ -50,11 +50,6 @@ public class PadesSignatureServerKeyController {
             // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
             signer.setCertificateThumbprint("f6c24db85cb0187c73014cc3834e5a96b8c458bc");
 
-            // Set a file reference for the stamp file. Note that this file can be referenced later by
-            // "fref://stamp" at the "url" field on the visual representation (see content/vr.json file or
-            // getVisualRepresentation(case) method).
-            signer.addFileReference("stamp", Util.getPdfStampPath());
-
             // Set visual representation. We provide a Java class that represents the visual representation
             // model.
             signer.setVisualRepresentation(PadesVisualElements.getVisualRepresentation(1));

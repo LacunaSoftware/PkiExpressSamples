@@ -65,7 +65,7 @@ public class PadesVisualElements {
                 return vr;
 
             default:
-                return null;
+                throw new IllegalArgumentException();
         }
     }
 }

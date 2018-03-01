@@ -33,10 +33,10 @@ public class PrinterFriendlyVersionController {
     private final String verificationSiteNameWithArticle = "a Minha Central de Verificação";
 
     // Publicly accessible URL of your website. Preferably HTTPS.
-    private final String verificationSite = "http://localhost:8000/";
+    private final String verificationSite = "http://localhost:60833/";
 
     // Format of the verification link, with "%s" as the verification code placeholder
-    private final String verificationLinkFormat = "http://localhost:8000/check?code=%s";
+    private final String verificationLinkFormat = "http://localhost:60833/check?code=%s";
 
     // "Normal" font size. Sizes of header fonts are defined based on this size.
     private final int normalFontSize = 12;
@@ -144,7 +144,7 @@ public class PrinterFriendlyVersionController {
                 pdf.mark()
                         .onAllPages()
                         .onContainer(pdf.container().height(2).anchorBottom().varWidth().margins(1.5, 3.5))
-                        .addElement(((PdfMarkTextElement)pdf.textElement().withOpacity(75)).addSection(allPagesMessage))
+                        .addElement(pdf.textElement().withOpacity(75).addSection(allPagesMessage))
         );
 
         // Summary on right margin of every page (except on the page which will be created at the end of the document),
