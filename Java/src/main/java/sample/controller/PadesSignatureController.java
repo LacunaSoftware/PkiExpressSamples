@@ -98,11 +98,6 @@ public class PadesSignatureController {
 				// Set Base64-encoded certificate's content to signature starter.
 				signatureStarter.setCertificateBase64(certContent);
 
-				// Set a file reference for the stamp file. Note that this file can be referenced later by
-				// "fref://stamp" at the "url" field on the visual representation (see content/vr.json file or
-				// getVisualRepresentation(case) method).
-				signatureStarter.addFileReference("stamp", Util.getPdfStampPath());
-
 				// Set visual representation. We provide a Java class that represents the visual representation
 				// model.
 				signatureStarter.setVisualRepresentation(PadesVisualElements.getVisualRepresentation(1));

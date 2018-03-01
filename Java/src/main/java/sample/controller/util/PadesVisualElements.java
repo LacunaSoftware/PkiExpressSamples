@@ -2,11 +2,14 @@ package sample.controller.util;
 
 
 import com.lacunasoftware.pkiexpress.*;
+import sample.util.Util;
+
+import java.io.IOException;
 
 
 public class PadesVisualElements {
     // This method is called by the get() method. It contains examples of signature visual representation positionings.
-    public static PadesVisualRepresentation getVisualRepresentation(int sampleNumber) {
+    public static PadesVisualRepresentation getVisualRepresentation(int sampleNumber) throws IOException {
 
         switch (sampleNumber) {
 
@@ -33,9 +36,8 @@ public class PadesVisualElements {
 
                 // Create an instance of PadesVisualImage class.
                 PadesVisualImage image = new PadesVisualImage();
-                // Added file reference previous created (see method addFileReference(alias, referece) on Pades
-                // samples).
-                image.setUrl("fref://stamp");
+                // Set the path of the image
+                image.setContent(Util.getPdfStampPath().toString());
                 // Add image to visual representation.
                 vr.setImage(image);
 
