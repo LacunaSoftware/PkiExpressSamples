@@ -1,8 +1,7 @@
-package sample.controller.util;
+package sample.util;
 
 
 import com.lacunasoftware.pkiexpress.*;
-import sample.util.Util;
 
 import java.io.IOException;
 
@@ -65,7 +64,7 @@ public class PadesVisualElements {
                 return vr;
 
             default:
-                return null;
+                throw new IllegalArgumentException();
         }
     }
 }

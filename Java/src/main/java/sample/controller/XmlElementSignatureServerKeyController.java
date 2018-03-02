@@ -1,6 +1,5 @@
 package sample.controller;
 
-
 import com.lacunasoftware.pkiexpress.XmlSignaturePolicies;
 import com.lacunasoftware.pkiexpress.XmlSigner;
 import org.springframework.stereotype.Controller;
@@ -32,7 +31,7 @@ public class XmlElementSignatureServerKeyController {
 
             // Get an instance of the XmlSigner class, responsible for receiving the signature elements and performing
             // the local signature.
-            XmlSigner signer = new XmlSigner(Util.getPkiExpressConfig());
+            XmlSigner signer = new XmlSigner();
 
             // Set PKI default options (see Util.java)
             Util.setPkiDefaults(signer);
