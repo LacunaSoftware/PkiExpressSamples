@@ -40,7 +40,7 @@ public class CheckPadesController {
             Thread.sleep(2000);
             // Return Not Found
             response.setStatus(404);
-            return "";
+            return null;
         }
 
         // Locate document from storage
