@@ -25,7 +25,7 @@ public class Util {
 		//operator.addTrustedRoot(path3);
 
 		// If you want the operator to trust on Lacuna Test Root (default: false), uncomment the following line:
-		operator.setTrustLacunaTestRoot(true);
+		//operator.setTrustLacunaTestRoot(true);
 		// THIS SHOULD NEVER BE USED ON A PRODUCTION ENVIRONMENT!
 
 		// If you want the operator to perfom its action on "OFFLINE MODE" (default: false), uncomment the following
