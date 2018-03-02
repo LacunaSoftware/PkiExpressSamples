@@ -25,7 +25,7 @@ public class OpenPadesSignatureController {
             HttpServletResponse response
     ) throws IOException {
 
-        // Get an instance of the PadesSignatureExplorer2 class, used to open/validate PDF signatures.
+        // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
         PadesSignatureExplorer sigExplorer = new PadesSignatureExplorer();
 
         // Set PKI default options. (see Util.java)

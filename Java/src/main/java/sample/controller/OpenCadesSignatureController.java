@@ -35,6 +35,10 @@ public class OpenCadesSignatureController {
         // Set the PDF file to be inspected.
         sigExplorer.setSignatureFile(Application.getTempFolderPath().resolve(userfile));
 
+        // If the CMS was a "detached" signature, the original file must be provided with the
+        // setDataFile(path) method:
+        //sigExplorer.setDataFile(content | path | stream);
+
         // Specify that we want to validate the signatures in the file, not only inspect them.
         sigExplorer.setValidate(true);
 

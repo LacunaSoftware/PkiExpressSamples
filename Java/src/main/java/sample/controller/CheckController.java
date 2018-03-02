@@ -61,12 +61,11 @@ public class CheckController {
         // Call the open() method, which returns the signature file's information.
         PadesSignature signature = sigExplorer.open();
 
-        // Render the information (see file resources/templates/check.html for more information on the information
+        // Render the information (see file resources/templates/check-pades.html for more information on the information
         // returned)
         model.addAttribute("fileId", fileId);
         model.addAttribute("signature", signature);
-        model.addAttribute("sigType", "pades");
-        return "check";
+        return "check-pades";
     }
 
     @RequestMapping(value = "/check-cades", method = {RequestMethod.GET})
@@ -97,7 +96,7 @@ public class CheckController {
         // Locate document from storage
         Path filePath = Application.getTempFolderPath().resolve(fileId);
 
-        // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
+        // Get an instance of the CadesSignatureExplorer class, used to open/validate PDF signatures.
         CadesSignatureExplorer sigExplorer = new CadesSignatureExplorer();
 
         // Set PKI defaults options. (see Util.java)
@@ -112,11 +111,10 @@ public class CheckController {
         // Call the open() method, which returns the signature file's information.
         CadesSignature signature = sigExplorer.open();
 
-        // Render the information (see file resources/templates/check.html for more information on the information
+        // Render the information (see file resources/templates/check-cades.html for more information on the information
         // returned)
         model.addAttribute("fileId", fileId);
         model.addAttribute("signature", signature);
-        model.addAttribute("sigType", "cades");
-        return "check";
+        return "check-cades";
     }
 }

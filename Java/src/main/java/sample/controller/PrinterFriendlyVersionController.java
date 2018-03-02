@@ -126,10 +126,16 @@ public class PrinterFriendlyVersionController {
         sigExplorer.setValidate(true);
         // Set the PDF file to be inspected.
         sigExplorer.setSignatureFile(filePath);
+        // Generate path for the output file that will be stored the encapsulated content from the signature.
+        String encapsulatedContentPath = UUID.randomUUID() + ".pdf";
+        sigExplorer.setExtractContentPath(Application.getTempFolderPath().resolve(encapsulatedContentPath));
+
+        // If the CMS was a "detached" signature, the original file must be provided with the
+        // setDataFile(path) method:
+        //sigExplorer.setDataFile(content | path | stream);
+
         // Call the open() method, which returns the signature file's information.
         CadesSignature signature = sigExplorer.open();
-        // Obtain encapsulated content from the signature
-        byte[] encapsulatedContent = signature.getEncapsulatedContent();
 
         // 2. Create PDF with the verification information from uploaded PDF.
 
@@ -137,8 +143,8 @@ public class PrinterFriendlyVersionController {
         PdfMarker pdfMarker = new PdfMarker();
         // Set PKI default options. (see Util.java)
         Util.setPkiDefaults(pdfMarker);
-        // Specify the file to be marked
-        pdfMarker.setFile(encapsulatedContent);
+        // Specify the file to be marked. In this sample, we will use the encapsulated content to be marked.
+        pdfMarker.setFile(Application.getTempFolderPath().resolve(encapsulatedContentPath));
         // Generate marks on printer-friendly version
         Path pfvPath = generatePrinterFriendlyVersion(pdfMarker, signature.getSigners(), verificationCode, "cades");
 

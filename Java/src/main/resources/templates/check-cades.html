@@ -7,7 +7,7 @@
 
 <div class="container">
 
-    <h2>Open existing PAdES Signature</h2>
+    <h2>Open existing CAdES Signature</h2>
 
     <h3>The given file contains <span th:text="${signature.getSigners().size()}" /> signatures:</h3>
 
@@ -72,7 +72,7 @@
     <h3>Actions:</h3>
     <ul>
         <li><a th:href="'/files/' + ${fileId}">Download the signed file</a></li>
-        <li><a th:href="'/' + ${sigType} + '-printer-friendly-version?fileId=' + ${fileId}">Download a printer-friendly version of the signed file</a></li>
+        <li><a th:href="'/cades-printer-friendly-version?fileId=' + ${fileId}">Download a printer-friendly version of the signed file</a></li>
     </ul>
 
 </div>
