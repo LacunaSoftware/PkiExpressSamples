@@ -38,7 +38,7 @@ public class CadesSignatureServerKeyController {
 
             // Get an instance of the CadesSigner class, responsible for receiving the signature elements and performing
             // the local signature.
-            CadesSigner signer = new CadesSigner(Util.getPkiExpressConfig());
+            CadesSigner signer = new CadesSigner();
 
             // Set PKI default options (see Util.java)
             Util.setPkiDefaults(signer);

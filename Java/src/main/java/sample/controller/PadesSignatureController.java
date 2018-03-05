@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sample.Application;
-import sample.controller.util.PadesVisualElements;
+import sample.util.PadesVisualElements;
 import sample.util.Util;
 
 import javax.servlet.http.HttpServletResponse;
@@ -87,7 +87,7 @@ public class PadesSignatureController {
 
 				// Get an instance of the PadesSignatureStarter class, responsible for receiving the signature elements
 				// and start the signature process.
-				PadesSignatureStarter signatureStarter = new PadesSignatureStarter(Util.getPkiExpressConfig());
+				PadesSignatureStarter signatureStarter = new PadesSignatureStarter();
 
 				// Set PKI default options (see Util.java)
 				Util.setPkiDefaults(signatureStarter);
@@ -97,11 +97,6 @@ public class PadesSignatureController {
 
 				// Set Base64-encoded certificate's content to signature starter.
 				signatureStarter.setCertificateBase64(certContent);
-
-				// Set a file reference for the stamp file. Note that this file can be referenced later by
-				// "fref://stamp" at the "url" field on the visual representation (see content/vr.json file or
-				// getVisualRepresentation(case) method).
-				signatureStarter.addFileReference("stamp", Util.getPdfStampPath());
 
 				// Set visual representation. We provide a Java class that represents the visual representation
 				// model.
@@ -149,7 +144,7 @@ public class PadesSignatureController {
 			try {
 
 				// Get an instance of the SignatureFinisher class, responsible for completing the signature process.
-				SignatureFinisher signatureFinisher = new SignatureFinisher(Util.getPkiExpressConfig());
+				SignatureFinisher signatureFinisher = new SignatureFinisher();
 
 				// Set PKI default options (see Util.java)
 				Util.setPkiDefaults(signatureFinisher);
