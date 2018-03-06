@@ -179,6 +179,7 @@ public class CadesSignatureController {
 				// Render the link to download the signed file.
 				model.addAttribute("state", state);
 				model.addAttribute("outputFile", filename);
+				model.addAttribute("ext", Util.getFileExtension(fileToSign));
 
 			} catch (Exception ex) {
 

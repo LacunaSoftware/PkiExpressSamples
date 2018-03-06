@@ -68,6 +68,7 @@ public class CadesSignatureServerKeyController {
 
             // Render the link to download the signed file.
             model.addAttribute("outputFile", filename);
+            model.addAttribute("ext", Util.getFileExtension(userfile));
 
         } catch(Exception ex) {
 

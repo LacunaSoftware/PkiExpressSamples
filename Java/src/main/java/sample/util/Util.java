@@ -1,5 +1,6 @@
 package sample.util;
 
+import com.lacunasoftware.pkiexpress.PKCertificate;
 import com.lacunasoftware.pkiexpress.PkiExpressOperator;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -48,6 +49,7 @@ public class Util {
 		buffer.flush();
 		return buffer.toByteArray();
 	}
+
 	public static Path getSampleDocPath() throws IOException {
 		return new ClassPathResource("/static/SampleDocument.pdf").getFile().toPath();
 	}
@@ -61,6 +63,7 @@ public class Util {
         buffer.flush();
         return buffer.toByteArray();
     }
+    
 	public static Path getSampleNFePath() throws IOException {
 		return new ClassPathResource("/static/SampleNFe.xml").getFile().toPath();
 	}
@@ -84,12 +87,17 @@ public class Util {
 		buffer.flush();
 		return buffer.toByteArray();
 	}
+
 	public static Path getVisualRepresentationPath() throws IOException {
 		return new ClassPathResource("/static/vr.json").getFile().toPath();
 	}
 
 	public static Path getPdfStampPath() throws IOException {
 		return new ClassPathResource("/static/stamp.png").getFile().toPath();
+	}
+
+	public static Path getBlankPdfPath() throws IOException {
+		return new ClassPathResource("/static/blank.pdf").getFile().toPath();
 	}
 
 	public static byte[] getIcpBrasilLogoContent() throws IOException {
@@ -129,6 +137,35 @@ public class Util {
 			++index;
 		}
 		return text.toString();
+	}
+
+	public static String getDescription(PKCertificate c) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getDisplayName(c));
+		if (c.getPkiBrazil().getCpf() != null) {
+			sb.append(String.format(" (CPF %s)", c.getPkiBrazil().getCpfFormatted()));
+		}
+		if (c.getPkiBrazil().getCnpj() != null) {
+			sb.append(String.format(", empresa %s (CNPJ %s)", c.getPkiBrazil().getCompanyName(), c.getPkiBrazil().getCnpjFormatted()));
+		}
+		return sb.toString();
+	}
+
+	public static String getDisplayName(PKCertificate c) {
+		if (c.getPkiBrazil().getResponsavel() != null) {
+			return c.getPkiBrazil().getResponsavel();
+		}
+		return c.getSubjectName().getCommonName();
+	}
+
+	public static String getFileExtension(String filename) {
+		// Get immediately next index after last '.' character.
+		String extension = "";
+		int extensionIndex = filename.lastIndexOf(".") + 1;
+		if (extensionIndex > 0) {
+			extension = filename.substring(extensionIndex);
+		}
+		return extension;
 	}
 
 	/*
