@@ -32,7 +32,7 @@ public class CheckCadesController {
         // hyphens before looking it up.
         String verificationCode = Util.parseVerificationCode(code);
 
-        // Get document associated with verification code
+        // Get document associated with verification code and the extension of the signed file.
         String fileId = StorageMock.lookupVerificationCode(session, verificationCode);
         if (fileId == null) {
             // Invalid code given!
@@ -66,6 +66,7 @@ public class CheckCadesController {
         // returned)
         model.addAttribute("fileId", fileId);
         model.addAttribute("signature", signature);
+
         return "check-cades";
     }
 }

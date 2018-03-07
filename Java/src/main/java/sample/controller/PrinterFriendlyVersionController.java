@@ -33,9 +33,8 @@ public class PrinterFriendlyVersionController {
     // Publicly accessible URL of your website. Preferably HTTPS.
     private final String verificationSite = "http://localhost:60833/";
 
-    // Format of the verification link, with "%s" as the verification code placeholder and as the signature type to be
-    // checked placeholder.
-    private final String verificationLinkFormat = "http://localhost:60833/check-%s?code=%s";
+    // Format of the verification link, with "%s" as the verification code placeholder.
+    private final String verificationLinkFormat = "http://localhost:60833/check-pades?code=%s";
 
     // "Normal" font size. Sizes of header fonts are defined based on this size.
     private final int normalFontSize = 12;
@@ -49,7 +48,7 @@ public class PrinterFriendlyVersionController {
     // You may also change texts, positions and more by editing directly the method generatePrinterFriendlyVersion below
     // #################################################################################################################
 
-    @RequestMapping(value = "/pades-printer-friendly-version", method = {RequestMethod.GET})
+    @RequestMapping(value = "/printer-friendly-version", method = {RequestMethod.GET})
     public void getPades(
             @RequestParam(value = "fileId") String fileId,
             HttpServletResponse httpResponse,
@@ -67,6 +66,27 @@ public class PrinterFriendlyVersionController {
             StorageMock.setVerificationCode(session, fileId, verificationCode);
         }
 
+        // Generate marks on printer-friendly version
+        Path pfvPath = generatePrinterFriendlyVersion(filePath, verificationCode);
+
+        // Return printer-friendly version as a downloadable file
+        httpResponse.setHeader("Content-Disposition", "attachment; filename=printer-friendly.pdf");
+        OutputStream outStream = httpResponse.getOutputStream();
+        Files.copy(pfvPath, outStream);
+        outStream.close();
+    }
+
+    private Path generatePrinterFriendlyVersion(Path pdfPath, String verificationCode) throws IOException {
+
+        // The verification code is generated without hyphens to save storage space and avoid copy-and-paste problems.
+        // On the PDF generation, we use the "formatted" version, with hyphens (which will later be discarded on the
+        // verification page)
+        String formattedVerificationCode = Util.formatVerificationCode(verificationCode);
+
+        // Build the verification link from the constant "verificationLinkFormat" (see above) and the formatted
+        // verification code
+        String verificationLink = String.format(verificationLinkFormat, formattedVerificationCode);
+
         // 1. Inspect signatures on the uploaded PDF
 
         // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
@@ -76,7 +96,7 @@ public class PrinterFriendlyVersionController {
         // Specify that we want to validate the signatures in the file, not only inspect them.
         sigExplorer.setValidate(true);
         // Set the PDF file to be inspected.
-        sigExplorer.setSignatureFile(filePath);
+        sigExplorer.setSignatureFile(pdfPath);
         // Call the open() method, which returns the signature file's information.
         PadesSignature signature = sigExplorer.open();
 
@@ -87,95 +107,18 @@ public class PrinterFriendlyVersionController {
         // Set PKI default options. (see Util.java)
         Util.setPkiDefaults(pdfMarker);
         // Specify the file to be marked
-        pdfMarker.setFile(filePath);
-        // Generate marks on printer-friendly version
-        Path pfvPath = generatePrinterFriendlyVersion(pdfMarker, signature.getSigners(), verificationCode, "pades");
-
-        // Return printer-friendly version as a downloadable file
-        httpResponse.setHeader("Content-Disposition", "attachment; filename=printer-friendly.pdf");
-        OutputStream outStream = httpResponse.getOutputStream();
-        Files.copy(pfvPath, outStream);
-        outStream.close();
-    }
-
-    @RequestMapping(value = "/cades-printer-friendly-version", method = {RequestMethod.GET})
-    public void getCades(
-            @RequestParam(value = "fileId") String fileId,
-            HttpServletResponse httpResponse,
-            HttpSession session
-    ) throws IOException {
-
-        // Locate document
-        Path filePath = Application.getTempFolderPath().resolve(fileId);
-
-        // Check if doc already has a verification code registered on storage
-        String verificationCode = StorageMock.getVerificationCode(session, fileId);
-        if (verificationCode == null) {
-            // If not, generate and register it
-            verificationCode = Util.generateVerificationCode();
-            StorageMock.setVerificationCode(session, fileId, verificationCode);
-        }
-
-        // 1. Inspect signatures on the uploaded PDF
-
-        // Get an instance of the CadesSignatureExplorer class, used to open/validate CAdES signatures.
-        CadesSignatureExplorer sigExplorer = new CadesSignatureExplorer();
-        // Set PKI defaults options. (see Util.java)
-        Util.setPkiDefaults(sigExplorer);
-        // Specify that we want to validate the signatures in the file, not only inspect them.
-        sigExplorer.setValidate(true);
-        // Set the PDF file to be inspected.
-        sigExplorer.setSignatureFile(filePath);
-        // Generate path for the output file that will be stored the encapsulated content from the signature.
-        String encapsulatedContentPath = UUID.randomUUID() + ".pdf";
-        sigExplorer.setExtractContentPath(Application.getTempFolderPath().resolve(encapsulatedContentPath));
-
-        // If the CMS was a "detached" signature, the original file must be provided with the
-        // setDataFile(path) method:
-        //sigExplorer.setDataFile(content | path | stream);
-
-        // Call the open() method, which returns the signature file's information.
-        CadesSignature signature = sigExplorer.open();
-
-        // 2. Create PDF with the verification information from uploaded PDF.
-
-        // Get an instance of the PdfMarker class, used to apply marks on the PDF.
-        PdfMarker pdfMarker = new PdfMarker();
-        // Set PKI default options. (see Util.java)
-        Util.setPkiDefaults(pdfMarker);
-        // Specify the file to be marked. In this sample, we will use the encapsulated content to be marked.
-        pdfMarker.setFile(Application.getTempFolderPath().resolve(encapsulatedContentPath));
-        // Generate marks on printer-friendly version
-        Path pfvPath = generatePrinterFriendlyVersion(pdfMarker, signature.getSigners(), verificationCode, "cades");
-
-        // Return printer-friendly version as a downloadable file
-        httpResponse.setHeader("Content-Disposition", "attachment; filename=printer-friendly.pdf");
-        OutputStream outStream = httpResponse.getOutputStream();
-        Files.copy(pfvPath, outStream);
-        outStream.close();
-    }
-
-    private <T extends CadesSignerInfo> Path generatePrinterFriendlyVersion(PdfMarker pdfMarker, List<T> signers, String verificationCode, String sigType) throws IOException {
-
-        // The verification code is generated without hyphens to save storage space and avoid copy-and-paste problems.
-        // On the PDF generation, we use the "formatted" version, with hyphens (which will later be discarded on the
-        // verification page)
-        String formattedVerificationCode = Util.formatVerificationCode(verificationCode);
-
-        // Build the verification link from the constant "VerificationLinkFormat" (see above) and the formatted
-        // verification code
-        String verificationLink = String.format(verificationLinkFormat, sigType, formattedVerificationCode);
+        pdfMarker.setFile(pdfPath);
 
         // Build string with joined names of signers (see method getDisplayName below)
         List<String> signerNamesList = new ArrayList<String>();
-        for (T signer : signers) {
-            signerNamesList.add(getDisplayName(signer.getCertificate()));
+        for (PadesSignerInfo signer : signature.getSigners()) {
+            signerNamesList.add(Util.getDisplayName(signer.getCertificate()));
         }
         String signerNames = Util.joinStringsPt(signerNamesList);
         String allPagesMessage = String.format("Este documento foi assinado digitalmente por %s.\nPara verificar a validade das assinaturas acesse %s em %s e informe o código %s", signerNames, verificationSiteNameWithArticle, verificationSite, formattedVerificationCode);
 
-        // PdfHelper is a class from the Rest PKI Client "fluent API" that helps to create elements and parameters for
-        // the PdfMarker
+        // PdfHelper is a class from the PKI Express's "fluent API" that helps creating elements and parameters for the
+        // PdfMarker.
         PdfHelper pdf = new PdfHelper();
 
         // ICP-Brasil logo on bottom-right corner of every page (except on the page which will be created at the end of
@@ -272,7 +215,7 @@ public class PrinterFriendlyVersionController {
         verticalOffset += elementHeight;
 
         // Iterate signers
-        for (T signer : signers) {
+        for (PadesSignerInfo signer : signature.getSigners()) {
 
             elementHeight = 1.5;
             manifestMark
@@ -331,28 +274,9 @@ public class PrinterFriendlyVersionController {
 
     }
 
-    private static String getDisplayName(PKCertificate c) {
-        if (c.getPkiBrazil().getResponsavel() != null) {
-            return c.getPkiBrazil().getResponsavel();
-        }
-        return c.getSubjectName().getCommonName();
-    }
-
-    private static String getDescription(PKCertificate c) {
+    private static String getSignerDescription(PadesSignerInfo signer) {
         StringBuilder sb = new StringBuilder();
-        sb.append(getDisplayName(c));
-        if (c.getPkiBrazil().getCpf() != null) {
-            sb.append(String.format(" (CPF %s)", c.getPkiBrazil().getCpfFormatted()));
-        }
-        if (c.getPkiBrazil().getCnpj() != null) {
-            sb.append(String.format(", empresa %s (CNPJ %s)", c.getPkiBrazil().getCompanyName(), c.getPkiBrazil().getCnpjFormatted()));
-        }
-        return sb.toString();
-    }
-
-    private static <T extends CadesSignerInfo> String getSignerDescription(T signer) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getDescription(signer.getCertificate()));
+        sb.append(Util.getDescription(signer.getCertificate()));
         if (signer.getSigningTime() != null) {
             sb.append(String.format(" em %s", new SimpleDateFormat(dateFormat).format(signer.getSigningTime())));
         }

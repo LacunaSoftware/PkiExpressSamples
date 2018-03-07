@@ -1,6 +1,7 @@
 package sample.util;
 
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class StorageMock {
@@ -49,5 +50,4 @@ public class StorageMock {
         // verification code column, which should be an indexed column
         return (String) session.getAttribute(String.format("Codes/%s", code));
     }
-
 }

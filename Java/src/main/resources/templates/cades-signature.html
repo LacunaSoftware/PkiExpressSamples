@@ -97,7 +97,7 @@
         <!--/* This page is shown when the signature is completed with signature */-->
         <p>File signed sucessfully!</p>
         <a th:href="'/files/' + ${outputFile}" class="btn btn-info">Download the signed file</a>
-        <a th:href="'/cades-printer-friendly-version?fileId=' + ${outputFile}" class="btn btn-default">Download a printer-friendly version of the signed file</a>
+        <a th:href="'/signature-package?fileId=' + ${outputFile} + '&amp;ext=' + ${ext}" class="btn btn-default">Download a signature package of the signed file</a>
 
     </div>
 
