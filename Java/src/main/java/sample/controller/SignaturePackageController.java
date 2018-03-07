@@ -248,7 +248,7 @@ public class SignaturePackageController {
         FileOutputStream fout = new FileOutputStream(signaturePackagePath.toFile());
         ZipOutputStream zout = new ZipOutputStream(fout);
         // Add original file to zip, adding original extension.
-        ZipEntry originalFile = new ZipEntry("document." + originalExtension);
+        ZipEntry originalFile = new ZipEntry(String.format("document.%s", originalExtension));
         zout.putNextEntry(originalFile);
         Files.copy(encapsulateContentTargetPath, zout);
         zout.closeEntry();
