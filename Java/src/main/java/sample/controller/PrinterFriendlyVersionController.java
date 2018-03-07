@@ -74,9 +74,6 @@ public class PrinterFriendlyVersionController {
         OutputStream outStream = httpResponse.getOutputStream();
         Files.copy(pfvPath, outStream);
         outStream.close();
-
-
-
     }
 
     private Path generatePrinterFriendlyVersion(Path pdfPath, String verificationCode) throws IOException {

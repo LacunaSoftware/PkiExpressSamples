@@ -22,7 +22,6 @@ public class CheckCadesController {
     @RequestMapping(value = "/check-cades", method = {RequestMethod.GET})
     public String get(
             @RequestParam(value = "code") String code,
-            @RequestParam(value = "ext", required = false) String originalExtension,
             Model model,
             HttpSession session,
             HttpServletResponse response
@@ -67,7 +66,6 @@ public class CheckCadesController {
         // returned)
         model.addAttribute("fileId", fileId);
         model.addAttribute("signature", signature);
-        model.addAttribute("ext", originalExtension);
 
         return "check-cades";
     }

@@ -89,13 +89,8 @@ public class SignaturePackageController {
         String formattedVerificationCode = Util.formatVerificationCode(verificationCode);
 
         // Build the verification link from the constant "VerificationLinkFormat" (see above) and the formatted
-        // verification code. Add information about the original file's extension to be used on verification page.
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format(verificationLinkFormat, formattedVerificationCode));
-        if (originalExtension != null) {
-            sb.append(String.format("&ext=%s", originalExtension));
-        }
-        String verificationLink = sb.toString();
+        // verification code.
+        String verificationLink = String.format(verificationLinkFormat, formattedVerificationCode);
 
         // 1. Inspect signature on the uploaded PDF.
 
