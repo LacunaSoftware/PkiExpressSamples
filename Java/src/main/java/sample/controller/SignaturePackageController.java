@@ -182,7 +182,7 @@ public class SignaturePackageController {
             pdf.textElement()
                .onContainer(pdf.container().height(elementHeight).anchorTop(verticalOffset).fullWidth())
                .addSection(pdf.textSection().withFontSize(normalFontSize).withText("O arquivo "))
-               .addSection(pdf.textSection().withFontSize(normalFontSize).withText("sample.doc").bold())
+               .addSection(pdf.textSection().withFontSize(normalFontSize).withText(String.format("document.%s", originalExtension)).bold())
                .addSection(pdf.textSection().withFontSize(normalFontSize).withText(String.format(" que acompanha este documento foi assinado digitalmente pelos seguintes signatários nas datas indicadas (%s)", timeZoneDisplayName)))
         );
         verticalOffset += elementHeight;
