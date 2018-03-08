@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import sample.Application;
-import sample.controller.util.PadesVisualElements;
+import sample.util.PadesVisualElements;
 import sample.util.Util;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +39,7 @@ public class PadesSignatureServerKeyController {
 
             // Get an instance of the PadesSigner class, responsible for receiving the signature elements and performing
             // the local signature.
-            PadesSigner signer = new PadesSigner(Util.getPkiExpressConfig());
+            PadesSigner signer = new PadesSigner();
 
             // Set PKI default options (see Util.java)
             Util.setPkiDefaults(signer);
@@ -49,11 +49,6 @@ public class PadesSignatureServerKeyController {
 
             // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
             signer.setCertificateThumbprint("f6c24db85cb0187c73014cc3834e5a96b8c458bc");
-
-            // Set a file reference for the stamp file. Note that this file can be referenced later by
-            // "fref://stamp" at the "url" field on the visual representation (see content/vr.json file or
-            // getVisualRepresentation(case) method).
-            signer.addFileReference("stamp", Util.getPdfStampPath());
 
             // Set visual representation. We provide a Java class that represents the visual representation
             // model.

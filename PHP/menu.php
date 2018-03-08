@@ -28,7 +28,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="cades-signature.php">With file already on server</a></li>
                         <li><a href="upload.php?goto=cades-signature">With file uploaded by user</a></li>
-                        <li><a href="upload.php?goto=cades-signature-server-key">Using a server key</a></li>
+                        <!--<li><a href="upload.php?goto=cades-signature-server-key">Using a server key</a></li>-->
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -36,7 +36,7 @@
                        aria-expanded="false">XML signature <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="xml-element-signature.php">XML element signature</a></li>
-                        <li><a href="xml-element-signature-server-key.php">XML element using a server key</a></li>
+                        <!--<li><a href="xml-element-signature-server-key.php">XML element using a server key</a></li>-->
                     </ul>
                 </li>
             </ul>

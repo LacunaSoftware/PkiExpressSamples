@@ -1,10 +1,7 @@
 package sample.controller;
 
 
-import com.lacunasoftware.pkiexpress.SignatureFinisher;
-import com.lacunasoftware.pkiexpress.SignatureStartResult;
-import com.lacunasoftware.pkiexpress.XmlSignaturePolicies;
-import com.lacunasoftware.pkiexpress.XmlSignatureStarter;
+import com.lacunasoftware.pkiexpress.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,7 +60,7 @@ public class XmlElementSignatureController {
 
                 // Get an instance of the XmlSignatureStarter class, responsible for receiving the signature elements
                 // and start the signature process.
-                XmlSignatureStarter signatureStarter = new XmlSignatureStarter(Util.getPkiExpressConfig());
+                XmlSignatureStarter signatureStarter = new XmlSignatureStarter();
 
                 // Set PKI default options (see Util.java)
                 Util.setPkiDefaults(signatureStarter);
@@ -116,7 +113,7 @@ public class XmlElementSignatureController {
             try {
 
                 // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
-                SignatureFinisher signatureFinisher = new SignatureFinisher(Util.getPkiExpressConfig());
+                SignatureFinisher signatureFinisher = new SignatureFinisher();
 
                 // Set PKI default options (see Util.java)
                 Util.setPkiDefaults(signatureFinisher);

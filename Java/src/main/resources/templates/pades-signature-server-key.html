@@ -13,9 +13,9 @@
 
         <!--/* If no errors have occurred, this page is shown for the user, with the link to the signed file. */-->
         <p>File signed sucessfully!</p>
-        <p>
-            <a th:href="'/files/' + ${outputFile}" class="btn btn-default">Download the signed file</a>
-        </p>
+
+        <a th:href="'/files/' + ${outputFile}" class="btn btn-info">Download the signed file</a>
+        <a th:href="'/printer-friendly-version?fileId=' + ${outputFile}" class="btn btn-default">Download a printer-friendly version of the signed file</a>
 
     </div>
 
