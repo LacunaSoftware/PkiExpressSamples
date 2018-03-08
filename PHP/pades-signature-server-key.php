@@ -22,10 +22,10 @@ try {
 
     // Get an instance of the PadesSigner class, responsible for receiving the signature elements and performing the
     // local signature.
-    $signer = new PadesSigner(getPkiExpressConfig());
+    $signer = new PadesSigner();
 
     // Set PKI default options. (see Util.php)
-    getPkiDefaults($signer);
+    setPkiDefaults($signer);
 
     // Set PDF to be signed.
     $signer->setPdfToSign("app-data/$userfile");
@@ -59,7 +59,7 @@ try {
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>PAdES Signature</title>
+    <title>PAdES signature</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
 </head>
 <body>
@@ -72,7 +72,7 @@ try {
     <?php if (!isset($errorMessage)) { ?>
 
         <?php // If no errors have occurred, this page is shown for the user, with the link to the signed file. ?>
-        <h2>PAdES Signature with a server key</h2>
+        <h2>PAdES signature with a server key</h2>
 
         <p>File signed successfully!</p>
         <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>

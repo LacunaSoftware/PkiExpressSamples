@@ -1,24 +1,25 @@
 <?php
 
 /*
- * This file generates a printer-friendly version from a signature file.
+ * This file generates a signature package from a CAdES signature.
  */
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Lacuna\PkiExpress\PadesSignatureExplorer;
+use Lacuna\PkiExpress\CadesSignatureExplorer;
+use Lacuna\PkiExpress\Color;
 use Lacuna\PkiExpress\PdfMark;
-use Lacuna\PkiExpress\PdfMarkPageOptions;
+use Lacuna\PkiExpress\PdfMarker;
 use Lacuna\PkiExpress\PdfMarkImage;
 use Lacuna\PkiExpress\PdfMarkImageElement;
-use Lacuna\PkiExpress\PdfTextSection;
-use Lacuna\PkiExpress\PdfMarkTextElement;
+use Lacuna\PkiExpress\PdfMarkPageOptions;
 use Lacuna\PkiExpress\PdfMarkQRCodeElement;
-use Lacuna\PkiExpress\PdfMarker;
-use Lacuna\PkiExpress\Color;
+use Lacuna\PkiExpress\PdfMarkTextElement;
+use Lacuna\PkiExpress\PdfTextSection;
+use Lacuna\PkiExpress\PdfTextStyle;
 
 // #####################################################################################################################
-// Configuration of the Printer-Friendly version
+// Configuration of the Signature Package
 // #####################################################################################################################
 
 // Name of your website, with preceding article (article in lowercase).
@@ -29,7 +30,7 @@ $verificationSite = 'http://localhost:8000';
 
 // Format of the verification link, without the verification code, that is added on generatePrinterFriendlyVersion()
 // method.
-$verificationLinkFormat = 'http://localhost:8000/check-pades.php?c=';
+$verificationLinkFormat = 'http://localhost:8000/check-cades.php?c=';
 
 // "Normal" font size. Sizes of header fonts are defined based on this size.
 $normalFontSize = 12;
@@ -39,12 +40,12 @@ $dateFormat = "d/m/Y H:i:s";
 
 // Display name of the time zone chosen above
 $timeZoneDisplayName = "horário de Brasília";
-
-// You may also change texts, positions and more by editing directly the method generatePrinterFriendlyVersion() below.
+// You may also change texts, positions and more by editing directly the method generateSignaturePackage() below.
 // #####################################################################################################################
 
 // Get file ID from query string
 $fileId = isset($_GET['file']) ? $_GET['file'] : null;
+$originalExtension = isset($_GET['ext']) ? $_GET['ext'] : null;
 if (empty($fileId)) {
     throw new \Exception("No file was uploaded");
 }
@@ -60,15 +61,15 @@ if (!isset($verificationCode)) {
     setVerificationCode($fileId, $verificationCode);
 }
 
-// Generate the printer-friendly version
-$pfvPath = generatePrinterFriendlyVersion($filePath, $verificationCode);
+// Generate the signature package
+$spPath = generateSignaturePackage($filePath, $verificationCode, $originalExtension);
 
 // Redirect to the generated file
-header("Location: {$pfvPath}");
+header("Location: {$spPath}");
 exit;
 
-// This function contains the logic to generate a printer-friendly version of a signature file.
-function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
+// This function contains the logic to generate a signature package from a CAdES signature file.
+function generateSignaturePackage($signaturePath, $verificationCode, $originalExtension)
 {
     // Use global variables defined above
     global $verificationSiteNameWithArticle;
@@ -82,7 +83,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     $breakline = PHP_EOL;
 
     // The verification code is generated without hyphens to save storage space and avoid copy-and-paste problems. On
-    // the PDF generation, we use the "formatted" version, with hyphens (which will later be discarded on the
+    // The PDF generation, we use the "formatted" version, with hyphens (which will later be discarded on the
     // verification page).
     $formattedVerificationCode = formatVerificationCode($verificationCode);
 
@@ -90,93 +91,38 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     // code.
     $verificationLink = $verificationLinkFormat . $formattedVerificationCode;
 
+    // 1. Inspect signatures on the uploaded PDF.
 
-    // 1. Inspect signatures on the uploaded PDF
-
-    // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
-    $signatureExplorer = new PadesSignatureExplorer();
+    // Get an instance of the CadesSignatureExplorer class, used to open/validate CAdES signatures.
+    $sigExplorer = new CadesSignatureExplorer();
     // Set PKI default options. (see Util.php)
-    setPkiDefaults($signatureExplorer);
+    setPkiDefaults($sigExplorer);
     // Specify that we want to validate the signatures in the file, not only inspect them.
-    $signatureExplorer->validate = true;
+    $sigExplorer->validate = true;
     // Set the PDF file to be inspected.
-    $signatureExplorer->setSignatureFile($pdfPath);
+    $sigExplorer->setSignatureFile(realpath($signaturePath));
+    // Generate paht for the output file, where the encapsulated content from the signature will be stored. If the
+    // CMS was a "detached" signature, the original file must be provided with the setdAtaFile(path) method:
+    //$signatureExplorer->setDataFile($path);
+    $encapsulateContentTargetPath = realpath("app-data") . DIRECTORY_SEPARATOR . uniqid();
+    $sigExplorer->setExtractContentPath($encapsulateContentTargetPath); // We need to pass the absolute path.
     // Call the open() method, which returns the signature file's information.
-    $signature = $signatureExplorer->open();
+    $signature = $sigExplorer->open();
 
-
-    // 2. Create PDF with verification information from uploaded PDF
+    // 2. Create protocol with the verification information from provided CMS.
 
     // Get an instance of the PdfMarker class, used to apply marks on a PDF.
     $pdfMarker = new PdfMarker();
-    // Set PKI defaults options. (see Util.java)
+    // Set PKI default options. (see Util.php)
     setPkiDefaults($pdfMarker);
-    // Specify the PDF file to be marked
-    $pdfMarker->setFile($pdfPath);
+    // Specify the flie to be marked. In this sample, we will use a blank PDF to create the protocol.
+    $pdfMarker->setFile('content/blank.pdf');
 
-    // Build string with joined names of signers (see method _getDisplayName below)
-    $certDisplayNames = [];
-    foreach ($signature->signers as $signer) {
-        array_push($certDisplayNames, _getDisplayName($signer->certificate));
-    }
-    $signerNames = joinStringsPt($certDisplayNames);
-    $allPagesMessage = 'Este documento foi assinado digitalmente por ' . $signerNames
-        . '.' . $breakline . 'Para verificar a validate das assinaturass acesse ' . $verificationSiteNameWithArticle
-        . ' em ' . $verificationSite . ' e informe o código ' . $formattedVerificationCode;
-
-    // ICP-Brasil logo on bottom-right corner of every page (except on the page which will be created at the end of the
-    // document)
-    $pdfMark = new PdfMark();
-    $pdfMark->pageOption = PdfMarkPageOptions::ALL_PAGES;
-    $pdfMark->container = [
-        'width' => 1,
-        'right' => 1,
-        'height' => 1,
-        'bottom' => 1
-    ];
-    $element = new PdfMarkImageElement();
-    $element->opacity = 75;
-    $element->image = new PdfMarkImage(getIcpBrasilLogoContent(), 'image/png');
-    array_push($pdfMark->elements, $element);
-    array_push($pdfMarker->marks, $pdfMark);
-
-    // Summary on bottom margin of every page (except on the page which will be created at the end of the document)
-    $pdfMark = new PdfMark();
-    $pdfMark->pageOption = PdfMarkPageOptions::ALL_PAGES;
-    $pdfMark->container = [
-        'height' => 2,
-        'bottom' => 0,
-        'left' => 1.5,
-        'right' => 3.5
-    ];
-    $element = new PdfMarkTextElement();
-    $element->opacity = 75;
-    array_push($element->textSections, new PdfTextSection($allPagesMessage));
-    array_push($pdfMark->elements, $element);
-    array_push($pdfMarker->marks, $pdfMark);
-
-    // Summary on right margin of every page (except on the page which wil be created at the end of the document),
-    // rotated 90 degrees counter-clockwise (text goes up)
-    $pdfMark = new PdfMark();
-    $pdfMark->pageOption = PdfMarkPageOptions::ALL_PAGES;
-    $pdfMark->container = [
-        'width' => 2,
-        'right' => 0,
-        'top' => 1.5,
-        'bottom' => 3.5
-    ];
-    $element = new PdfMarkTextElement();
-    $element->rotation = 90;
-    $element->opacity = 75;
-    array_push($element->textSections, new PdfTextSection($allPagesMessage));
-    array_push($pdfMark->elements, $element);
-    array_push($pdfMarker->marks, $pdfMark);
-
-    // Create a "manifest" mark on a new page added on the end of the document. We'll add several elements to this mark.
-    $manifestMark = new PdfMark();
-    $manifestMark->pageOption = PdfMarkPageOptions::NEW_PAGE;
+    // Create a "protocol" mark on a new page added on the end of the document. We'll add several elements to this mark.
+    $protocolMark = new PdfMark();
+    $protocolMark->pageOption = PdfMarkPageOptions::ALL_PAGES;
     // This mark's container is the whole page with 1-inch margins
-    $manifestMark->container = [
+    $protocolMark->container = [
         'top' => 1.5,
         'bottom' => 1.5,
         'left' => 1.5,
@@ -197,7 +143,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
         'left' => 0
     ];
     $element->image = new PdfMarkImage(getIcpBrasilLogoContent(), "image/png");
-    array_push($manifestMark->elements, $element);
+    array_push($protocolMark->elements, $element);
 
     // QR Code with the verification link on the upper-right corner
     $element = new PdfMarkQRCodeElement();
@@ -208,7 +154,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
         'right' => 0
     ];
     $element->qrCodeData = $verificationLink;
-    array_push($manifestMark->elements, $element);
+    array_push($protocolMark->elements, $element);
 
     // Header "VERIFICAÇÃO DAS ASSINATURAS" centered between ICP-Brasil logo and QR Code
     $element = new PdfMarkTextElement();
@@ -222,9 +168,9 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     $element->align = 'Center';
     $textSection = new PdfTextSection();
     $textSection->fontSize = $normalFontSize * 1.6;
-    $textSection->text = 'VERIFICAÇÃO DAS' . $breakline . 'ASSINATURAS';
+    $textSection->text = 'PROTOCOLO DE' . $breakline . 'ASSINATURAS';
     array_push($element->textSections, $textSection);
-    array_push($manifestMark->elements, $element);
+    array_push($protocolMark->elements, $element);
     $verticalOffset += $elementHeight;
 
     // Vertical padding
@@ -245,7 +191,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     $textSection->fontSize = $normalFontSize * 1.2;
     $textSection->text = 'Código para verificação: ' . $formattedVerificationCode;
     array_push($element->textSections, $textSection);
-    array_push($manifestMark->elements, $element);
+    array_push($protocolMark->elements, $element);
     $verticalOffset += $elementHeight;
 
     // Paragraph saying "this document was signed by the following signers etc" and mentioning the time zone of the
@@ -261,9 +207,18 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     ];
     $textSection = new PdfTextSection();
     $textSection->fontSize = $normalFontSize;
-    $textSection->text = sprintf('Este documento foi assinado digitalmente pelos seguintes signatários nas datas indicadas (%s)', $timeZoneDisplayName);
+    $textSection->text = 'O arquivo ';
     array_push($element->textSections, $textSection);
-    array_push($manifestMark->elements, $element);
+    $textSection = new PdfTextSection();
+    $textSection->fontSize = $normalFontSize;
+    $textSection->text = sprintf('document.%s', $originalExtension);
+    $textSection->style = PdfTextStyle::BOLD;
+    array_push($element->textSections, $textSection);
+    $textSection = new PdfTextSection();
+    $textSection->fontSize = $normalFontSize;
+    $textSection->text = sprintf(' documento foi assinado digitalmente pelos seguintes signatários nas datas indicadas (%s)', $timeZoneDisplayName);
+    array_push($element->textSections, $textSection);
+    array_push($protocolMark->elements, $element);
     $verticalOffset += $elementHeight;
 
     // Iterate signers
@@ -280,7 +235,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
             'left' => 0
         ];
         $element->image = new PdfMarkImage(getValidationResultIcon($signer->validationResults->isValid()), 'image/png');
-        array_push($manifestMark->elements, $element);
+        array_push($protocolMark->elements, $element);
         // Description of signer (see method _getSignerDescription() below
         $element = new PdfMarkTextElement();
         $element->relativeContainer = [
@@ -293,7 +248,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
         $textSection->fontSize = $normalFontSize;
         $textSection->text = _getSignerDescription($signer, $dateFormat);
         array_push($element->textSections, $textSection);
-        array_push($manifestMark->elements, $element);
+        array_push($protocolMark->elements, $element);
 
         $verticalOffset += $elementHeight;
     }
@@ -326,7 +281,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     $textSection->fontSize = $normalFontSize;
     $textSection->text = ' e informe o código acima ou acesse o link abaixo:';
     array_push($element->textSections, $textSection);
-    array_push($manifestMark->elements, $element);
+    array_push($protocolMark->elements, $element);
     $verticalOffset += $elementHeight;
 
     // Verification link.
@@ -345,20 +300,35 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     $textSection->color = new Color("#0000FF", 100);
     $textSection->text = $verificationLink;
     array_push($element->textSections, $textSection);
-    array_push($manifestMark->elements, $element);
+    array_push($protocolMark->elements, $element);
 
     // Apply marks.
-    array_push($pdfMarker->marks, $manifestMark);
+    array_push($pdfMarker->marks, $protocolMark);
 
     // Generate path for output file and add to marker.
     createAppData(); // make sure the "app-data" folder exists (util.php)
-    $outputFilePath = 'app-data/' . formatVerificationCode($verificationCode) . '.pdf';
-    $pdfMarker->setOutputFile($outputFilePath);
+    $protocolPath = 'app-data/' . formatVerificationCode($verificationCode) . '.pdf';
+    $pdfMarker->setOutputFile($protocolPath);
 
     // Apply marks.
     $pdfMarker->apply();
 
-    // Return path for output file.
-    return $outputFilePath;
-}
+    // 3. Generate path to write signature package.
 
+    // Generate path to write signature package and open package.
+    $signaturePackagePath = 'app-data/signature-package-' . uniqid() . '.zip';
+    $za = new ZipArchive();
+    $za->open($signaturePackagePath, ZipArchive::CREATE);
+    // Add original file to zip, adding original extension.
+    $za->addFile($encapsulateContentTargetPath, sprintf("document.%s", $originalExtension));
+    // Add signature file to zip.
+    $za->addFile($signaturePath, 'document-signature.p7s');
+    // Add protocol file to zip.
+    var_dump($protocolPath);
+    $za->addFile($protocolPath, 'document-protocol.pdf');
+    // Close package.
+    $za->close();
+
+    // Return path for signature package
+    return $signaturePackagePath;
+}

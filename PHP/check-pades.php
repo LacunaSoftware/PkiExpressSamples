@@ -28,10 +28,10 @@ if ($fileId == null) {
 }
 
 // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
-$sigExplorer = new PadesSignatureExplorer(getPkiExpressConfig());
+$sigExplorer = new PadesSignatureExplorer();
 
 // Set PKI default options. (see Util.php)
-getPkiDefaults($sigExplorer);
+setPkiDefaults($sigExplorer);
 
 // Specify that we want to validate the signatures in the file, not only inspect them.
 $sigExplorer->validate = true;
@@ -46,7 +46,7 @@ $signature = $sigExplorer->open();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Checking code signature</title>
+    <title>Checking signatures on printer-friendly PDF</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT
     // required to use the Web PKI component) ?>
 </head>

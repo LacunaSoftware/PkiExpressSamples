@@ -2,21 +2,8 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Lacuna\PkiExpress\PkiExpressConfig;
 
-function getPkiExpressConfig()
-{
-    // Retrieve configuration from config.php
-    $config = getConfig();
-    $pkiExpressHome = $config['pkiExpress']['home'];
-    $tempFolder = $config['pkiExpress']['tempFolder'];
-    $transferFilesFolder = $config['pkiExpress']['transferFilesFolder'];
-
-    // Instantiate the PkiExpressConfig class with the fields informed on this method.
-    return new PkiExpressConfig($pkiExpressHome, $tempFolder, $transferFilesFolder);
-}
-
-function getPkiDefaults(&$operator)
+function setPkiDefaults(&$operator)
 {
     // If you want the operator to trust in a custom trusted root, you need to inform to the operator class. You can
     // trust on more than one roots by uncommenting the following lines:
@@ -66,6 +53,37 @@ function joinStringsPt($strings)
         }
         $text .= $s;
         ++$index;
+    }
+    return $text;
+}
+
+function _getDisplayName($cert)
+{
+    if ($cert->pkiBrazil->responsavel != null) {
+        return $cert->pkiBrazil->responsavel;
+    }
+    return $cert->subjectName->commonName;
+}
+
+function _getDescription($cert)
+{
+    $text = '';
+    $text .= _getDisplayName($cert);
+    if ($cert->pkiBrazil->cpf != null) {
+        $text .= ' (CPF ' . $cert->pkiBrazil->cpfFormatted . ')';
+    }
+    if ($cert->pkiBrazil->cnpj != null) {
+        $text .= ', empresa ' . $cert->pkiBrazil->companyName . ' (CNPJ ' . $cert->pkiBrazil->cnpjFormatted . ')';
+    }
+    return $text;
+}
+
+function _getSignerDescription($signer, $dateFormat)
+{
+    $text = '';
+    $text .= _getDescription($signer->certificate);
+    if ($signer->signingTime != null) {
+        $text .= ' em ' .  date($dateFormat, strtotime($signer->signingTime));
     }
     return $text;
 }

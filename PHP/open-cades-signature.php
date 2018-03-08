@@ -2,7 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Lacuna\PkiExpress\PadesSignatureExplorer;
+use Lacuna\PkiExpress\CadesSignatureExplorer;
 
 
 // Our demo only works if a userfile is given to work with.
@@ -12,7 +12,7 @@ if (empty($userfile)) {
 }
 
 // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
-$sigExplorer = new PadesSignatureExplorer();
+$sigExplorer = new CadesSignatureExplorer();
 
 // Set PKI default options. (see Util.php)
 setPkiDefaults($sigExplorer);
@@ -30,7 +30,7 @@ $signature = $sigExplorer->open();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Open existing PAdES signature</title>
+    <title>Open CAdES</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
 </head>
 <body>
@@ -38,7 +38,7 @@ $signature = $sigExplorer->open();
 <?php include 'menu.php' // The top menu, this can be removed entirely ?>
 
 <div class="container">
-    <h2>Open PAdES</h2>
+    <h2>Open existing CAdES signature</h2>
 
     <h3>The given file contains <?= count($signature->signers) ?> signatures:</h3>
 

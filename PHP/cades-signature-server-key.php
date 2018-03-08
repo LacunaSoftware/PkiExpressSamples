@@ -21,10 +21,10 @@ try {
 
     // Get an instance of the CadesSigner class, responsible for receiving the signature elements and performing the
     // local signature.
-    $signer = new CadesSigner(getPkiExpressConfig());
+    $signer = new CadesSigner();
 
     // Set PKI default options (see Util.php)
-    getPkiDefaults($signer);
+    setPkiDefaults($signer);
 
     // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign that file. But,
     // if the CMS was a "detached" signature, the original file must be provided with the setDataFile($path) method:
@@ -42,6 +42,9 @@ try {
     $outputFile = uniqid() . ".p7s";
     $signer->setOutputFile("app-data/{$outputFile}");
 
+    // Get the file's extension to be passed to signature package generation.
+    $ext = pathinfo($userfile, PATHINFO_EXTENSION);
+
     // Perform the signature.
     $signer->sign();
 
@@ -54,7 +57,7 @@ try {
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>CAdES Signature</title>
+    <title>CAdES Signature with a server key</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
 </head>
 <body>
@@ -70,9 +73,11 @@ try {
         <h2>CAdES Signature with a server key</h2>
 
         <p>File signed successfully!</p>
-        <p>
-            <a href="app-data/<?= $outputFile ?>" class="btn btn-default">Download the signed file</a>
-        </p>
+        <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
+        <a href="signature-package.php?file=<?= $outputFile ?>&ext=<?= $ext ?>" class="btn btn-default">Download a signature package of the signed file*</a>
+        <br/>
+        <br/>
+        <p>* This operation requires that the Zip extension to be installed.</p>
 
     <?php } else { ?>
 

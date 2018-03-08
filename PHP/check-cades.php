@@ -2,26 +2,43 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Lacuna\PkiExpress\PadesSignatureExplorer;
+use Lacuna\PkiExpress\CadesSignatureExplorer;
 
+// Get document ID from query string
+$formattedCode = isset($_GET['c']) ? $_GET['c'] : null;
+$ext = isset($_GET['ext']) ? $_GET['ext'] : null;
+if (!isset($formattedCode)) {
+    throw new \Exception("No code was provided");
+}
 
-// Our demo only works if a userfile is given to work with.
-$userfile = isset($_GET['userfile']) ? $_GET['userfile'] : null;
-if (empty($userfile)) {
-    throw new \Exception("No file was uploaded");
+// On printer-friendly-version.php, we stored the unformatted version of the verification code (without hyphens) but
+// used the formatted version (with hyphens) on the printer-friendly PDF. Now, we remove the hyphen before looking it
+// up.
+$verificationCode = parseVerificationCode($formattedCode);
+
+// Get document associated with verification code
+$fileId = lookupVerificationCode($verificationCode);
+if ($fileId == null) {
+    // Invalid code given!
+    // Small delay to slow down brute-force attacks (if you want to be extra careful you might want to add a CAPTCHA to
+    // the process).
+    sleep(2);
+
+    // Inform that the file was not found
+    die('File not found');
 }
 
 // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
-$sigExplorer = new PadesSignatureExplorer();
+$sigExplorer = new CadesSignatureExplorer();
 
 // Set PKI default options. (see Util.php)
 setPkiDefaults($sigExplorer);
 
-// Set the PDF file to be inspected.
-$sigExplorer->setSignatureFile("app-data/{$userfile}");
-
 // Specify that we want to validate the signatures in the file, not only inspect them.
 $sigExplorer->validate = true;
+
+// Set the PDF file to be inspected.
+$sigExplorer->setSignatureFile("app-data/{$fileId}");
 
 // Call the open() method, which returns the signature file's information.
 $signature = $sigExplorer->open();
@@ -30,15 +47,17 @@ $signature = $sigExplorer->open();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Open existing PAdES signature</title>
-    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
+    <title>Checking CAdES signatures on signature package</title>
+    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT
+    // required to use the Web PKI component) ?>
 </head>
 <body>
 
 <?php include 'menu.php' // The top menu, this can be removed entirely ?>
 
 <div class="container">
-    <h2>Open PAdES</h2>
+
+    <h2>Check CAdES signatures on signature package</h2>
 
     <h3>The given file contains <?= count($signature->signers) ?> signatures:</h3>
 
@@ -113,4 +132,5 @@ $signature = $sigExplorer->open();
     </div>
 </div>
 
+</body>
 </html>

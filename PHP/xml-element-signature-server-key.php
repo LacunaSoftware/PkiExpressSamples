@@ -14,10 +14,10 @@ try {
 
     // Get an instance of the XmlSigner class, responsible for receiving the signature elements and performing the local
     // signature.
-    $signer = new XmlSigner(getPkiExpressConfig());
+    $signer = new XmlSigner();
 
     // Set PKI default options. (see Util.php)
-    getPkiDefaults($signer);
+    setPkiDefaults($signer);
 
     // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
     $signer->setXmlToSign("content/SampleNFe.xml");
@@ -48,7 +48,7 @@ try {
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>XML Element Signature</title>
+    <title>XML signature</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
 </head>
 <body>
@@ -60,7 +60,7 @@ try {
     <?php if (!isset($errorMessage)) { ?>
 
         <?php // If no errors have occurred, this page is shown for the user, with the link to the signed file. ?>
-        <h2>XML Element Signature with a server key</h2>
+        <h2>XML element signature with a server key</h2>
 
         <p>File signed successfully!</p>
         <p>
