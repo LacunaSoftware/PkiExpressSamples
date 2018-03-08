@@ -14,19 +14,22 @@ try {
 
     // Get an instance of the XmlSigner class, responsible for receiving the signature elements and performing the local
     // signature.
-    $signer = new XmlSigner(getPkiExpressConfig());
+    $signer = new XmlSigner();
+
+    // Set PKI default options. (see Util.php)
+    setPkiDefaults($signer);
 
     // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
     $signer->setXmlToSign("content/SampleNFe.xml");
 
     // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1)
-    $signer->setCertificateThumbprint('f6c24db85cb0187c73014cc3834e5a96b8c458bc');
+    $signer->certThumb = 'f6c24db85cb0187c73014cc3834e5a96b8c458bc';
 
     // Set the signature policy.
-    $signer->setSignaturePolicy(XmlSignaturePolicies::NFE);
+    $signer->signaturePolicy = XmlSignaturePolicies::NFE;
 
     // Set the ID of the element to be signed.
-    $signer->setToSignElementId('NFe35141214314050000662550010001084271182362300');
+    $signer->toSignElementId = 'NFe35141214314050000662550010001084271182362300';
 
     // Generate path for output file and add to signer object.
     createAppData(); // make sure the "app-data" folder exists (util.php)'
@@ -45,7 +48,7 @@ try {
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>XML Element Signature</title>
+    <title>XML signature</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
 </head>
 <body>
@@ -57,7 +60,7 @@ try {
     <?php if (!isset($errorMessage)) { ?>
 
         <?php // If no errors have occurred, this page is shown for the user, with the link to the signed file. ?>
-        <h2>XML Element Signature with a server key</h2>
+        <h2>XML element signature with a server key</h2>
 
         <p>File signed successfully!</p>
         <p>

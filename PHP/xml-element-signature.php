@@ -35,7 +35,10 @@ if ($state == 'start') {
 
         // Get an instance of the XmlSignatureStarter class, responsible for receiving the signature elements and
         // start the signature process.
-        $signatureStarter = new XmlSignatureStarter(getPkiExpressConfig());
+        $signatureStarter = new XmlSignatureStarter();
+
+        // Set PKI default options. (see Util.php)
+        setPkiDefaults($signatureStarter);
 
         // Set Base64-encoded certificate's content to signature starter.
         $signatureStarter->setCertificateBase64($certContent);
@@ -44,10 +47,10 @@ if ($state == 'start') {
         $signatureStarter->setXmlToSign('content/SampleNFe.xml');
 
         // Set the signature policy.
-        $signatureStarter->setSignaturePolicy(XmlSignaturePolicies::NFE);
+        $signatureStarter->signaturePolicy = XmlSignaturePolicies::NFE;
 
         // Set the ID of the element to be signed.
-        $signatureStarter->setToSignElementId('NFe35141214314050000662550010001084271182362300');
+        $signatureStarter->toSignElementId = 'NFe35141214314050000662550010001084271182362300';
 
         // Start the signature process. Receive as response the following fields:
         // - $toSignHash: The hash to be signed.
@@ -84,7 +87,10 @@ if ($state == 'start') {
         $signature = !empty($_POST['signature']) ? $_POST['signature'] : null;
 
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
-        $signatureFinisher = new SignatureFinisher(getPkiExpressConfig());
+        $signatureFinisher = new SignatureFinisher();
+
+        // Set PKI default options. (see Util.php)
+        setPkiDefaults($signatureFinisher);
 
         // Set the XML to be signed. It's the same we used on "start" step.
         $signatureFinisher->setFileToSign('content/SampleNFe.xml');
@@ -119,14 +125,14 @@ if ($state == 'start') {
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>XML Signature</title>
+    <title>XML signature</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
 
     <?php
     // The file below contains the JS lib for accessing the Web PKI component. For more information, see:
     // https://webpki.lacunasoftware.com/#/Documentation
     ?>
-    <script src="content/js/lacuna-web-pki-2.6.1.js"></script>
+    <script src="content/js/lacuna-web-pki-2.9.0.js"></script>
 
     <?php
     // The file below contains the logic for calling the Web PKI component. It is only an example, feel free to alter it
@@ -156,7 +162,7 @@ if ($state == 'start') {
 
     <?php } ?>
 
-    <h2>XML Element Signature</h2>
+    <h2>XML element signature</h2>
 
     <?php if ($state != 'completed') { ?>
 
