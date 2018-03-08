@@ -52,7 +52,10 @@ if ($state == 'start') {
 
         // Get an instance of the PadesSignatureStarter class, responsible for receiving the signature elements and
         // start the signature process.
-        $signatureStarter = new PadesSignatureStarter(getPkiExpressConfig());
+        $signatureStarter = new PadesSignatureStarter();
+
+        // Set PKI default options. (see Util.php)
+        setPkiDefaults($signatureStarter);
 
         // Set PDF to be signed.
         $signatureStarter->setPdfToSign($fileToSign);
@@ -105,7 +108,10 @@ if ($state == 'start') {
         $fileToSign = !empty($_POST['fileToSign']) ? $_POST['fileToSign'] : null;
 
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
-        $signatureFinisher = new SignatureFinisher(getPkiExpressConfig());
+        $signatureFinisher = new SignatureFinisher();
+
+        // Set PKI default options. (see Util.php)
+        setPkiDefaults($signatureFinisher);
 
         // Set PDF to be signed. It's the same file we used on "start" step.
         $signatureFinisher->setFileToSign($fileToSign);
@@ -140,14 +146,14 @@ if ($state == 'start') {
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>PAdES Signature</title>
+    <title>PAdES signature</title>
     <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
 
     <?php
     // The file below contains the JS lib for accessing the Web PKI component. For more information, see:
     // https://webpki.lacunasoftware.com/#/Documentation
     ?>
-    <script src="content/js/lacuna-web-pki-2.6.1.js"></script>
+    <script src="content/js/lacuna-web-pki-2.9.0.js"></script>
 
     <?php
     // The file below contains the logic for calling the Web PKI component. It is only an example, feel free to alter it
@@ -177,7 +183,7 @@ if ($state == 'start') {
 
     <?php } ?>
 
-    <h2>PAdES Signature</h2>
+    <h2>PAdES signature</h2>
 
     <?php if ($state != 'completed') { ?>
 
@@ -247,9 +253,9 @@ if ($state == 'start') {
 
         <?php // This page is shown when the signature is completed with success. ?>
         <p>File signed successfully!</p>
-        <p>
-            <a href="app-data/<?= $outputFile ?>" class="btn btn-default">Download the signed file</a>
-        </p>
+
+        <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
+        <a href="printer-friendly-version.php?file=<?= $outputFile ?>" class="btn btn-default">Download a printer-friendly version of the signed file</a>
 
     <?php } ?>
 
