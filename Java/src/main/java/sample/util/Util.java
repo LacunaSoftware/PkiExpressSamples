@@ -88,6 +88,20 @@ public class Util {
 		return buffer.toByteArray();
 	}
 
+	public static byte[] getSamplePkcs12Content() throws IOException {
+		Resource resource = new ClassPathResource("/static/Pierre de Fermat.pfx");
+		InputStream fileStram = resource.getInputStream();
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		org.apache.commons.io.IOUtils.copy(fileStram, buffer);
+		fileStram.close();
+		buffer.flush();
+		return buffer.toByteArray();
+	}
+
+	public static Path getSamplePkcs12Path() throws IOException {
+		return new ClassPathResource("/static/Pierre de Fermat.pfx").getFile().toPath();
+	}
+
 	public static Path getVisualRepresentationPath() throws IOException {
 		return new ClassPathResource("/static/vr.json").getFile().toPath();
 	}
