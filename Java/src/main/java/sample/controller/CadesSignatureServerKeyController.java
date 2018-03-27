@@ -49,8 +49,10 @@ public class CadesSignatureServerKeyController {
             //signer.setDataFile(content | path | stream);
             signer.setFileToSign(Application.getTempFolderPath().resolve(userfile));
 
-            // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
-            signer.setCertificateThumbprint("f6c24db85cb0187c73014cc3834e5a96b8c458bc");
+            // Set the PKCS #12 certification path
+            signer.setPkcs12(Util.getSamplePkcs12Path());
+            // Set the certificate's PIN.
+            signer.setCertPassword("1234");
 
             // Set 'encapsulate content' option (default: true).
             signer.setEncapsulateContent(true);

@@ -39,8 +39,10 @@ public class XmlElementSignatureServerKeyController {
             // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
             signer.setXmlToSign(Util.getSampleNFePath());
 
-            // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
-            signer.setCertificateThumbprint("f6c24db85cb0187c73014cc3834e5a96b8c458bc");
+            // Set the PKCS #12 certification path
+            signer.setPkcs12(Util.getSamplePkcs12Path());
+            // Set the certificate's PIN.
+            signer.setCertPassword("1234");
 
             // Set the signature policy.
             signer.setSignaturePolicy(XmlSignaturePolicies.NFe);
