@@ -63,13 +63,13 @@ public class BatchSignatureController {
         // and start the signature process.
         PadesSignatureStarter signatureStarter = new PadesSignatureStarter();
 
-        // Set the PKI default options (see Util.java)
+        // Set the PKI default options. (see Util.java)
         Util.setPkiDefaults(signatureStarter);
 
         // Set the PDF to be signed.
         signatureStarter.setPdfToSign(Util.getBatchDocPath(request.getId()));
 
-        // Set Base64-encoded certificate's content to signature starter
+        // Set Base64-encoded certificate's content to signature starter.
         signatureStarter.setCertificateBase64(request.getCertContent());
 
         // Set visual representation. We provide a Java class that represents the visual representation
@@ -113,7 +113,7 @@ public class BatchSignatureController {
         // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
         SignatureFinisher signatureFinisher = new SignatureFinisher();
 
-        // Set PKI default options (see Util.java)
+        // Set PKI default options. (see Util.java)
         Util.setPkiDefaults(signatureFinisher);
 
         // Set PDF to be signed. It's the same file we used on "start" method.
@@ -122,7 +122,7 @@ public class BatchSignatureController {
         // Set transfer file.
         signatureFinisher.setTransferFilePath(request.getTransferFile());
 
-        // Set the signature value
+        // Set the signature value.
         signatureFinisher.setSignature(request.getSignature());
 
         // Generate path for the output file and add to signature finisher.

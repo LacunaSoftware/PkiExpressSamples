@@ -41,13 +41,13 @@ public class PadesSignatureServerKeyController {
             // the local signature.
             PadesSigner signer = new PadesSigner();
 
-            // Set PKI default options (see Util.java)
+            // Set PKI default options. (see Util.java)
             Util.setPkiDefaults(signer);
 
             // Set PDF to be signed.
             signer.setPdfToSign(Application.getTempFolderPath().resolve(userfile));
 
-            // Set the PKCS #12 certification path
+            // Set the PKCS #12 certification path.
             signer.setPkcs12(Util.getSamplePkcs12Path());
             // Set the certificate's PIN.
             signer.setCertPassword("1234");
