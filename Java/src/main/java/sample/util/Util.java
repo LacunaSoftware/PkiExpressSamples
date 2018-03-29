@@ -114,6 +114,10 @@ public class Util {
 		return new ClassPathResource("/static/blank.pdf").getFile().toPath();
 	}
 
+	public static Path getBatchDocPath(int id) throws IOException {
+		return new ClassPathResource("/static/" + String.format("%02d", id % 10) + ".pdf").getFile().toPath();
+	}
+
 	public static byte[] getIcpBrasilLogoContent() throws IOException {
 		Resource resource = new ClassPathResource("/static/icp-brasil.png");
 		InputStream fileStream = resource.getInputStream();
