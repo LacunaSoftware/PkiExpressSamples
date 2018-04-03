@@ -28,16 +28,17 @@ public class BatchSignatureController {
     /**
      * This action renders the batch signature page.
      *
-     * Notice that the only thing we'll do on the server-side at this point is determine the IDs of the documents
-     * to be signed. The page will handle each document one by one and will call the server asynchronously to
-     * start and complete each signature.
+     * Notice that the only thing we'll do on the server-side at this point is determine the IDs of
+     * the documents to be signed. The page will handle each document one by one and will call the
+     * server asynchronously to start and complete each signature.
      */
     @RequestMapping(value = "/batch-signature", method = {RequestMethod.GET})
     public String get(
             Model model,
             HttpServletResponse response
     ) {
-        // It is up to your application's business logic to determine which documents will compose the batch.
+        // It is up to your application's business logic to determine which documents will compose
+        // the batch.
         List<Integer> lst = new ArrayList<Integer>();
         for (int i = 1; i < 31; i++) {
             lst.add(i);
@@ -48,8 +49,8 @@ public class BatchSignatureController {
     }
 
     /**
-     * This action is called asynchronously from the batch signature page in order to initiate the signature of each
-     * document in the batch.
+     * This action is called asynchronously from the batch signature page in order to initiate the
+     * signature of each document in the batch.
      */
     @RequestMapping(value = "/batch-signature-start", method = {RequestMethod.POST})
     public @ResponseBody
@@ -59,8 +60,8 @@ public class BatchSignatureController {
             HttpServletResponse response
     ) throws IOException {
 
-        // Get an instance of the PadesSignatureStarter class, responsible for receiving the signature elements
-        // and start the signature process.
+        // Get an instance of the PadesSignatureStarter class, responsible for receiving the
+        // signature elements and start the signature process.
         PadesSignatureStarter signatureStarter = new PadesSignatureStarter();
 
         // Set the PKI default options. (see Util.java)
@@ -72,23 +73,20 @@ public class BatchSignatureController {
         // Set Base64-encoded certificate's content to signature starter.
         signatureStarter.setCertificateBase64(request.getCertContent());
 
-        // Set visual representation. We provide a Java class that represents the visual representation
-        // model.
+        // Set visual representation.
         signatureStarter.setVisualRepresentation(PadesVisualElements.getVisualRepresentation(1));
-        // Alternatively, we can provide a javascript file that represents json-encoded the model
-        // (see resources/static/vr.json).
-        //signatureStarter.setVisualRepresentationFromFile(Util.getVisualRepresentationPath());
 
-        // Start the signature process. Receive as response a SignatureStartResult instance containing the
-        // following fields:
+        // Start the signature process. Receive as response a SignatureStartResult instance
+        // containing the following fields:
         // - toSignHash: The hash to be signed.
-        // - digestAlgorithm: The digest algorithm that will inform the Web PKI component to compute the
-        // signature.
+        // - digestAlgorithm: The digest algorithm that will inform the Web PKI component to
+        // compute the signature.
         // - transferFile: A temporary file to be passed to "complete" step.
         SignatureStartResult result = signatureStarter.start();
 
-        // If you want to delete the temporary files created by this step use the method dispose(). This method
-        // MUST be called after the start() method, because it deletes some files needed by the method.
+        // If you want to delete the temporary files created by this step use the method dispose().
+        // This method MUST be called after the start() method, because it deletes some files
+        // needed by the method.
         signatureStarter.dispose();
 
         // Return the fields needed on javascript and complete() method.
@@ -100,8 +98,8 @@ public class BatchSignatureController {
     }
 
     /**
-     * This action is called asynchronously form the batch signature page in order to complete the signature of each
-     * document in the batch.
+     * This action is called asynchronously form the batch signature page in order to complete the
+     * signature of each document in the batch.
      */
     @RequestMapping(value = "/batch-signature-complete", method = {RequestMethod.POST})
     public @ResponseBody String complete(
@@ -110,7 +108,8 @@ public class BatchSignatureController {
             HttpServletResponse response
     ) throws IOException {
 
-        // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
+        // Get an instance of the SignatureFinisher class, responsible for completing the signature
+        // process.
         SignatureFinisher signatureFinisher = new SignatureFinisher();
 
         // Set PKI default options. (see Util.java)
@@ -132,8 +131,9 @@ public class BatchSignatureController {
         // Complete the signature process.
         signatureFinisher.complete();
 
-        // If you want to delete the temporary files created by this step, use the method dispose(). This method
-        // MUST be called after the complete() method, because it deletes some files needed by the method.
+        // If you want to delete the temporary files created by this step, use the method
+        // dispose(). This method MUST be called after the complete() method, because it deletes
+        // some files needed by the method.
         signatureFinisher.dispose();
 
         // Return the JSON with the signed file.

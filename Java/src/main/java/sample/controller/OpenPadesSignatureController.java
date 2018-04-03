@@ -40,8 +40,8 @@ public class OpenPadesSignatureController {
         // Call the open() method, which returns the signature file's information.
         PadesSignature signature = sigExplorer.open();
 
-        // Render the information (see file resources/templates/open-pades-signature.html for more information on the
-        // information returned)
+        // Render the information (see file resources/templates/open-pades-signature.html for more
+        // information on the information returned)
         model.addAttribute("signature", signature);
         return "open-pades-signature";
     }

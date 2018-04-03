@@ -21,7 +21,8 @@ import java.util.UUID;
 public class PadesSignatureServerKeyController {
 
     /**
-     * This action perform a local PAdES signature in one step using PKI Express and renders a link to the signed file.
+     * This action perform a local PAdES signature in one step using PKI Express and renders a link
+     * to the signed file.
      */
     @RequestMapping(value = "/pades-signature-server-key", method = {RequestMethod.GET})
     public String get(
@@ -37,8 +38,8 @@ public class PadesSignatureServerKeyController {
                 throw new RuntimeException("File not found!");
             }
 
-            // Get an instance of the PadesSigner class, responsible for receiving the signature elements and performing
-            // the local signature.
+            // Get an instance of the PadesSigner class, responsible for receiving the signature
+            // elements and performing the local signature.
             PadesSigner signer = new PadesSigner();
 
             // Set PKI default options. (see Util.java)
@@ -52,12 +53,9 @@ public class PadesSignatureServerKeyController {
             // Set the certificate's PIN.
             signer.setCertPassword("1234");
 
-            // Set visual representation. We provide a Java class that represents the visual representation
-            // model.
+            // Set visual representation. We provide a Java class that represents the visual
+            // representation model.
             signer.setVisualRepresentation(PadesVisualElements.getVisualRepresentation(1));
-            // Alternatively, we can provide a javascript file that represents json-encoded the model
-            // (see resources/static/vr.json).
-            //signer.setVisualRepresentationFromFile(Util.getVisualRepresentationPath());
 
             // Generate path for output file and add to singer object.
             String filename = UUID.randomUUID() + ".pdf";
@@ -66,8 +64,9 @@ public class PadesSignatureServerKeyController {
             // Perform the signature.
             signer.sign();
 
-            // If you want to delete the temporary files created by this step, use the method dispose(). This method
-            // MUST be called after the sign() method, because it deletes some files needed by the method.
+            // If you want to delete the temporary files created by this step, use the method
+            // dispose(). This method MUST be called after the sign() method, because it deletes
+            // some files needed by the method.
             signer.dispose();
 
             // Render the link to download the signed file on signature page.

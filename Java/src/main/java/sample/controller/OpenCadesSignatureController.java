@@ -26,7 +26,8 @@ public class OpenCadesSignatureController {
             HttpServletResponse response
     ) throws IOException {
 
-        // Get an instance of the CadesSignatureExplorer class, used to open/validate PDF signatures.
+        // Get an instance of the CadesSignatureExplorer class, used to open/validate PDF
+        // signatures.
         CadesSignatureExplorer sigExplorer = new CadesSignatureExplorer();
 
         // Set PKI default options. (see Util.java)
@@ -35,18 +36,14 @@ public class OpenCadesSignatureController {
         // Set the PDF file to be inspected.
         sigExplorer.setSignatureFile(Application.getTempFolderPath().resolve(userfile));
 
-        // If the CMS was a "detached" signature, the original file must be provided with the
-        // setDataFile(path) method:
-        //sigExplorer.setDataFile(content | path | stream);
-
         // Specify that we want to validate the signatures in the file, not only inspect them.
         sigExplorer.setValidate(true);
 
         // Call the open() method, which returns the signature file's information.
         CadesSignature signature = sigExplorer.open();
 
-        // Render the information (see file resources/templates/open-cades-signature.html for more information on the
-        // information returned)
+        // Render the information (see file resources/templates/open-cades-signature.html for more
+        // information on the information returned)
         model.addAttribute("signature", signature);
         return "open-cades-signature";
     }

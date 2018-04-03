@@ -20,7 +20,8 @@ import java.util.UUID;
 public class CadesSignatureServerKeyController {
 
     /**
-     * This action perform a local CAdES signature in one step using PKI Express and renders a link to the signed file.
+     * This action perform a local CAdES signature in one step using PKI Express and renders a link
+     * to the signed file.
      */
     @RequestMapping(value = "/cades-signature-server-key", method = {RequestMethod.GET})
     public String get(
@@ -36,20 +37,18 @@ public class CadesSignatureServerKeyController {
                 throw new RuntimeException("File not found!");
             }
 
-            // Get an instance of the CadesSigner class, responsible for receiving the signature elements and performing
-            // the local signature.
+            // Get an instance of the CadesSigner class, responsible for receiving the signature
+            // elements and performing the local signature.
             CadesSigner signer = new CadesSigner();
 
-            // Set PKI default options (see Util.java)
+            // Set PKI default options (see Util.java).
             Util.setPkiDefaults(signer);
 
-            // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign that
-            // file. But, if the CMS was a "detached" signature, the original file must be provided with the
-            // setDataFile(path) method:
-            //signer.setDataFile(content | path | stream);
+            // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and
+            // will co-sign that file.
             signer.setFileToSign(Application.getTempFolderPath().resolve(userfile));
 
-            // Set the PKCS #12 certification path
+            // Set the PKCS #12 certification path.
             signer.setPkcs12(Util.getSamplePkcs12Path());
             // Set the certificate's PIN.
             signer.setCertPassword("1234");
@@ -64,8 +63,9 @@ public class CadesSignatureServerKeyController {
             // Perform the signature.
             signer.sign();
 
-            // If you want to delete the temporary files created by this step, use the method dispose(). This method
-            // MUST be called after the sign() method, because it deletes some files needed by the method.
+            // If you want to delete the temporary files created by this step, use the method
+            // dispose(). This method  MUST be called after the sign() method, because it deletes
+            // some files needed by the method.
             signer.dispose();
 
             // Render the link to download the signed file.

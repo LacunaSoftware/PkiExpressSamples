@@ -19,18 +19,20 @@ public class Util {
 
 	public static void setPkiDefaults(PkiExpressOperator operator) {
 
-		// If you want the operator to trust in a custom trusted root, you need to inform to the operator class. You can
-		// trust on more than one roots by uncommenting the following lines:
+		// If you want the operator to trust in a custom trusted root, you need to inform to the
+		// operator class. You can trust on more than one roots by uncommenting the following
+		// lines:
 		//operator.addTrustedRoot(path1);
 		//operator.addTrustedRoot(path2);
 		//operator.addTrustedRoot(path3);
 
-		// If you want the operator to trust on Lacuna Test Root (default: false), uncomment the following line:
+		// If you want the operator to trust on Lacuna Test Root (default: false), uncomment the
+		// following line:
 		//operator.setTrustLacunaTestRoot(true);
 		// THIS SHOULD NEVER BE USED ON A PRODUCTION ENVIRONMENT!
 
-		// If you want the operator to perfom its action on "OFFLINE MODE" (default: false), uncomment the following
-		// line:
+		// If you want the operator to perfom its action on "OFFLINE MODE" (default: false),
+		// uncomment the following line:
 		//operator.setOffline(true);
 	}
 
@@ -191,7 +193,8 @@ public class Util {
 	 * Configuration of the code generation
 	 *
 	 * - CodeSize   : size of the code in characters
-	 * - CodeGroups : number of groups to separate the code (must be a proper divisor of the code size)
+	 * - CodeGroups : number of groups to separate the code (must be a proper divisor of the code
+	 * 		size)
 	 *
 	 * Examples
 	 * --------
@@ -206,7 +209,8 @@ public class Util {
 	 * Entropy
 	 * -------
 	 *
-	 * The resulting entropy of the code in bits is the size of the code times 5. Here are some suggestions:
+	 * The resulting entropy of the code in bits is the size of the code times 5. Here are some
+     * suggestions:
 	 *
 	 * - 12 characters = 60 bits
 	 * - 16 characters = 80 bits
@@ -218,7 +222,8 @@ public class Util {
 
 	// This method generates a verification code, without dashes
 	public static String generateVerificationCode() {
-		// String with exactly 32 letters and numbers to be used on the codes. We recommend leaving this value as is.
+		// String with exactly 32 letters and numbers to be used on the codes. We recommend leaving
+		// this value as is.
 		final String alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 		// Allocate a byte array large enough to receive the necessary entropy
 		byte[] bytes = new byte[(int)Math.ceil(verificationCodeSize * 5 / 8.0)];
