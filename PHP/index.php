@@ -35,7 +35,8 @@
             XML signature
             <ul>
                 <li><a href="xml-element-signature.php">Create a XML element signature</a></li>
-                <li><a href="xml-element-signature-server-key.php">Create a XML element signature using a server key</a></li>
+                <li><a href="xml-element-signature-server-key.php">Create a XML element signature using a server key</a>
+                </li>
             </ul>
         </li>
     </ul>

@@ -12,7 +12,7 @@ function setPkiDefaults(&$operator)
     //$operator->addTrustedRoot($path3);
 
     // If you want the operator to trust on Lacuna Test Root (default: false), uncomment the following line:
-    //$operator->trustLacunaTestRoot = true;
+    $operator->trustLacunaTestRoot = true;
 
     // If you want the operator to perform its action on "OFFLINE MODE" (default: false), uncomment the following
     // line:
@@ -83,7 +83,7 @@ function _getSignerDescription($signer, $dateFormat)
     $text = '';
     $text .= _getDescription($signer->certificate);
     if ($signer->signingTime != null) {
-        $text .= ' em ' .  date($dateFormat, strtotime($signer->signingTime));
+        $text .= ' em ' . date($dateFormat, strtotime($signer->signingTime));
     }
     return $text;
 }

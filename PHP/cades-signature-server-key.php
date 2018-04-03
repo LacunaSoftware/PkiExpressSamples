@@ -31,8 +31,10 @@ try {
     //$signer->setDataFile($dataFile);
     $signer->setFileToSign("app-data/{$userfile}");
 
-    // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
-    $signer->certThumb = 'f6c24db85cb0187c73014cc3834e5a96b8c458bc';
+    // The PKCS #12 certificate path.
+    $signer->setPkcs12("content/Pierre de Fermat.pfx");
+    // Set the certificate's PIN.
+    $signer->setCertPassword("1234");
 
     // Set 'encapsulate content' option (default: true).
     $signer->encapsulateContent = true;
@@ -48,7 +50,7 @@ try {
     // Perform the signature.
     $signer->sign();
 
-} catch(Exception $e) {
+} catch (Exception $e) {
 
     // Get exception message to be rendered on signature page
     $errorMessage = $e->getMessage();
@@ -74,7 +76,8 @@ try {
 
         <p>File signed successfully!</p>
         <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
-        <a href="signature-package.php?file=<?= $outputFile ?>&ext=<?= $ext ?>" class="btn btn-default">Download a signature package of the signed file*</a>
+        <a href="signature-package.php?file=<?= $outputFile ?>&ext=<?= $ext ?>" class="btn btn-default">Download a
+            signature package of the signed file*</a>
         <br/>
         <br/>
         <p>* This operation requires that the Zip extension to be installed.</p>

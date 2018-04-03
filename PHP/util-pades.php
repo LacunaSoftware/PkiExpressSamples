@@ -3,7 +3,7 @@
 function getVisualRepresentation($sampleNumber)
 {
 
-    switch($sampleNumber) {
+    switch ($sampleNumber) {
         case 1:
             // Example #1: visual representation equivalent to content/vr.json
             return array(

@@ -22,8 +22,10 @@ try {
     // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
     $signer->setXmlToSign("content/SampleNFe.xml");
 
-    // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1)
-    $signer->certThumb = 'f6c24db85cb0187c73014cc3834e5a96b8c458bc';
+    // The PKCS #12 certificate's path.
+    $signer->setPkcs12("content/Pierre de Fermat.pfx");
+    // Set the certificate's PIN.
+    $signer->setCertPassword("1234");
 
     // Set the signature policy.
     $signer->signaturePolicy = XmlSignaturePolicies::NFE;
@@ -39,7 +41,7 @@ try {
     // Perform the signature.
     $signer->sign();
 
-} catch(Exception $e) {
+} catch (Exception $e) {
 
     // Get exception message to be rendered on signature page
     $errorMessage = $e->getMessage();
