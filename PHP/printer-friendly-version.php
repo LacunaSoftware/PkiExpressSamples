@@ -261,7 +261,8 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
     ];
     $textSection = new PdfTextSection();
     $textSection->fontSize = $normalFontSize;
-    $textSection->text = sprintf('Este documento foi assinado digitalmente pelos seguintes signatários nas datas indicadas (%s)', $timeZoneDisplayName);
+    $textSection->text = sprintf('Este documento foi assinado digitalmente pelos seguintes signatários nas datas indicadas (%s)',
+        $timeZoneDisplayName);
     array_push($element->textSections, $textSection);
     array_push($manifestMark->elements, $element);
     $verticalOffset += $elementHeight;

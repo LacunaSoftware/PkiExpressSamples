@@ -216,7 +216,8 @@ function generateSignaturePackage($signaturePath, $verificationCode, $originalEx
     array_push($element->textSections, $textSection);
     $textSection = new PdfTextSection();
     $textSection->fontSize = $normalFontSize;
-    $textSection->text = sprintf(' documento foi assinado digitalmente pelos seguintes signatários nas datas indicadas (%s)', $timeZoneDisplayName);
+    $textSection->text = sprintf(' documento foi assinado digitalmente pelos seguintes signatários nas datas indicadas (%s)',
+        $timeZoneDisplayName);
     array_push($element->textSections, $textSection);
     array_push($protocolMark->elements, $element);
     $verticalOffset += $elementHeight;

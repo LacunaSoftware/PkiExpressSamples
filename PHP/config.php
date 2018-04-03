@@ -1,6 +1,7 @@
 <?php
 
-function getConfig() {
+function getConfig()
+{
     return array(
 
         // Web PKI Configuration

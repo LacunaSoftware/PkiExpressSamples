@@ -30,8 +30,10 @@ try {
     // Set PDF to be signed.
     $signer->setPdfToSign("app-data/$userfile");
 
-    // Set the "Pierre de Fermat" certificate's thumbprint (SHA-1).
-    $signer->certThumb  = 'f6c24db85cb0187c73014cc3834e5a96b8c458bc';
+    // The PKCS #12 certificate path.
+    $signer->setPkcs12("content/Pierre de Fermat.pfx");
+    // Set the certificate's PIN.
+    $signer->setCertPassword("1234");
 
     // Set a file reference for the stamp file. Note that this file can be referenced later by "fref://stamp" at the
     // "url" field on the visual representation (see content/vr.json file or getVisualRepresentation($case) method).
@@ -50,7 +52,7 @@ try {
     // Perform the signature.
     $signer->sign();
 
-} catch(Exception $e) {
+} catch (Exception $e) {
 
     // Get exception message to be rendered on signature page
     $errorMessage = $e->getMessage();
@@ -76,7 +78,8 @@ try {
 
         <p>File signed successfully!</p>
         <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
-        <a href="printer-friendly-version.php?file=<?= $outputFile ?>" class="btn btn-default">Download a printer-friendly version of the signed file</a>
+        <a href="printer-friendly-version.php?file=<?= $outputFile ?>" class="btn btn-default">Download a
+            printer-friendly version of the signed file</a>
 
 
     <?php } else { ?>

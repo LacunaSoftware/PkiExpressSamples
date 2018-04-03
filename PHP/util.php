@@ -83,7 +83,7 @@ function _getSignerDescription($signer, $dateFormat)
     $text = '';
     $text .= _getDescription($signer->certificate);
     if ($signer->signingTime != null) {
-        $text .= ' em ' .  date($dateFormat, strtotime($signer->signingTime));
+        $text .= ' em ' . date($dateFormat, strtotime($signer->signingTime));
     }
     return $text;
 }

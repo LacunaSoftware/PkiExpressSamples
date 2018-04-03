@@ -76,7 +76,8 @@ if (isset($_FILES['userfile'])) {
     <?php if (isset($errorMessage)) { ?>
 
         <div class="alert alert-danger alert-dismissible" role="alert" style="margin-top: 2%;">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
             <span>
                 <label>Upload Failed</label>
                 <p><?= $errorMessage ?></p>
@@ -94,7 +95,7 @@ if (isset($_FILES['userfile'])) {
 
         <div class="form-group">
             <p>Select file (max. size: 10MB): <input type="file" name="userfile"></p>
-            <input class="btn btn-primary" type="submit" name="submit" value="Upload" />
+            <input class="btn btn-primary" type="submit" name="submit" value="Upload"/>
         </div>
     </form>
 

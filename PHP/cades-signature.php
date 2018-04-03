@@ -81,7 +81,7 @@ if ($state == 'start') {
         $digestAlgorithm = $response->digestAlgorithm;
         $transferFile = $response->transferFile;
 
-    } catch(Exception $e) {
+    } catch (Exception $e) {
 
         // Return to "initial" state rendering the error message.
         $errorMessage = $e->getMessage();
@@ -89,61 +89,63 @@ if ($state == 'start') {
         $state = 'initial';
     }
 
-} else if ($state == 'complete') {
+} else {
+    if ($state == 'complete') {
 
-    // This block will be executed only when it's on the "complete" step. In this sample, the state is set as "complete"
-    // programatically after the Web PKI component perform the signature and submit the form (see method sign() on
-    // content/js/signature-form.js).
-    try {
+        // This block will be executed only when it's on the "complete" step. In this sample, the state is set as "complete"
+        // programatically after the Web PKI component perform the signature and submit the form (see method sign() on
+        // content/js/signature-form.js).
+        try {
 
-        // Recover variables from the POST arguments to be used on this step.
-        $certThumb = !empty($_POST['certThumb']) ? $_POST['certThumb'] : null;
-        $toSignHash = !empty($_POST['toSignHash']) ? $_POST['toSignHash'] : null;
-        $transferFile = !empty($_POST['transferFile']) ? $_POST['transferFile'] : null;
-        $digestAlgorithm = !empty($_POST['digestAlgorithm']) ? $_POST['digestAlgorithm'] : null;
-        $signature = !empty($_POST['signature']) ? $_POST['signature'] : null;
-        $fileToSign = !empty($_POST['fileToSign']) ? $_POST['fileToSign'] : null;
+            // Recover variables from the POST arguments to be used on this step.
+            $certThumb = !empty($_POST['certThumb']) ? $_POST['certThumb'] : null;
+            $toSignHash = !empty($_POST['toSignHash']) ? $_POST['toSignHash'] : null;
+            $transferFile = !empty($_POST['transferFile']) ? $_POST['transferFile'] : null;
+            $digestAlgorithm = !empty($_POST['digestAlgorithm']) ? $_POST['digestAlgorithm'] : null;
+            $signature = !empty($_POST['signature']) ? $_POST['signature'] : null;
+            $fileToSign = !empty($_POST['fileToSign']) ? $_POST['fileToSign'] : null;
 
-        // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
-        $signatureFinisher = new SignatureFinisher();
+            // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
+            $signatureFinisher = new SignatureFinisher();
 
-        // Set PKI default options (see Util.php)
-        setPkiDefaults($signatureFinisher);
+            // Set PKI default options (see Util.php)
+            setPkiDefaults($signatureFinisher);
 
-        // Set file to be signed. It's the same file we used on "start" step.
-        $signatureFinisher->setFileToSign($fileToSign);
+            // Set file to be signed. It's the same file we used on "start" step.
+            $signatureFinisher->setFileToSign($fileToSign);
 
-        // For the same reason on "start" step, we have to set the data file in this step.
-        //$signatureFinisher->setDataFile($dataFile);
+            // For the same reason on "start" step, we have to set the data file in this step.
+            //$signatureFinisher->setDataFile($dataFile);
 
-        // Set transfer file.
-        $signatureFinisher->setTransferFile($transferFile);
+            // Set transfer file.
+            $signatureFinisher->setTransferFile($transferFile);
 
-        // Set the signature value.
-        $signatureFinisher->setSignature($signature);
+            // Set the signature value.
+            $signatureFinisher->setSignature($signature);
 
-        // Generate path for output file and add to signature finisher.
-        createAppData(); // make sure the "app-data" folder exists (util.php)
-        $outputFile = uniqid() . ".p7s";
-        $signatureFinisher->setOutputFile("app-data/{$outputFile}");
+            // Generate path for output file and add to signature finisher.
+            createAppData(); // make sure the "app-data" folder exists (util.php)
+            $outputFile = uniqid() . ".p7s";
+            $signatureFinisher->setOutputFile("app-data/{$outputFile}");
 
-        // Complete the signature process.
-        $signatureFinisher->complete();
+            // Complete the signature process.
+            $signatureFinisher->complete();
 
-        // Get the file's extension to be passed to signature package generation.
-        $ext = pathinfo($fileToSign, PATHINFO_EXTENSION);
+            // Get the file's extension to be passed to signature package generation.
+            $ext = pathinfo($fileToSign, PATHINFO_EXTENSION);
 
-        // Update signature state to "completed".
-        $state = "completed";
+            // Update signature state to "completed".
+            $state = "completed";
 
-    } catch(Exception $e) {
+        } catch (Exception $e) {
 
-        // Return to "initial" state rendering the error message.
-        $errorMessage = $e->getMessage();
-        $errorTitle = 'Signature Finalization Failed';
-        $state = 'initial';
+            // Return to "initial" state rendering the error message.
+            $errorMessage = $e->getMessage();
+            $errorTitle = 'Signature Finalization Failed';
+            $state = 'initial';
+        }
+
     }
-
 }
 
 ?><!DOCTYPE html>
@@ -179,7 +181,8 @@ if ($state == 'start') {
     <?php if (isset($errorMessage)) { ?>
 
         <div class="alert alert-danger alert-dismissible" role="alert" style="margin-top: 2%;">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
             <label for="errorMsg"><?= $errorTitle ?></label><br/>
             <span id="errorMsg"><?= $errorMessage ?></span>
         </div>
@@ -257,9 +260,10 @@ if ($state == 'start') {
     <?php // This page is shown when the signature is completed with success. ?>
         <p>File signed successfully!</p>
         <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
-        <a href="signature-package.php?file=<?= $outputFile ?>&ext=<?= $ext ?>" class="btn btn-default">Download a signature package of the signed file*</a>
-        <br/>
-        <br/>
+        <a href="signature-package.php?file=<?= $outputFile ?>&ext=<?= $ext ?>" class="btn btn-default">Download a
+            signature package of the signed file*</a>
+    <br/>
+    <br/>
         <p>* This operation requires that the Zip extension to be installed.</p>
 
     <?php } ?>
