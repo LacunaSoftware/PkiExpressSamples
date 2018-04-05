@@ -325,7 +325,6 @@ function generateSignaturePackage($signaturePath, $verificationCode, $originalEx
     // Add signature file to zip.
     $za->addFile($signaturePath, 'document-signature.p7s');
     // Add protocol file to zip.
-    var_dump($protocolPath);
     $za->addFile($protocolPath, 'document-protocol.pdf');
     // Close package.
     $za->close();

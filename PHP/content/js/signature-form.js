@@ -19,7 +19,7 @@ var signatureForm = (function() {
         // we use its value.
         pki = new LacunaWebPKI(_webPkiLicense);
 
-        if (formElements.stateField.val() == 'initial') {
+        if (formElements.stateField.val() === 'initial') {
 
             // Wireup of button clicks.
             formElements.signButton.click(startSignature);
@@ -38,7 +38,7 @@ var signatureForm = (function() {
                 defaultError: onWebPkiError
             });
 
-        } else if (formElements.stateField.val() == 'start') {
+        } else if (formElements.stateField.val() === 'start') {
 
             // Block the UI while we get things ready.
             $.blockUI({ message: 'Signing ...' });
