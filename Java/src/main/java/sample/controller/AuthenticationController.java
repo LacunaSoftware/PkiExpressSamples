@@ -28,9 +28,6 @@ public class AuthenticationController {
         // Set PKI default options. (see Util.java)
         Util.setPkiDefaults(auth);
 
-        // Option to use a external nonce store.
-        auth.setExternalStorage(true);
-
         // Start the authentication. Receive as response a AuthStartResult instance containing
         // the following fields:
         // - nonce: The nonce to be signed. This value is also used on "complete" action;
@@ -73,9 +70,6 @@ public class AuthenticationController {
 
         // Set the signature.
         auth.setSignature(signature);
-
-        // Option to use a external nonce store.
-        auth.setExternalStorage(true);
 
         // Complete the authentication. Receive as response a AuthenticationResult instance
         // containing the following fields:
