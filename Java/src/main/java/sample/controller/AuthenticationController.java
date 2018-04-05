@@ -71,11 +71,11 @@ public class AuthenticationController {
         // Set the signature.
         auth.setSignature(signature);
 
-        // Complete the authentication. Receive as response a AuthenticationResult instance
+        // Complete the authentication. Receive as response a AuthCompleteResult instance
         // containing the following fields:
         // - The certificate information;
         // - The validation results;
-        AuthenticationResult result = auth.complete();
+        AuthCompleteResult result = auth.complete();
 
         // Check the authentication result
         ValidationResults vr = result.getValidationResults();
