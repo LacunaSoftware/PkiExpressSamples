@@ -101,7 +101,6 @@ var authenticationForm = (function () {
                 // server-side.
                 formElements.signatureField.val(signature);
                 formElements.certContentField.val(certEncoded);
-                formElements.stateField.val('complete');
                 formElements.form.submit();
 
             });
