@@ -27,6 +27,12 @@ $result = $auth->start();
 $nonce = $result->nonce;
 $digestAlgorithm = $result->digestAlgorithm;
 
+// The nonce acquired above can only be used for a single authentication. In order to retry authenticating it is
+// necessary to get a new token. This can be a problem if the user uses the back button of the browser, since the
+// browser might show a cached page that we rendered previously, with a now stale token. To prevent this from happening,
+// we call the function setExpiredPage(), located in util.php, which sets HTTP headers to prevent caching of the page.
+setExpiredPage();
+
 ?><!DOCTYPE html>
 <html>
 <head>
