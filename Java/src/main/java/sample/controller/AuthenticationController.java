@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import sample.Application;
 import sample.util.Util;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
@@ -20,7 +21,7 @@ public class AuthenticationController {
      * renders the authentication page.
      */
     @RequestMapping(value = "/authentication", method = {RequestMethod.GET})
-    public String get(Model model) throws IOException {
+    public String get(Model model, HttpServletResponse response) throws IOException {
 
         // Get an instance of the Authentication class.
         Authentication auth = new Authentication();
@@ -39,6 +40,14 @@ public class AuthenticationController {
         // javascript and on the "complete" step.
         model.addAttribute("nonce", result.getNonce());
         model.addAttribute("digestAlgorithm", result.getDigestAlgorithm());
+
+        // The nonce acquired above can only be used for a single authentication attempt. In order
+        // to retry the signature it is necessary to get a new token. This can be a problem if the
+        // user uses the back button of the browser, since the browser might show a cached page
+        // that we rendered previously, with a now stale token. To prevent this from happening, we
+        // call the method Util.setNoCacheHeaders(), which sets HTTP headers to prevent caching of
+        // the page.
+        Util.setNoCacheHeaders(response);
 
         return "authentication";
 
@@ -94,8 +103,12 @@ public class AuthenticationController {
             return "authentication-failed";
         }
 
-        // If the authentication was successful, we render a page showing the signed in certificate
-        // on the page.
+        // At this point, you have assurance that the certificate is valid. Now, you'd typically
+        // query your database for a user that matches one of the certificate's fields, such as
+        // userCert.getEmailAddress() or userCert.getPkiBrazil().getCpf() (the actual field to be
+        // used as key depends on your application's business logic) and set the user as
+        // authenticated with whatever web security framework your application uses. For
+        // demonstration purposes, we'll just render the user's certificate information.
         model.addAttribute("userCert", result.getCertificate());
 
         // Render the authentication succeeded page (templates/authentication-success.html)
