@@ -96,9 +96,14 @@
 
         <!--/* This page is shown when the signature is completed with signature */-->
         <p>File signed sucessfully!</p>
-        <a th:href="'/files/' + ${outputFile}" class="btn btn-info">Download the signed file</a>
-        <a th:href="'/signature-package?fileId=' + ${outputFile} + '&amp;ext=' + ${ext}" class="btn btn-default">Download a signature package of the signed file</a>
 
+        <h3>Actions:</h3>
+        <ul>
+            <li><a th:href="'/files/' + ${outputFile}">Download the signed file</a></li>
+            <li><a th:href="'/signature-package?fileId=' + ${outputFile} + '&amp;ext=' + ${ext}">Download a signature package of the signed file</a></li>
+            <li><a th:href="'/open-cades-signature?userfile=' + ${outputFile}">Open/validate the signed file</a></li>
+            <li><a th:href="'/cades-signature?userfile=' + ${outputFile}">Co-sign with another certificate</a></li>
+        </ul>
     </div>
 
 </div>
