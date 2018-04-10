@@ -37,10 +37,10 @@ public class PadesSignatureController {
 		Path fileToSign;
 		if (userfile != null && !userfile.isEmpty()) {
 
-			// If the URL argument "userfile" is filled, it means the user was redirected here by UploadController
-			// (signature with file uploaded by user). We'll set the path of the file to be signed, which was saved in
-			// the temporary folder by UploadController (such a file would normally come from your application's
-			// database)
+			// If the URL argument "userfile" is filled, it means the user was redirected here by
+			// UploadController (signature with file uploaded by user). We'll set the path of the
+			// file to be signed, which was saved in the temporary folder by UploadController (such
+			// a file would normally come from your application's database)
 			if (!Files.exists(Application.getTempFolderPath().resolve(userfile))) {
 				throw new RuntimeException("File not found!");
 			}
@@ -48,8 +48,8 @@ public class PadesSignatureController {
 
 		} else {
 
-			// If userfile is null, this is the "signature with server file" case. We'll set the path to the sample
-			// document.
+			// If userfile is null, this is the "signature with server file" case. We'll set the
+			// path to the sample document.
 			fileToSign = Util.getSampleDocPath();
 
 		}
@@ -62,8 +62,8 @@ public class PadesSignatureController {
 	}
 
 	/**
-	 * This action receives the form submission from the signature page. It will perform a PAdES signature in three
-	 * steps using PKI Express and Web PKI.
+	 * This action receives the form submission from the signature page. It will perform a PAdES
+	 * signature in three steps using PKI Express and Web PKI.
 	 */
 	@RequestMapping(value = "/pades-signature", method = {RequestMethod.POST})
 	public String post(
@@ -80,13 +80,13 @@ public class PadesSignatureController {
 
 		if (state.equals("start")) {
 
-			// This block will be executed only when its on the "start" step. In this sample, the state is set as
-			// "start" programatically after the user press the "Sign File" button (see method sign() on
-			// signature-form.js).
+			// This block will be executed only when its on the "start" step. In this sample, the
+			// state is set as "start" programatically after the user press the "Sign File" button
+			// (see method sign() on signature-form.js).
 			try {
 
-				// Get an instance of the PadesSignatureStarter class, responsible for receiving the signature elements
-				// and start the signature process.
+				// Get an instance of the PadesSignatureStarter class, responsible for receiving
+				// the signature elements and start the signature process.
 				PadesSignatureStarter signatureStarter = new PadesSignatureStarter();
 
 				// Set PKI default options (see Util.java)
@@ -98,27 +98,25 @@ public class PadesSignatureController {
 				// Set Base64-encoded certificate's content to signature starter.
 				signatureStarter.setCertificateBase64(certContent);
 
-				// Set visual representation. We provide a Java class that represents the visual representation
-				// model.
+				// Set visual representation. We provide a Java class that represents the visual
+				// representation model.
 				signatureStarter.setVisualRepresentation(PadesVisualElements.getVisualRepresentation(1));
-				// Alternatively, we can provide a javascript file that represents json-encoded the model
-				// (see resources/static/vr.json).
-				//signatureStarter.setVisualRepresentationFromFile(Util.getVisualRepresentationPath());
 
-				// Start the signature process. Receive as response a SignatureStartResult instance containing the
-				// following fields:
+				// Start the signature process. Receive as response a SignatureStartResult instance
+				// containing the following fields:
 				// - toSignHash: The hash to be signed.
-				// - digestAlgorithm: The digest algorithm that will inform the Web PKI component to compute the
-				// signature.
+				// - digestAlgorithm: The digest algorithm that will inform the Web PKI component
+				// to compute the signature.
 				// - transferFile: A temporary file to be passed to "complete" step.
 				SignatureStartResult result = signatureStarter.start();
 
-				// If you want to delete the temporary files created by this step use the method dispose(). This method
-				// MUST be called after the start() method, because it deletes some files needed by the method.
+				// If you want to delete the temporary files created by this step use the method
+				// dispose(). This method MUST be called after the start() method, because it
+				// deletes some files needed by the method.
 				signatureStarter.dispose();
 
-				// Render the fields received form start() method as hidden fields to be used on the javascript or on
-				// the "complete" step.
+				// Render the fields received form start() method as hidden fields to be used on
+				// the javascript or on the "complete" step.
 				model.addAttribute("state", state);
 				model.addAttribute("fileToSign", fileToSign);
 				model.addAttribute("certContent", certContent);
@@ -138,12 +136,13 @@ public class PadesSignatureController {
 
 		} else if (state.equals("complete")) {
 
-			// This block will be executed only when it's on the "complete" step. In this sample, the state is set as
-			// "complete" programatically after the Web PKI component perform the signature and submit the form (see
-			// method sign() on signature-form.js).
+			// This block will be executed only when it's on the "complete" step. In this sample,
+			// the state is set as "complete" programatically after the Web PKI component perform
+			// the signature and submit the form (see method sign() on signature-form.js).
 			try {
 
-				// Get an instance of the SignatureFinisher class, responsible for completing the signature process.
+				// Get an instance of the SignatureFinisher class, responsible for completing the
+				// signature process.
 				SignatureFinisher signatureFinisher = new SignatureFinisher();
 
 				// Set PKI default options (see Util.java)
@@ -165,8 +164,9 @@ public class PadesSignatureController {
 				// Complete the signature process.
 				signatureFinisher.complete();
 
-				// If you want to delete the temporary files created by this step, use the method dispose(). This method
-				// MUST be called after the complete() method, because it deletes some files needed by the method.
+				// If you want to delete the temporary files created by this step, use the method
+				// dispose(). This method MUST be called after the complete() method, because it
+				// deletes some files needed by the method.
 				signatureFinisher.dispose();
 
 				// Update signature state to "completed".

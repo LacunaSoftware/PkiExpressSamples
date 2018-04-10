@@ -18,8 +18,8 @@ import java.util.UUID;
 public class XmlElementSignatureServerKeyController {
 
     /**
-     * This action perform a local XML signature of an element of the XML in one step using PKI Express and renders a
-     * link to the signed file.
+     * This action perform a local XML signature of an element of the XML in one step using PKI
+     * Express and renders a link to the signed file.
      */
     @RequestMapping(value = "/xml-element-signature-server-key", method = {RequestMethod.GET})
     public String get(
@@ -29,8 +29,8 @@ public class XmlElementSignatureServerKeyController {
 
         try {
 
-            // Get an instance of the XmlSigner class, responsible for receiving the signature elements and performing
-            // the local signature.
+            // Get an instance of the XmlSigner class, responsible for receiving the signature
+            // elements and performing the local signature.
             XmlSigner signer = new XmlSigner();
 
             // Set PKI default options (see Util.java)
@@ -57,8 +57,9 @@ public class XmlElementSignatureServerKeyController {
             // Perform the signature.
             signer.sign();
 
-            // If you want to delete the temporary files created by this step, use the method dispose(). This method
-            // MUST be called after the sign() method, because it deletes some files needed by the method.
+            // If you want to delete the temporary files created by this step, use the method
+            // dispose(). This method MUST be called after the sign() method, because it deletes
+            // some files needed by the method.
             signer.dispose();
 
             // Render the link to download the signed file on signature page.

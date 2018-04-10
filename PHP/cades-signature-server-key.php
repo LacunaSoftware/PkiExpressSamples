@@ -75,11 +75,15 @@ try {
         <h2>CAdES Signature with a server key</h2>
 
         <p>File signed successfully!</p>
-        <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
-        <a href="signature-package.php?file=<?= $outputFile ?>&ext=<?= $ext ?>" class="btn btn-default">Download a
-            signature package of the signed file*</a>
-        <br/>
-        <br/>
+
+        <h3>Actions:</h3>
+        <ul>
+            <li><a href="app-data/<?= $outputFile ?>">Download the signed file</a></li>
+            <li><a href="signature-package.php?file=<?= $outputFile ?>&ext=<?= $ext ?>">Download a
+                    signature package of the signed file</a>*</li>
+            <li><a href="open-cades-signature.php?userfile=<?= $outputFile ?>">Open/validate the signed file</a></li>
+        </ul>
+
         <p>* This operation requires that the Zip extension to be installed.</p>
 
     <?php } else { ?>

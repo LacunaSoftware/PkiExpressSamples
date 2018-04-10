@@ -13,6 +13,7 @@
     <h2>PKI Express Samples</h2>
     Choose one of the following samples:
     <ul>
+        <li><a href="/authentication.php">Authentication with digital certificate</a></li>
         <li>
             PAdES signature
             <ul>

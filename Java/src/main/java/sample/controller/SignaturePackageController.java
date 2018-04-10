@@ -26,9 +26,9 @@ import java.util.zip.ZipOutputStream;
 @Controller
 public class SignaturePackageController {
 
-    // #################################################################################################################
+    // ############################################################################################
     // Configuration of the Signature Package
-    // #################################################################################################################
+    // ############################################################################################
 
     // Name of your website, with preceding article (article in lowercase)
     private final String verificationSiteNameWithArticle = "a Minha Central de Verificação";
@@ -36,8 +36,7 @@ public class SignaturePackageController {
     // Publicly accessible URL of your website. Preferably HTTPS.
     private final String verificationSite = "http://localhost:60833/";
 
-    // Format of the verification link, with "%s" as the verification code placeholder and the original file's extension
-    // placeholder.
+    // Format of the verification link, with "%s" as the verification code placeholder.
     private final String verificationLinkFormat = "http://localhost:60833/check-cades?code=%s";
 
     // "Normal" font size. Sizes of header fonts are defined based on this size.
@@ -49,8 +48,9 @@ public class SignaturePackageController {
     // Display name of the time zone chosen above
     public static final String timeZoneDisplayName = "horário de Brasília";
 
-    // You may also change texts, positions and more by editing directly the method generateSignaturePackage below
-    // #################################################################################################################
+    // You may also change texts, positions and more by editing directly the method
+    // generateSignaturePackage below.
+    // ############################################################################################
 
     @RequestMapping(value = "/signature-package", method = {RequestMethod.GET})
     public void get(
@@ -83,18 +83,19 @@ public class SignaturePackageController {
 
     private Path generateSignaturePackage(Path signaturePath, String verificationCode, String originalExtension) throws IOException {
 
-        // The verification code is generated without hyphens to save storage space and avoid copy-and-paste problems.
-        // On the PDF generation, we use the "formatted" version, with hyphen. (which will later be discarded on the
-        // verification page)
+        // The verification code is generated without hyphens to save storage space and avoid
+        // copy-and-paste problems. On the PDF generation, we use the "formatted" version, with
+        // hyphen. (which will later be discarded on the verification page)
         String formattedVerificationCode = Util.formatVerificationCode(verificationCode);
 
-        // Build the verification link from the constant "VerificationLinkFormat" (see above) and the formatted
-        // verification code.
+        // Build the verification link from the constant "VerificationLinkFormat" (see above) and
+        // the formatted verification code.
         String verificationLink = String.format(verificationLinkFormat, formattedVerificationCode);
 
         // 1. Inspect signature on the uploaded PDF.
 
-        // Get an instance of the CadesSignatureExplorer class, used to open/validate CAdES signatures.
+        // Get an instance of the CadesSignatureExplorer class, used to open/validate CAdES
+        // signatures.
         CadesSignatureExplorer sigExplorer = new CadesSignatureExplorer();
         // Set PKI defaults options. (see Util.java)
         Util.setPkiDefaults(sigExplorer);
@@ -102,9 +103,8 @@ public class SignaturePackageController {
         sigExplorer.setValidate(true);
         // Set the signature file to be inspected.
         sigExplorer.setSignatureFile(signaturePath);
-        // Generate path for the output file, where the encapsulated content from the signature will be stored. If the
-        // CMS was a "detached" signature, the original file must be provided with the setDataFile(path) method:
-        //sigExplorer.setDataFile(content | path | stream);
+        // Generate path for the output file, where the encapsulated content from the signature
+        // will be stored.
         Path encapsulateContentTargetPath = Application.getTempFolderPath().resolve(UUID.randomUUID() + ".pdf");
         sigExplorer.setExtractContentPath(encapsulateContentTargetPath);
         // Call the open() method, which returns the signature file's information.
@@ -116,11 +116,12 @@ public class SignaturePackageController {
         PdfMarker pdfMarker = new PdfMarker();
         // Set PKI default options. (see Util.java)
         Util.setPkiDefaults(pdfMarker);
-        // Specify the file to be marked. In this sample, we will use a blank PDF to create the protocol.
+        // Specify the file to be marked. In this sample, we will use a blank PDF to create the
+        // protocol.
         pdfMarker.setFile(Util.getBlankPdfPath());
 
-        // PdfHelper is a class form PKI Express "Fluent API" that helps creating elements and parameters for the
-        // PdfMarker.
+        // PdfHelper is a class form PKI Express "Fluent API" that helps creating elements and
+        // parameters for the PdfMarker.
         PdfHelper pdf = new PdfHelper();
 
         // Create a "protocol" mark on the blank PDF. We'll add several elements to this mark.
@@ -148,7 +149,7 @@ public class SignaturePackageController {
                        .onContainer(pdf.container().height(elementHeight).anchorTop(verticalOffset).width(elementHeight /* using elementHeight as width because the image is a square */).anchorRight())
                        .withQRCodeData(verificationLink)
             )
-            // Header "VERIFICAÇÃO DAS ASSINATURAS" centered between ICP-Brasil logo and QR Code
+            // Header "VERIFICAÇÃO DAS ASSINATURAS" centered between ICP-Brasil logo and QR Code.
             .addElement(
                     pdf.textElement()
                        .onContainer(pdf.container().height(elementHeight).anchorTop(verticalOffset + 0.2).fullWidth())
@@ -157,10 +158,10 @@ public class SignaturePackageController {
             );
         verticalOffset += elementHeight;
 
-        // Vertical padding
+        // Vertical padding.
         verticalOffset += 1.7;
 
-        // Header with verification code
+        // Header with verification code.
         elementHeight = 2;
         protocolMark.addElement(
             pdf.textElement()
@@ -170,8 +171,8 @@ public class SignaturePackageController {
         );
         verticalOffset += elementHeight;
 
-        // Paragraph saying "this document was signed by the following signers etc" and mentioning the time zone of the
-        // date/times below.
+        // Paragraph saying "this document was signed by the following signers etc" and mentioning
+        // the time zone of the date/times below.
         elementHeight = 2.5;
         protocolMark.addElement(
             pdf.textElement()
@@ -187,13 +188,13 @@ public class SignaturePackageController {
 
             elementHeight = 1.5;
             protocolMark
-                // Green "check" or red "X" icon depending on result of validation for this signer
+                // Green "check" or red "X" icon depending on result of validation for this signer.
                 .addElement(
                     pdf.imageElement()
                        .onContainer(pdf.container().height(0.5).anchorTop(verticalOffset + 0.2).width(0.5).anchorLeft())
                        .withImage(Util.getValidationResultIcon(signer.getValidationResults().isValid()), "image/png")
                 )
-                // Description of signer (see method getSignerDescription below)
+                // Description of signer (see method getSignerDescription below).
                 .addElement(
                     pdf.textElement()
                        .onContainer(pdf.container().height(elementHeight).anchorTop(verticalOffset).varWidth().margins(0.8, 0))
@@ -202,11 +203,11 @@ public class SignaturePackageController {
             verticalOffset += elementHeight;
         }
 
-        // Some vertical padding from last signer
+        // Some vertical padding from last signer.
         verticalOffset += 1;
 
-        // Paragraph with link to verification site and citing both the verification code above and the verification
-        // link below
+        // Paragraph with link to verification site and citing both the verification code above and
+        // the verification link below.
         elementHeight = 2.5;
         protocolMark.addElement(
             pdf.textElement()
@@ -217,7 +218,7 @@ public class SignaturePackageController {
         );
         verticalOffset += elementHeight;
 
-        // Verification link
+        // Verification link.
         elementHeight = 1.5;
         protocolMark.addElement(
             pdf.textElement()
@@ -226,17 +227,17 @@ public class SignaturePackageController {
                .alignTextCenter()
         );
 
-        // Add marks
+        // Add marks.
         pdfMarker.addMark(protocolMark);
 
-        // Generate path for output file and add the marker
+        // Generate path for output file and add the marker.
         Path protocolPath = Application.getTempFolderPath().resolve(UUID.randomUUID() + ".pdf");
         pdfMarker.setOutputFilePath(protocolPath);
 
-        // Apply marks
+        // Apply marks.
         pdfMarker.apply();
 
-        // 3. Generate zip file
+        // 3. Generate zip file:
 
         // Generate path to write signature package.
         Path signaturePackagePath = Application.getTempFolderPath().resolve(UUID.randomUUID() + ".zip");

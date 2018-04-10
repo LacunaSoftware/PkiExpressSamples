@@ -77,9 +77,14 @@ try {
         <h2>PAdES signature with a server key</h2>
 
         <p>File signed successfully!</p>
-        <a href="app-data/<?= $outputFile ?>" class="btn btn-info">Download the signed file</a>
-        <a href="printer-friendly-version.php?file=<?= $outputFile ?>" class="btn btn-default">Download a
-            printer-friendly version of the signed file</a>
+
+        <h3>Actions:</h3>
+        <ul>
+            <li><a href="app-data/<?= $outputFile ?>">Download the signed file</a></li>
+            <li><a href="printer-friendly-version.php?file=<?= $outputFile ?>">Download a
+                    printer-friendly version of the signed file</a></li>
+            <li><a href="open-pades-signature.php?userfile=<?= $outputFile ?>">Open/validate the signed file</a></li>
+        </ul>
 
 
     <?php } else { ?>

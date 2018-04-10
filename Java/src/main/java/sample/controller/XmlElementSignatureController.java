@@ -36,8 +36,8 @@ public class XmlElementSignatureController {
     }
 
     /**
-     * This action receives the form submission from the signature page. It will perform a XML signature of an element
-     * of the XML in three steps using PKI Express and Web PKI.
+     * This action receives the form submission from the signature page. It will perform a XML
+     * signature of an element of the XML in three steps using PKI Express and Web PKI.
      */
     @RequestMapping(value = "/xml-element-signature", method = {RequestMethod.POST})
     public String post(
@@ -53,13 +53,13 @@ public class XmlElementSignatureController {
 
         if (state.equals("start")) {
 
-            // This block will be executed only when its on the "start" step. In this sample, the state is set as
-            // "start" programatically after the user press the "Sign File" button (see method sign() on
-            // signature-form.js).
+            // This block will be executed only when its on the "start" step. In this sample, the
+            // state is set as "start" programatically after the user press the "Sign File" button
+            // (see method sign() on signature-form.js).
             try {
 
-                // Get an instance of the XmlSignatureStarter class, responsible for receiving the signature elements
-                // and start the signature process.
+                // Get an instance of the XmlSignatureStarter class, responsible for receiving the
+                // signature elements and start the signature process.
                 XmlSignatureStarter signatureStarter = new XmlSignatureStarter();
 
                 // Set PKI default options (see Util.java)
@@ -77,20 +77,21 @@ public class XmlElementSignatureController {
                 // Set the ID of the element to be signed.
                 signatureStarter.setToSignElementId("NFe35141214314050000662550010001084271182362300");
 
-                // Start the signature process. Receive as response a SignatureStartResult instance containing the
-                // following fields:
+                // Start the signature process. Receive as response a SignatureStartResult instance
+                // containing the following fields:
                 // - toSignHash: The hash to be signed.
-                // - digestAlgorithm: The digest algorithm that will inform the Web PKI component to compute the
-                // signature.
+                // - digestAlgorithm: The digest algorithm that will inform the Web PKI component
+                // to compute the signature.
                 // - transferFile: A temporary file to be passed to "complete" step.
                 SignatureStartResult result = signatureStarter.start();
 
-                // If you want to delete the temporary files created by this step, use the method dispose(). This method
-                // MUST be called after the start() method, because it deletes some files needed by the later method.
+                // If you want to delete the temporary files created by this step, use the method
+                // dispose(). This method MUST be called after the start() method, because it
+                // deletes some files needed by the later method.
                 signatureStarter.dispose();
 
-                // Render the fields received form start() method as hidden fields to be used on the javascript or on
-                // the "complete" step.
+                // Render the fields received form start() method as hidden fields to be used on
+                // the javascript or on the "complete" step.
                 model.addAttribute("state", state);
                 model.addAttribute("certContent", certContent);
                 model.addAttribute("certThumb", certThumb);
@@ -107,12 +108,13 @@ public class XmlElementSignatureController {
             }
         } else if (state.equals("complete")) {
 
-            // This block will be executed only when it's on the "complete" step. In this sample, the state is set as
-            // "complete" programatically after the Web PKI component perform the signature and submit the form (see
-            // method sign() on signature-form.js).
+            // This block will be executed only when it's on the "complete" step. In this sample,
+            // the state is set as "complete" programatically after the Web PKI component perform
+            // the signature and submit the form (see method sign() on signature-form.js).
             try {
 
-                // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
+                // Get an instance of the SignatureFinisher class, responsible for completing the
+                // signature process.
                 SignatureFinisher signatureFinisher = new SignatureFinisher();
 
                 // Set PKI default options (see Util.java)
@@ -134,8 +136,9 @@ public class XmlElementSignatureController {
                 // Complete the signature process.
                 signatureFinisher.complete();
 
-                // If you want to delete the temporary files created by this step, use the method dispose(). This method
-                // MUST be called after the complete() method, because it deletes some files needed by the method.
+                // If you want to delete the temporary files created by this step, use the method
+                // dispose(). This method MUST be called after the complete() method, because it
+                // deletes some files needed by the method.
                 signatureFinisher.dispose();
 
                 // Update signature state to "completed".

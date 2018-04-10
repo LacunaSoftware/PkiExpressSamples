@@ -23,9 +23,9 @@ import java.util.List;
 @Controller
 public class PrinterFriendlyVersionController {
 
-    // #################################################################################################################
+    // ############################################################################################
     // Configuration of the Printer-Friendly version
-    // #################################################################################################################
+    // ############################################################################################
 
     // Name of your website, with preceding article (article in lowercase)
     private final String verificationSiteNameWithArticle = "a Minha Central de Verificação";
@@ -45,8 +45,9 @@ public class PrinterFriendlyVersionController {
     // Display name of the time zone chosen above
     public static final String timeZoneDisplayName = "horário de Brasília";
 
-    // You may also change texts, positions and more by editing directly the method generatePrinterFriendlyVersion below
-    // #################################################################################################################
+    // You may also change texts, positions and more by editing directly the method
+    // generatePrinterFriendlyVersion below.
+    // ############################################################################################
 
     @RequestMapping(value = "/printer-friendly-version", method = {RequestMethod.GET})
     public void getPades(
@@ -78,18 +79,19 @@ public class PrinterFriendlyVersionController {
 
     private Path generatePrinterFriendlyVersion(Path pdfPath, String verificationCode) throws IOException {
 
-        // The verification code is generated without hyphens to save storage space and avoid copy-and-paste problems.
-        // On the PDF generation, we use the "formatted" version, with hyphens (which will later be discarded on the
-        // verification page)
+        // The verification code is generated without hyphens to save storage space and avoid
+        // copy-and-paste problems. On the PDF generation, we use the "formatted" version, with
+        // hyphens (which will later be discarded on the verification page)
         String formattedVerificationCode = Util.formatVerificationCode(verificationCode);
 
-        // Build the verification link from the constant "verificationLinkFormat" (see above) and the formatted
-        // verification code
+        // Build the verification link from the constant "verificationLinkFormat" (see above) and
+        // the formatted verification code
         String verificationLink = String.format(verificationLinkFormat, formattedVerificationCode);
 
         // 1. Inspect signatures on the uploaded PDF
 
-        // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
+        // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF
+        // signatures.
         PadesSignatureExplorer  sigExplorer = new PadesSignatureExplorer();
         // Set PKI defaults options. (see Util.java)
         Util.setPkiDefaults(sigExplorer);
@@ -117,12 +119,12 @@ public class PrinterFriendlyVersionController {
         String signerNames = Util.joinStringsPt(signerNamesList);
         String allPagesMessage = String.format("Este documento foi assinado digitalmente por %s.\nPara verificar a validade das assinaturas acesse %s em %s e informe o código %s", signerNames, verificationSiteNameWithArticle, verificationSite, formattedVerificationCode);
 
-        // PdfHelper is a class from the PKI Express's "fluent API" that helps creating elements and parameters for the
-        // PdfMarker.
+        // PdfHelper is a class from the PKI Express's "fluent API" that helps creating elements
+        // and parameters for the PdfMarker.
         PdfHelper pdf = new PdfHelper();
 
-        // ICP-Brasil logo on bottom-right corner of every page (except on the page which will be created at the end of
-        // the document)
+        // ICP-Brasil logo on bottom-right corner of every page (except on the page which will be
+        // created at the end of the document)
         pdfMarker.addMark(
                 pdf.mark()
                         .onAllPages()
@@ -135,7 +137,8 @@ public class PrinterFriendlyVersionController {
 
         );
 
-        // Summary on bottom margin of every page (except on the page which will be created at the end of the document)
+        // Summary on bottom margin of every page (except on the page which will be created at the
+        // end of the document)
         pdfMarker.addMark(
                 pdf.mark()
                         .onAllPages()
@@ -143,8 +146,8 @@ public class PrinterFriendlyVersionController {
                         .addElement(pdf.textElement().withOpacity(75).addSection(allPagesMessage))
         );
 
-        // Summary on right margin of every page (except on the page which will be created at the end of the document),
-        // rotated 90 degrees counterclockwise (text goes up)
+        // Summary on right margin of every page (except on the page which will be created at the
+        // end of the document), rotated 90 degrees counterclockwise (text goes up)
         pdfMarker.addMark(
                 pdf.mark()
                         .onAllPages()
@@ -157,8 +160,8 @@ public class PrinterFriendlyVersionController {
                         )
         );
 
-        // Create a "manifest" mark on a new page added on the end of the document. We'll add several elements to this
-        // mark.
+        // Create a "manifest" mark on a new page added on the end of the document. We'll add
+        // several elements to this mark.
         PdfMark manifestMark = pdf.mark()
                 .onNewPage()
                 // This mark's container is the whole page with 1-inch margins
@@ -182,7 +185,8 @@ public class PrinterFriendlyVersionController {
                                 .onContainer(pdf.container().height(elementHeight).anchorTop(verticalOffset).width(elementHeight /* using elementHeight as width because the image is a square */).anchorRight())
                                 .withQRCodeData(verificationLink)
                 )
-                // Header "VERIFICAÇÃO DAS ASSINATURAS" centered between ICP-Brasil logo and QR Code
+                // Header "VERIFICAÇÃO DAS ASSINATURAS" centered between ICP-Brasil logo and
+                // QR Code.
                 .addElement(
                         pdf.textElement()
                                 .onContainer(pdf.container().height(elementHeight).anchorTop(verticalOffset + 0.2).fullWidth())
@@ -204,8 +208,8 @@ public class PrinterFriendlyVersionController {
         );
         verticalOffset += elementHeight;
 
-        // Paragraph saying "this document was signed by the following signers etc" and mentioning the time zone of the
-        // date/times below
+        // Paragraph saying "this document was signed by the following signers etc" and mentioning
+        // the time zone of the date/times below.
         elementHeight = 2.5;
         manifestMark.addElement(
                 pdf.textElement()
@@ -219,7 +223,8 @@ public class PrinterFriendlyVersionController {
 
             elementHeight = 1.5;
             manifestMark
-                    // Green "check" or red "X" icon depending on result of validation for this signer
+                    // Green "check" or red "X" icon depending on result of validation for this
+                    // signer.
                     .addElement(
                             pdf.imageElement()
                                     .onContainer(pdf.container().height(0.5).anchorTop(verticalOffset + 0.2).width(0.5).anchorLeft())
@@ -238,8 +243,8 @@ public class PrinterFriendlyVersionController {
         // Some vertical padding form last signer
         verticalOffset += 1;
 
-        // Paragraph with link to verification site and citing both the verification code above and the verification
-        // link below
+        // Paragraph with link to verification site and citing both the verification code above and
+        // the verification link below
         elementHeight = 2.5;
         manifestMark.addElement(
                 pdf.textElement()

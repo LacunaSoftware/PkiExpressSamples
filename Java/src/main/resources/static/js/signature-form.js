@@ -1,15 +1,15 @@
-// -----------------------------------------------------------------------------------------------------
-// This file contains logic for calling the Web PKI component. It is only an example, feel free to alter
-// it to meet your application's needs.
-// -----------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+// This file contains logic for calling the Web PKI component to perform a signature. It is only an
+// example, feel free to alter it to meet your application's needs.
+// ------------------------------------------------------------------------------------------------
 var signatureForm = (function() {
 
     var pki = null;
     var formElements = {};
 
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Initializes the signature form.
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     function init(fe) {
 
         // Receive form parameters received as arguments.
@@ -18,7 +18,7 @@ var signatureForm = (function() {
         // Instance Web PKI object.
         pki = new LacunaWebPKI(_webPkiLicense);
 
-        if (formElements.stateField.val() == 'initial') {
+        if (formElements.stateField.val() === 'initial') {
 
             // Wireup of button clicks.
             formElements.signButton.click(startSignature);
@@ -28,30 +28,36 @@ var signatureForm = (function() {
             $.blockUI({ message: 'Initializing ...' });
 
             // Call the init() method on the LacunaWebPKI object, passing a callback for when the
-            // component is ready to be used and another to be called when an error occurs on any of the
-            // subsequent operations. For more information, see:
+            // component is ready to be used and another to be called when an error occurs on any
+            // of the subsequent operations. For more information, see:
             // https://docs.lacunasoftware.com/en-us/articles/web-pki/get-started.html#coding-the-first-lines
             // https://webpki.lacunasoftware.com/Help/classes/LacunaWebPKI.html#method_init
             pki.init({
-                ready: loadCertificates, // As soon as the component is ready we'll load the certificates.
+                // As soon as the component is ready we'll load the certificates.
+                ready: loadCertificates,
+                // Generic error callback (see function declaration above).
                 defaultError: onWebPkiError
             });
 
-        } else if (formElements.stateField.val() == 'start') {
+        } else if (formElements.stateField.val() === 'start') {
 
             // Block the UI while we get things ready.
             $.blockUI({ message: 'Signing ...' });
+
+            // Call the init() method again to perform the signature.
             pki.init({
-                ready: sign, // As soon as the component is ready we'll perform the signature.
+                // As soon as the component is ready we'll perform the signature.
+                ready: sign,
+                // Generic error callback (see function declaration above).
                 defaultError: onWebPkiError
             });
 
         }
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // Function called when the user clicks the "Refresh" button
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+    // Function called when the user clicks the "Refresh" button.
+    // --------------------------------------------------------------------------------------------
     function refresh() {
         // Block the UI while we load the certificates.
         $.blockUI({ message: 'Refreshing ...' });
@@ -59,26 +65,20 @@ var signatureForm = (function() {
         loadCertificates();
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // Function that loads the certificates, either on startup or when the user clicks the "Refresh"
-    // button. At this point, the UI is already blocked.
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+    // Function that loads the certificates, either on startup or when the user clicks the
+    // "Refresh" button. At this point, the UI is already blocked.
+    // --------------------------------------------------------------------------------------------
     function loadCertificates() {
 
         // Call the listCertificates() method to list the user's certificates.
         pki.listCertificates({
 
-            // Specify that expired certificates should be ignored.
-            filter: pki.filters.isWithinValidity,
-
-            // In order to list only certificates within validity period and having a CPF (ICP-Brasil),
-            // use this instead:
-            //filter: pki.filters.all(pki.filters.hasPkiBrazilCpf, pki.filters.isWithinValidity),
-
-            // Id of the select to be populated with the certificates.
+            // ID of the <select> element to be populated with the certificates.
             selectId: formElements.certificateSelect.attr('id'),
 
-            // Function that will be called to get the text that should be displayed for each option.
+            // Function that will be called to get the text that should be displayed for each
+            // option.
             selectOptionFormatter: function (cert) {
                 return cert.subjectName + ' (issued by ' + cert.issuerName + ')';
             }
@@ -91,9 +91,9 @@ var signatureForm = (function() {
 
     }
 
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Function called when the user clicks the "Sign File" button.
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     function startSignature() {
 
         // Block the UI while we perform the signature
@@ -114,21 +114,21 @@ var signatureForm = (function() {
         });
     }
 
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Function called when the page is rendered on the "start" state. This will happen after the
     // "start" step on server-side (see method init() above).
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     function sign() {
 
-        // Call signHash() on the Web PKI component passing the "to-sign-hash", the digest algorithm and
-        // the certificate selected by the user.
+        // Call signHash() on the Web PKI component passing the "to-sign-hash", the digest
+        // algorithm and the certificate selected by the user.
         pki.signHash({
             thumbprint: formElements.certThumbField.val(),
             hash: formElements.toSignHashField.val(),
             digestAlgorithm: formElements.digestAlgorithmField.val()
         }).success(function (signature) {
 
-            // Submit form with "complete" state
+            // Submit form with the "complete" state.
             formElements.stateField.val('complete');
             formElements.signatureField.val(signature);
             formElements.form.submit();
@@ -136,15 +136,15 @@ var signatureForm = (function() {
         });
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // Function called if an error occurs on the Web PKI component
-    // -------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+    // Function called if an error occurs on the Web PKI component.
+    // --------------------------------------------------------------------------------------------
     function onWebPkiError(message, error, origin) {
 
-        // Unblock the UI
+        // Unblock the UI.
         $.unblockUI();
 
-        // Log the error to the browser console (for debugging purposes)
+        // Log the error to the browser console (for debugging purposes).
         if (console) {
             console.log('An error has occurred on the signature browser component: ' + message, error);
         }
