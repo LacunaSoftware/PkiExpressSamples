@@ -16,7 +16,7 @@ try {
     // signature.
     $signer = new XmlSigner();
 
-    // Set PKI default options. (see Util.php)
+    // Set PKI default options (see Util.php).
     setPkiDefaults($signer);
 
     // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.

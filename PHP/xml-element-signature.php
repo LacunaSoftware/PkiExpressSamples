@@ -37,7 +37,7 @@ if ($state == 'start') {
         // start the signature process.
         $signatureStarter = new XmlSignatureStarter();
 
-        // Set PKI default options. (see Util.php)
+        // Set PKI default options (see Util.php).
         setPkiDefaults($signatureStarter);
 
         // Set Base64-encoded certificate's content to signature starter.
@@ -90,7 +90,7 @@ if ($state == 'start') {
             // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
             $signatureFinisher = new SignatureFinisher();
 
-            // Set PKI default options. (see Util.php)
+            // Set PKI default options (see Util.php).
             setPkiDefaults($signatureFinisher);
 
             // Set the XML to be signed. It's the same we used on "start" step.

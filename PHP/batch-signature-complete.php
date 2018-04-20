@@ -11,24 +11,19 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Lacuna\PkiExpress\SignatureFinisher;
 
-// Get the document id for this signature (received from the POST call, see batch-signature-form.js)
+// Get the parameters for this signature (received from the POST call via AJAX, see batch-signature-form.js)
 $id = $_POST['id'];
-
-// Get the computed signature (received from the POST call, see batch-signature-form.js)
 $signature = $_POST['signature'];
-
-// Get the transfer file for this signature, received on start action (received from the POST call,
-// see batch-signature-form.js)
 $transferFile = $_POST['transferFile'];
 
 // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
 $signatureFinisher = new SignatureFinisher();
 
-// Set PKI default options. (see Util.php)
+// Set PKI default options (see Util.php).
 setPkiDefaults($signatureFinisher);
 
-// Set PDF to be signed. It's the same file we used on "start" step.
-$signatureFinisher->setFileToSign('content/0' . $id % 10 . '.pdf');
+// Set PDF to be signed. It's the same file we used on start action.
+$signatureFinisher->setFileToSign(sprintf('content/%02d.pdf', $id % 10));
 
 // Set transfer file.
 $signatureFinisher->setTransferFile($transferFile);
@@ -44,5 +39,5 @@ $signatureFinisher->setOutputFile("app-data/{$outputFile}");
 // Complete the signature process.
 $signatureFinisher->complete();
 
-// Return a JSON with the saved filename (the page iwll use jQuery to decode this value).
+// Return a JSON with the saved filename (the page will use jQuery to decode this value).
 echo json_encode($outputFile);

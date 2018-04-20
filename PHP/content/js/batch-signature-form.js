@@ -6,7 +6,7 @@ var batchSignatureForm = (function () {
 
     // The Javascript class "Queue" defined here helps to process the documents in the batch. You
     // don't necessarily need to understand this code, only how to use it (see the usage below on
-    // the function startBatch)
+    // the function startBatch).
     (function () {
         window.Queue = function () {
             this.items = [];
@@ -77,7 +77,7 @@ var batchSignatureForm = (function () {
 
         formElements = fe;
 
-        // Wireup of button clicks
+        // Wireup of button clicks.
         formElements.signButton.click(sign);
         formElements.refreshButton.click(refresh);
 
@@ -85,13 +85,13 @@ var batchSignatureForm = (function () {
         // will render something like this: var batchDocIds = [ 1,2,3,...,30 ];
         batchDocIds = formElements.batchDocIds;
 
-        // Receive the document lists
+        // Receive the document lists.
         docList = formElements.docList;
 
-        // Block the UI while we get things ready
+        // Block the UI while we get things ready.
         $.blockUI({ message: 'Inicializando ...' });
 
-        // Render documents to be signed
+        // Render documents to be signed.
         for (var i = 0; i < batchDocIds.length; i++) {
             var docId = batchDocIds[i];
             docList.append($('<li />').append(
@@ -100,7 +100,7 @@ var batchSignatureForm = (function () {
         }
 
         // Call the init() method on the LacunaWebPKI object, passing a callback for when the
-        // component is ready to be used and another to be called when an error occurrs on any of
+        // component is ready to be used and another to be called when an error occurs on any of
         // the subsequent operations. For more information, see:
         // https://docs.lacunasoftware.com/en-us/articles/web-pki/get-started.html#coding-the-first-lines
         // http://webpki.lacunasoftware.com/Help/classes/LacunaWebPKI.html#method_init
@@ -227,8 +227,8 @@ var batchSignatureForm = (function () {
 
     // --------------------------------------------------------------------------------------------
     // Function that performs the first step described above for each document, which is the
-    // to the action "start" of the BatchSignatureController in order to start the signature and
-    // get the information need for the signature computation and for the signature completion.
+    // to the action batch-signature-start.php in order to start the signature and get the
+    // information need for the signature computation and for the signature completion.
     //
     // This function is called by the Queue.process function, taking documents from the "start"
     // queue. Once we're done, we'll call the "done" callback passing the document, and the
@@ -286,7 +286,7 @@ var batchSignatureForm = (function () {
             step.signature = signature;
             done(step);
         }).error(function (error) {
-            // Render error
+            // Render error.
             renderFail(step, error);
             // Call the "done" callback with no argument, signalling the document should not go to
             // the next queue.
@@ -296,7 +296,7 @@ var batchSignatureForm = (function () {
 
     // --------------------------------------------------------------------------------------------
     // Function that performs the third step described above for each document, which is the call
-    // to the action "complete" of the BatchSignatureController order to complete the signature.
+    // to the action batch-signature-complete.php order to complete the signature.
     //
     // This function is called by the Queue.process function, taking documents from the "complete"
     // queue. Once we're done, we'll call the "done" callback passing the document. Once all
@@ -340,7 +340,7 @@ var batchSignatureForm = (function () {
         addAlert('info', 'Batch processing completed');
         // Prevent user from clicking "sign batch" again (our logic isn't prepared for that).
         formElements.signButton.prop('disabled', true);
-        // Unblock the UI
+        // Unblock the UI.
         $.unblockUI();
     }
 
@@ -405,4 +405,5 @@ var batchSignatureForm = (function () {
     return {
         init: init
     };
+
 })();

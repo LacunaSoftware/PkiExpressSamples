@@ -20,15 +20,15 @@ $documentsIds = array_map(function($id) {
 <head>
     <meta charset="utf-8">
     <title>Batch Samples</title>
-    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use with the Web PKI component) ?>
+    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use with the Web PKI component). ?>
 </head>
 <body>
 
-<?php include 'menu.php' // The top menu, this can be removed entirely ?>
+<?php include 'menu.php' // The top menu, this can be removed entirely. ?>
 
 <div class="container">
 
-    <?php // Messages about the signature process will be rendered in here ?>
+    <?php // Messages about the signature process will be rendered in here. ?>
     <div id="messagesPanel"></div>
 
     <h2>Batch Signature</h2>
@@ -42,15 +42,15 @@ $documentsIds = array_map(function($id) {
                 You'll be signing the following files:
                 <?php
                 // UL element to hold the batch's documents (we'll render these programatically,
-                // see batch-signature-form.js)
+                // see batch-signature-form.js).
                 ?>
             <ul id="docList"/>
             </p>
         </div>
 
         <?php
-        // Render a select (combo box) to list the user's certificates. For now it will be
-        // empty, we'll populate it later on (see batch-signature-form.js)
+        // Render a select (combo box) to list the user's certificates. For now it will be empty, we'll populate it
+        // later on (see batch-signature-form.js).
         ?>
         <div class="form-group">
             <label for="certificateSelect">Choose a certificate</label>
@@ -58,7 +58,7 @@ $documentsIds = array_map(function($id) {
         </div>
 
         <?php
-        // Action buttons. Notice that the "Sign File" button is NOT a submit button. When the user clicks the button,
+        // Action buttons. Notice that the "Sign Batch" button is NOT a submit button. When the user clicks the button,
         // we must first use the Web PKI component to perform the client-side computation necessary and only when
         // that computation is finished we'll submit the form programmatically (see batch-signature-form.js).
         ?>
@@ -83,13 +83,13 @@ $documentsIds = array_map(function($id) {
 <script>
 
     $(document).ready(function () {
-        // Once the page is ready, we call the init() function on the javascript code (see batch-signature-form.js)
+        // Once the page is ready, we call the init() function on the javascript code (see batch-signature-form.js).
         batchSignatureForm.init({
-            certificateSelect: $('#certificateSelect'),       // the select element (combo box) to list the certificates
-            refreshButton: $('#refreshButton'),               // the "refresh" button
-            signButton: $('#signButton'),                     // the button that initiates the operation
-            batchDocIds: <?= json_encode($documentsIds); ?>,  // the documents ids
-            docList: $('#docList')                            // the reference to the list of documents.
+            certificateSelect: $('#certificateSelect'),       // The <select> element (combo box) to list the certificates.
+            refreshButton: $('#refreshButton'),               // The "refresh" button.
+            signButton: $('#signButton'),                     // The button that initiates the operation.
+            batchDocIds: <?= json_encode($documentsIds); ?>,  // The documents IDs.
+            docList: $('#docList')                            // The reference to the list of documents.
         });
     });
 

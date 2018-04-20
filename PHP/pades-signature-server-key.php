@@ -41,8 +41,6 @@ try {
 
     // Set visual representation. We provide a PHP class that represents the visual representation model.
     $signer->setVisualRepresentation(getVisualRepresentation(1));
-    // Alternatively, we can provide a javascript file that contains a json-encoded model (see content/vr.json).
-    //$signer->setVisualRepresentationFromFile("content/vr.json");
 
     // Generate path for output file and add to signer object.
     createAppData(); // make sure the "app-data" folder exists (util.php)

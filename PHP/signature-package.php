@@ -95,7 +95,7 @@ function generateSignaturePackage($signaturePath, $verificationCode, $originalEx
 
     // Get an instance of the CadesSignatureExplorer class, used to open/validate CAdES signatures.
     $sigExplorer = new CadesSignatureExplorer();
-    // Set PKI default options. (see Util.php)
+    // Set PKI default options (see Util.php).
     setPkiDefaults($sigExplorer);
     // Specify that we want to validate the signatures in the file, not only inspect them.
     $sigExplorer->validate = true;

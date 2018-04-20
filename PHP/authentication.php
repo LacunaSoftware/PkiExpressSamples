@@ -14,7 +14,7 @@ $signature = null;
 // Get an instance of the Authentication class.
 $auth = new Authentication();
 
-// Set PKI default options. (see Util.php)
+// Set PKI default options (see Util.php).
 setPkiDefaults($auth);
 
 // Start the authentication. Receive as response a AuthStartResult instance containing the following fields:
