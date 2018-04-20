@@ -11,10 +11,10 @@ if (empty($userfile)) {
     throw new \Exception("No file was uploaded");
 }
 
-// Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
+// Get an instance of the PadesSignatureExplorer class, used to open/validate CAdES signatures.
 $sigExplorer = new CadesSignatureExplorer();
 
-// Set PKI default options. (see Util.php)
+// Set PKI default options (see Util.php).
 setPkiDefaults($sigExplorer);
 
 // Set the PDF file to be inspected.

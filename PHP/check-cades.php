@@ -12,7 +12,7 @@ if (!isset($formattedCode)) {
 }
 
 // On printer-friendly-version.php, we stored the unformatted version of the verification code (without hyphens) but
-// used the formatted version (with hyphens) on the printer-friendly PDF. Now, we remove the hyphen before looking it
+// used the formatted version (with hyphens) on the signature-protocol PDF. Now, we remove the hyphen before looking it
 // up.
 $verificationCode = parseVerificationCode($formattedCode);
 
@@ -31,7 +31,7 @@ if ($fileId == null) {
 // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
 $sigExplorer = new CadesSignatureExplorer();
 
-// Set PKI default options. (see Util.php)
+// Set PKI default options (see Util.php).
 setPkiDefaults($sigExplorer);
 
 // Specify that we want to validate the signatures in the file, not only inspect them.

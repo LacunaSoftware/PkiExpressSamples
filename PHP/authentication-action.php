@@ -16,7 +16,7 @@ $signature = !empty($_POST['signature']) ? $_POST['signature'] : null;
 // Get an instance of the Authentication class.
 $auth = new Authentication();
 
-// Set PKI default options. (see Util.php)
+// Set PKI default options (see Util.php).
 setPkiDefaults($auth);
 
 // Set the nonce. This value is generated on "start" action and passed by a hidden field.

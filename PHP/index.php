@@ -40,6 +40,12 @@
                 </li>
             </ul>
         </li>
+        <li>
+            Sign a batch of files
+            <ul>
+                <li><a href="batch-signature.php">Simple batch signature</a></li>
+            </ul>
+        </li>
     </ul>
 
 </div>

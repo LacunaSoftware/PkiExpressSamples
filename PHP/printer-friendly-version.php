@@ -95,7 +95,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
 
     // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
     $signatureExplorer = new PadesSignatureExplorer();
-    // Set PKI default options. (see Util.php)
+    // Set PKI default options (see Util.php).
     setPkiDefaults($signatureExplorer);
     // Specify that we want to validate the signatures in the file, not only inspect them.
     $signatureExplorer->validate = true;
@@ -109,7 +109,7 @@ function generatePrinterFriendlyVersion($pdfPath, $verificationCode)
 
     // Get an instance of the PdfMarker class, used to apply marks on a PDF.
     $pdfMarker = new PdfMarker();
-    // Set PKI defaults options. (see Util.java)
+    // Set PKI defaults options (see Util.java).
     setPkiDefaults($pdfMarker);
     // Specify the PDF file to be marked
     $pdfMarker->setFile($pdfPath);

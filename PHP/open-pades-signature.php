@@ -14,7 +14,7 @@ if (empty($userfile)) {
 // Get an instance of the PadesSignatureExplorer class, used to open/validate PDF signatures.
 $sigExplorer = new PadesSignatureExplorer();
 
-// Set PKI default options. (see Util.php)
+// Set PKI default options (see Util.php).
 setPkiDefaults($sigExplorer);
 
 // Set the PDF file to be inspected.

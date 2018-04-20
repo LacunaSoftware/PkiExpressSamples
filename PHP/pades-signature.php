@@ -54,7 +54,7 @@ if ($state == 'start') {
         // start the signature process.
         $signatureStarter = new PadesSignatureStarter();
 
-        // Set PKI default options. (see Util.php)
+        // Set PKI default options (see Util.php).
         setPkiDefaults($signatureStarter);
 
         // Set PDF to be signed.
@@ -69,8 +69,6 @@ if ($state == 'start') {
 
         // Set visual representation. We provide a PHP class that represents the visual representation model.
         $signatureStarter->setVisualRepresentation(getVisualRepresentation(1));
-        // Alternatively, you can provide a javascript file that contains a json-encoded model (see content/vr.json).
-        //$signatureStarter->setVisualRepresentationFromFile("content/vr.json");
 
         // Start the signature process. Receive as response the following fields:
         // - $toSignHash: The hash to be signed.
@@ -95,9 +93,9 @@ if ($state == 'start') {
 } else {
     if ($state == 'complete') {
 
-        // This block will be executed only when it's on the "complete" step. In this sample, the state is set as "complete"
-        // programatically after the Web PKI component perform the signature and submit the form (see method sign() on
-        // content/js/signature-form.js).
+        // This block will be executed only when it's on the "complete" step. In this sample, the state is set as,
+        // "complete" programatically after the Web PKI component perform the signature and submit the form (see method
+        // sign() on content/js/signature-form.js).
         try {
 
             // Recover variables from the POST arguments to be used on this step.
@@ -111,7 +109,7 @@ if ($state == 'start') {
             // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
             $signatureFinisher = new SignatureFinisher();
 
-            // Set PKI default options. (see Util.php)
+            // Set PKI default options (see Util.php).
             setPkiDefaults($signatureFinisher);
 
             // Set PDF to be signed. It's the same file we used on "start" step.

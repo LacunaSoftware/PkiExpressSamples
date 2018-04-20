@@ -54,13 +54,10 @@ if ($state == 'start') {
         // start the signature process.
         $signatureStarter = new CadesSignatureStarter();
 
-        // Set PKI default options (see Util.php)
+        // Set PKI default options (see Util.php).
         setPkiDefaults($signatureStarter);
 
-        // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign that file.
-        // But, if the CMS was a "detached" signature, the original file must be provided with the setDataFile($path)
-        // method:
-        //$signatureStarter->setDataFile($dataFile);
+        // Set file to be signed. If the file is a CMS, PKI Express will recognize that and will co-sign that file.
         $signatureStarter->setFileToSign($fileToSign);
 
         // Set Base64-encoded certificate's content to signature starter.
@@ -108,14 +105,11 @@ if ($state == 'start') {
             // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
             $signatureFinisher = new SignatureFinisher();
 
-            // Set PKI default options (see Util.php)
+            // Set PKI default options (see Util.php).
             setPkiDefaults($signatureFinisher);
 
             // Set file to be signed. It's the same file we used on "start" step.
             $signatureFinisher->setFileToSign($fileToSign);
-
-            // For the same reason on "start" step, we have to set the data file in this step.
-            //$signatureFinisher->setDataFile($dataFile);
 
             // Set transfer file.
             $signatureFinisher->setTransferFile($transferFile);
