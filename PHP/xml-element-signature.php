@@ -46,7 +46,7 @@ if ($state == 'start') {
         // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
         $signatureStarter->setXmlToSign('content/SampleNFe.xml');
 
-        // Set the signature policy.
+        // Set signature policy.
         $signatureStarter->signaturePolicy = XmlSignaturePolicies::NFE;
 
         // Set the ID of the element to be signed.
