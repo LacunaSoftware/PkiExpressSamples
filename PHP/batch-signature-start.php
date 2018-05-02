@@ -9,7 +9,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Lacuna\PkiExpress\PadesSignatureStarter;
-use Lacuna\PkiExpress\PadesSignaturePolicies;
+use Lacuna\PkiExpress\StandardSignaturePolicies;
 
 
 // Get the parameters for this signature (received from the POST call via AJAX, see batch-signature-form.js).
@@ -24,7 +24,7 @@ $signatureStarter = new PadesSignatureStarter();
 setPkiDefaults($signatureStarter);
 
 // Set signature policy.
-$signatureStarter->signaturePolicy = PadesSignaturePolicies::BASIC;
+$signatureStarter->signaturePolicy = StandardSignaturePolicies::PADES_BASIC;
 
 // Set PDF to be signed.
 $signatureStarter->setPdfToSign(sprintf('content/%02d.pdf', $id % 10));

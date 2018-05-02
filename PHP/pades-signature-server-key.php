@@ -6,7 +6,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Lacuna\PkiExpress\PadesSignaturePolicies;
+use Lacuna\PkiExpress\StandardSignaturePolicies;
 use Lacuna\PkiExpress\PadesSigner;
 
 
@@ -29,7 +29,7 @@ try {
     setPkiDefaults($signer);
 
     // Set signature policy.
-    $signer->signaturePolicy = PadesSignaturePolicies::BASIC;
+    $signer->signaturePolicy = StandardSignaturePolicies::PADES_BASIC;
 
     // Set PDF to be signed.
     $signer->setPdfToSign("app-data/$userfile");

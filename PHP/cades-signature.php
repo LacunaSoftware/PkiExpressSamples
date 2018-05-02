@@ -8,7 +8,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Lacuna\PkiExpress\CadesSignatureStarter;
 use Lacuna\PkiExpress\SignatureFinisher;
-use Lacuna\PkiExpress\CadesSignaturePolicies;
+use Lacuna\PkiExpress\StandardSignaturePolicies;
 
 
 // Recover signature state from hidden field (if it is not set, the "initial" state is assumed).
@@ -59,7 +59,7 @@ if ($state == 'start') {
         setPkiDefaults($signatureStarter);
 
         // Set signature policy.
-        $signatureStarter->signaturePolicy = CadesSignaturePolicies::ICPBR_ADR_BASICA;
+        $signatureStarter->signaturePolicy = StandardSignaturePolicies::PKI_BRAZIL_CADES_ADR_BASICA;
 
         // Set file to be signed. If the file is a CMS, PKI Express will recognize that and will co-sign that file.
         $signatureStarter->setFileToSign($fileToSign);

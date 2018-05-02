@@ -6,7 +6,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Lacuna\PkiExpress\CadesSignaturePolicies;
+use Lacuna\PkiExpress\StandardSignaturePolicies;
 use Lacuna\PkiExpress\CadesSigner;
 
 // Retrieve the URL argument "userfile", this is filled after been redirected here by the file upload.php. We'll set the
@@ -28,7 +28,7 @@ try {
     setPkiDefaults($signer);
 
     // Set signature policy.
-    $signer->signaturePolicy = CadesSignaturePolicies::ICPBR_ADR_BASICA;
+    $signer->signaturePolicy = StandardSignaturePolicies::PKI_BRAZIL_CADES_ADR_BASICA;
 
     // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and will co-sign that file.
     $signer->setFileToSign("app-data/{$userfile}");

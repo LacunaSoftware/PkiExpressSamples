@@ -7,7 +7,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Lacuna\PkiExpress\XmlSignatureStarter;
-use Lacuna\PkiExpress\XmlSignaturePolicies;
+use Lacuna\PkiExpress\StandardSignaturePolicies;
 use Lacuna\PkiExpress\SignatureFinisher;
 
 
@@ -47,7 +47,7 @@ if ($state == 'start') {
         $signatureStarter->setXmlToSign('content/SampleNFe.xml');
 
         // Set signature policy.
-        $signatureStarter->signaturePolicy = XmlSignaturePolicies::NFE;
+        $signatureStarter->signaturePolicy = StandardSignaturePolicies::NFE_PADRAO_NACIONAL;
 
         // Set the ID of the element to be signed.
         $signatureStarter->toSignElementId = 'NFe35141214314050000662550010001084271182362300';
