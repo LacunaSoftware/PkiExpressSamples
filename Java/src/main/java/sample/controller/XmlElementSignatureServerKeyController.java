@@ -1,6 +1,7 @@
 package sample.controller;
 
-import com.lacunasoftware.pkiexpress.XmlSignaturePolicies;
+import com.lacunasoftware.pkiexpress.StandardSignaturePolicies;
+import com.lacunasoftware.pkiexpress.TimestampAuthority;
 import com.lacunasoftware.pkiexpress.XmlSigner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +46,7 @@ public class XmlElementSignatureServerKeyController {
             signer.setCertPassword("1234");
 
             // Set the signature policy.
-            signer.setSignaturePolicy(XmlSignaturePolicies.NFe);
+            signer.setSignaturePolicy(StandardSignaturePolicies.NFePadraoNacional);
 
             // Set the ID of the element to be signed.
             signer.setToSignElementId("NFe35141214314050000662550010001084271182362300");

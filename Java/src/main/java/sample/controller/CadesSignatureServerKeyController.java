@@ -2,6 +2,8 @@ package sample.controller;
 
 
 import com.lacunasoftware.pkiexpress.CadesSigner;
+import com.lacunasoftware.pkiexpress.StandardSignaturePolicies;
+import com.lacunasoftware.pkiexpress.TimestampAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +45,9 @@ public class CadesSignatureServerKeyController {
 
             // Set PKI default options (see Util.java).
             Util.setPkiDefaults(signer);
+
+            // Set signature policy.
+            signer.setSignaturePolicy(StandardSignaturePolicies.PkiBrazilCadesAdrBasica);
 
             // Set file to be signed. If the file is a CMS, the PKI Express will recognize that and
             // will co-sign that file.
