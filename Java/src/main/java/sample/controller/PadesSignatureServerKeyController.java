@@ -1,9 +1,7 @@
 package sample.controller;
 
 
-import com.lacunasoftware.pkiexpress.PadesSigner;
-import com.lacunasoftware.pkiexpress.StandardSignaturePolicies;
-import com.lacunasoftware.pkiexpress.TimestampAuthority;
+import com.lacunasoftware.pkiexpress.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
