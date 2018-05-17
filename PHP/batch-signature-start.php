@@ -24,7 +24,7 @@ $signatureStarter = new PadesSignatureStarter();
 setPkiDefaults($signatureStarter);
 
 // Set signature policy.
-$signatureStarter->signaturePolicy = StandardSignaturePolicies::PADES_BASIC;
+$signatureStarter->signaturePolicy = StandardSignaturePolicies::PADES_BASIC_WITH_LTV;
 
 // Set PDF to be signed.
 $signatureStarter->setPdfToSign(sprintf('content/%02d.pdf', $id % 10));

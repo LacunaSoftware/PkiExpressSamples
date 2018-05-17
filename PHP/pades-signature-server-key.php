@@ -29,7 +29,7 @@ try {
     setPkiDefaults($signer);
 
     // Set signature policy.
-    $signer->signaturePolicy = StandardSignaturePolicies::PADES_BASIC;
+    $signer->signaturePolicy = StandardSignaturePolicies::PADES_BASIC_WITH_LTV;
 
     // Set PDF to be signed.
     $signer->setPdfToSign("app-data/$userfile");

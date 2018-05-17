@@ -59,7 +59,7 @@ if ($state == 'start') {
         setPkiDefaults($signatureStarter);
 
         // Set signature policy.
-        $signatureStarter->signaturePolicy = StandardSignaturePolicies::PADES_BASIC;
+        $signatureStarter->signaturePolicy = StandardSignaturePolicies::PADES_BASIC_WITH_LTV;
 
         // Set PDF to be signed.
         $signatureStarter->setPdfToSign($fileToSign);
