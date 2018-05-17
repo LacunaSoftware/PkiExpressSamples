@@ -91,7 +91,7 @@ public class PadesSignatureController {
 				Util.setPkiDefaults(signatureStarter);
 
 				// Set signature policy.
-				signatureStarter.setSignaturePolicy(StandardSignaturePolicies.PadesBasic);
+				signatureStarter.setSignaturePolicy(StandardSignaturePolicies.PadesBasicWithLTV);
 
 				// Set PDF to be signed.
 				signatureStarter.setPdfToSign(fileToSign);

@@ -69,7 +69,7 @@ public class BatchSignatureController {
         Util.setPkiDefaults(signatureStarter);
 
         // Set signature policy.
-        signatureStarter.setSignaturePolicy(StandardSignaturePolicies.PadesBasic);
+        signatureStarter.setSignaturePolicy(StandardSignaturePolicies.PadesBasicWithLTV);
 
         // Set the PDF to be signed.
         signatureStarter.setPdfToSign(Util.getBatchDocPath(request.getId()));
