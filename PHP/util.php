@@ -2,6 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use Lacuna\PkiExpress\TimestampAuthority;
 
 function setPkiDefaults(&$operator)
 {
@@ -17,6 +18,13 @@ function setPkiDefaults(&$operator)
     // If you want the operator to perform its action on "OFFLINE MODE" (default: false), uncomment the following
     // line:
     //$operator->offline = true;
+
+    // If you want to perform a signature with timestamp, uncomment the following line to set a timestamp authority:
+    //$tsa = new TimestampAuthority('timestamp-authority-url');
+    //$tsa->setOAuthTokenAuthentication('oauth-token');
+    //$tsa->setSSLAuthentication('cert-thumbprint');
+    //$tsa->setBasicAuthentication('user', 'pass');
+    //$operator->timestampAuthority = $tsa;
 }
 
 function getIcpBrasilLogoContent()
