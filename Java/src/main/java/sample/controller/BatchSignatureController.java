@@ -3,6 +3,7 @@ package sample.controller;
 import com.lacunasoftware.pkiexpress.PadesSignatureStarter;
 import com.lacunasoftware.pkiexpress.SignatureFinisher;
 import com.lacunasoftware.pkiexpress.SignatureStartResult;
+import com.lacunasoftware.pkiexpress.StandardSignaturePolicies;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +67,9 @@ public class BatchSignatureController {
 
         // Set the PKI default options. (see Util.java)
         Util.setPkiDefaults(signatureStarter);
+
+        // Set signature policy.
+        signatureStarter.setSignaturePolicy(StandardSignaturePolicies.PadesBasicWithLTV);
 
         // Set the PDF to be signed.
         signatureStarter.setPdfToSign(Util.getBatchDocPath(request.getId()));

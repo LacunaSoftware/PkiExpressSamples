@@ -1,9 +1,7 @@
 package sample.controller;
 
 
-import com.lacunasoftware.pkiexpress.PadesSignatureStarter;
-import com.lacunasoftware.pkiexpress.SignatureFinisher;
-import com.lacunasoftware.pkiexpress.SignatureStartResult;
+import com.lacunasoftware.pkiexpress.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -91,6 +89,9 @@ public class PadesSignatureController {
 
 				// Set PKI default options (see Util.java)
 				Util.setPkiDefaults(signatureStarter);
+
+				// Set signature policy.
+				signatureStarter.setSignaturePolicy(StandardSignaturePolicies.PadesBasicWithLTV);
 
 				// Set PDF to be signed.
 				signatureStarter.setPdfToSign(fileToSign);

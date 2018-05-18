@@ -6,6 +6,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Lacuna\PkiExpress\PadesSignatureStarter;
+use Lacuna\PkiExpress\StandardSignaturePolicies;
 use Lacuna\PkiExpress\SignatureFinisher;
 
 
@@ -56,6 +57,9 @@ if ($state == 'start') {
 
         // Set PKI default options (see Util.php).
         setPkiDefaults($signatureStarter);
+
+        // Set signature policy.
+        $signatureStarter->signaturePolicy = StandardSignaturePolicies::PADES_BASIC_WITH_LTV;
 
         // Set PDF to be signed.
         $signatureStarter->setPdfToSign($fileToSign);

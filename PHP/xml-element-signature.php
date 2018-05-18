@@ -7,7 +7,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Lacuna\PkiExpress\XmlSignatureStarter;
-use Lacuna\PkiExpress\XmlSignaturePolicies;
+use Lacuna\PkiExpress\StandardSignaturePolicies;
 use Lacuna\PkiExpress\SignatureFinisher;
 
 
@@ -46,8 +46,8 @@ if ($state == 'start') {
         // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
         $signatureStarter->setXmlToSign('content/SampleNFe.xml');
 
-        // Set the signature policy.
-        $signatureStarter->signaturePolicy = XmlSignaturePolicies::NFE;
+        // Set signature policy.
+        $signatureStarter->signaturePolicy = StandardSignaturePolicies::NFE_PADRAO_NACIONAL;
 
         // Set the ID of the element to be signed.
         $signatureStarter->toSignElementId = 'NFe35141214314050000662550010001084271182362300';

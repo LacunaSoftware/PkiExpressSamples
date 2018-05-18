@@ -2,6 +2,7 @@ package sample.util;
 
 import com.lacunasoftware.pkiexpress.PKCertificate;
 import com.lacunasoftware.pkiexpress.PkiExpressOperator;
+import com.lacunasoftware.pkiexpress.TimestampAuthority;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -34,6 +35,15 @@ public class Util {
 		// If you want the operator to perfom its action on "OFFLINE MODE" (default: false),
 		// uncomment the following line:
 		//operator.setOffline(true);
+
+		// If you want to perform a signature with timestamp, uncomment the following to set a
+		// timestamp authority:
+		//TimestampAuthority tsa = new TimestampAuthority("timestamp-authority-url");
+		//tsa.setOAuthTokenAuthentication("oauth-token");
+		//tsa.setSSLThumbprint("cert-thumbprint");
+		//tsa.setBasicAuthentication("user", "pass");
+		//operator.setTimestampAuthority(tsa);
+
 	}
 
 	public static void setNoCacheHeaders(HttpServletResponse response) {

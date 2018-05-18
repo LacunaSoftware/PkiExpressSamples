@@ -72,7 +72,7 @@ public class XmlElementSignatureController {
                 signatureStarter.setXmlToSign(Util.getSampleNFePath());
 
                 // Set the signature policy.
-                signatureStarter.setSignaturePolicy(XmlSignaturePolicies.NFe);
+                signatureStarter.setSignaturePolicy(StandardSignaturePolicies.NFePadraoNacional);
 
                 // Set the ID of the element to be signed.
                 signatureStarter.setToSignElementId("NFe35141214314050000662550010001084271182362300");
