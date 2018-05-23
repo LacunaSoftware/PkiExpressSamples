@@ -19,11 +19,10 @@ function setPkiDefaults(&$operator)
     // line:
     //$operator->offline = true;
 
-    // If you want to perform a signature with timestamp, uncomment the following line to set a timestamp authority:
-    //$tsa = new TimestampAuthority('timestamp-authority-url');
-    //$tsa->setOAuthTokenAuthentication('oauth-token');
-    //$tsa->setSSLAuthentication('cert-thumbprint');
-    //$tsa->setBasicAuthentication('user', 'pass');
+    // If you want to perform a signature with timestamp, set the timestamp authority. You can use REST PKI to do this
+    // (acquire access token on https://pki.rest), by uncommenting the following lines:
+    //$tsa = new TimestampAuthority('https://pki.rest/tsp/a402df41-8559-47b2-a05c-be555bf66310');
+    //$tsa->setOAuthTokenAuthentication('SET YOU ACCESS TOKEN HERE');
     //$operator->timestampAuthority = $tsa;
 }
 

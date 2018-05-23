@@ -36,12 +36,11 @@ public class Util {
 		// uncomment the following line:
 		//operator.setOffline(true);
 
-		// If you want to perform a signature with timestamp, uncomment the following to set a
-		// timestamp authority:
-		//TimestampAuthority tsa = new TimestampAuthority("timestamp-authority-url");
-		//tsa.setOAuthTokenAuthentication("oauth-token");
-		//tsa.setSSLThumbprint("cert-thumbprint");
-		//tsa.setBasicAuthentication("user", "pass");
+		// If you want to perform a signature with timestamp, set the timestamp authority. You can
+		// use REST PKI to do this (acquire access token on https://pki.rest), by uncommenting the
+		// following lines:
+		//TimestampAuthority tsa = new TimestampAuthority("https://pki.rest/tsp/a402df41-8559-47b2-a05c-be555bf66310");
+		//tsa.setOAuthTokenAuthentication("SET YOU ACCESS TOKEN HERE");
 		//operator.setTimestampAuthority(tsa);
 
 	}
