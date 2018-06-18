@@ -1,6 +1,5 @@
 package sample.controller;
 
-
 import com.lacunasoftware.pkiexpress.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import sample.Application;
 import sample.util.Util;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.UUID;
 
@@ -26,9 +23,8 @@ public class CadesSignatureServerKeyController {
     @RequestMapping(value = "/cades-signature-server-key", method = {RequestMethod.GET})
     public String get(
             @RequestParam(value = "userfile") String userfile,
-            Model model,
-            HttpServletResponse response
-    ) throws IOException {
+            Model model
+    ) {
 
         try {
 

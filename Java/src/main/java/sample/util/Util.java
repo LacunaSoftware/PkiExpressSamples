@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.*;
 
+
 public class Util {
 
 	public static SecureRandom rng = new SecureRandom();
@@ -127,6 +128,10 @@ public class Util {
 
 	public static Path getBatchDocPath(int id) throws IOException {
 		return new ClassPathResource("/static/" + String.format("%02d", id % 10) + ".pdf").getFile().toPath();
+	}
+
+	public static Path getSampleCodEnvelope() throws IOException {
+		return new ClassPathResource("/static/SampleCodEnvelope.xml").getFile().toPath();
 	}
 
 	public static byte[] getIcpBrasilLogoContent() throws IOException {

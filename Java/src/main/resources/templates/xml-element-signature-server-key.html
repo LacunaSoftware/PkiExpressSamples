@@ -11,7 +11,10 @@
 
         <h2>XML Element Signature with a server key</h2>
 
-        <!--/* If no errors have occurred, this page is shown for the user, with the link to the signed file. */-->
+        <!--
+            If no errors have occurred, this page is shown for the user, with the link to the
+            signed file.
+        -->
         <p>File signed sucessfully!</p>
         <p>
             <a th:href="'/files/' + ${outputFile}" class="btn btn-default">Download the signed file</a>
@@ -21,10 +24,10 @@
 
     <div th:if="${errorMessage} != null">
 
-        <!--/*
-            If some error has occurred, the error message is show with a "Try Again" button to return to the upload
-            page.
-         */-->
+        <!--
+            If some error has occurred, the error message is show with a "Try Again" button to
+            return to the upload page.
+         -->
         <div class="alert alert-danger" role="alert" style="margin-top: 2%;">
             <label for="errorMsg">Signature Failed</label><br />
             <span id="errorMsg" th:text="${errorMessage}"></span>

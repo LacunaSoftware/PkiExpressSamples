@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import sample.Application;
 import sample.util.Util;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.UUID;
 
 
@@ -22,10 +20,7 @@ public class XmlElementSignatureServerKeyController {
      * Express and renders a link to the signed file.
      */
     @RequestMapping(value = "/xml-element-signature-server-key", method = {RequestMethod.GET})
-    public String get(
-            Model model,
-            HttpServletResponse response
-    ) throws IOException {
+    public String get(Model model) {
 
         try {
 

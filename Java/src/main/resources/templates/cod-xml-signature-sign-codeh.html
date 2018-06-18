@@ -8,16 +8,16 @@
 <div class="container">
 
     <!--
-        This section will be only shown if some error has occurred in the last signature attempt.
-        If the user start a new signature, this error message is cleared.
-     -->
+        This section will be only shown if some error has occurred in the last signature
+        attempt. If the user start a new signature, this error message is cleared.
+    -->
     <div th:if="${errorMessage} != null" class="alert alert-danger alert-dismissible" role="alert" style="margin-top: 2%;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <label for="errorMsg"><span th:text="${errorTitle}"></span></label><br />
         <span id="errorMsg" th:text="${errorMessage}"></span>
     </div>
 
-    <h2>XML Element Signature</h2>
+    <h2>COD XML signature (CODEH element)</h2>
 
     <div th:unless="${state} =='completed'">
 
@@ -38,10 +38,10 @@
             <input type="hidden" id="transferFileField" name="transferFile" th:value="${transferFile}" />
             <input type="hidden" id="signatureField" name="signature" th:value="${signature}" />
             <input type="hidden" id="digestAlgorithmField" name="digestAlgorithm" th:value="${digestAlgorithm}" />
+            <input type="hidden" id="fileToSignField" name="fileToSign" th:value="${fileToSign}" />
 
             <div class="form-group">
-                <label>File to sign</label>
-                <p>You are signing the <i>infNFe</i> node of <a href="/SampleNFe.xml">this sample XML</a>.</p>
+                <p>You are signing the <i>CODEH</i> element of <a th:href="'/files/' + ${userfile}">this XML envelope</a>.</p>
             </div>
 
             <!--
@@ -59,7 +59,7 @@
                 client-side computation necessary and only when that computation is finished we'll
                 submit the form programmatically (see signature-form.js).
             -->
-            <button id="signButton" type="button" class="btn btn-primary">Sign File</button>
+            <button id="signButton" type="button" class="btn btn-primary">Sign CODEH element</button>
             <button id="refreshButton" type="button" class="btn btn-default">Refresh Certificates</button>
 
         </form>
@@ -100,12 +100,10 @@
 
     <div th:if="${state} == 'completed'">
 
-        <!-- This page is shown when the signature is completed with signature. -->
-        <p>File signed sucessfully!</p>
+        <p>CODEH element signed successfully!</p>
         <p>
-            <a th:href="'/files/' + ${outputFile}" class="btn btn-default">Download the signed file</a>
+            <a th:href="'/files/' + ${outputFile}" class="btn btn-default">Download XML with signed COD and CODEH elements</a>
         </p>
-
     </div>
 
 </div>

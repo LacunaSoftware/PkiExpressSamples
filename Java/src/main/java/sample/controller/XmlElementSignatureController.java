@@ -1,6 +1,5 @@
 package sample.controller;
 
-
 import com.lacunasoftware.pkiexpress.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import sample.Application;
 import sample.util.Util;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.UUID;
 
 
@@ -23,9 +20,8 @@ public class XmlElementSignatureController {
 	 */
     @RequestMapping(value = "/xml-element-signature", method = {RequestMethod.GET})
     public String get(
-            Model model,
-            HttpServletResponse response
-    ) throws IOException {
+            Model model
+    ) {
 
         // Set the state as "initial" to be passed to javascript to perform the relative step.
         String state = "initial";
@@ -44,12 +40,10 @@ public class XmlElementSignatureController {
             @RequestParam(value = "state", required = false) String state,
             @RequestParam(value = "certThumb", required = false) String certThumb,
             @RequestParam(value = "certContent", required = false) String certContent,
-            @RequestParam(value = "toSignHash", required = false) String toSignHash,
             @RequestParam(value = "transferFile", required = false) String transferFile,
-            @RequestParam(value = "digestAlgorithm", required = false) String digestAlgorithm,
             @RequestParam(value = "signature", required = false) String signature,
             Model model
-    ) throws IOException {
+    ) {
 
         if (state.equals("start")) {
 

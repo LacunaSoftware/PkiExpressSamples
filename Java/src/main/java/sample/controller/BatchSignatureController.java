@@ -4,7 +4,6 @@ import com.lacunasoftware.pkiexpress.PadesSignatureStarter;
 import com.lacunasoftware.pkiexpress.SignatureFinisher;
 import com.lacunasoftware.pkiexpress.SignatureStartResult;
 import com.lacunasoftware.pkiexpress.StandardSignaturePolicies;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,6 @@ import sample.model.BatchSignatureStartResponse;
 import sample.util.PadesVisualElements;
 import sample.util.Util;
 
-import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +31,8 @@ public class BatchSignatureController {
      * server asynchronously to start and complete each signature.
      */
     @RequestMapping(value = "/batch-signature", method = {RequestMethod.GET})
-    public String get(
-            Model model,
-            HttpServletResponse response
-    ) {
+    public String get(Model model) {
+
         // It is up to your application's business logic to determine which documents will compose
         // the batch.
         List<Integer> lst = new ArrayList<Integer>();
@@ -55,11 +50,7 @@ public class BatchSignatureController {
      */
     @RequestMapping(value = "/batch-signature-start", method = {RequestMethod.POST})
     public @ResponseBody
-    BatchSignatureStartResponse start(
-            BatchSignatureStartRequest request,
-            Model model,
-            HttpServletResponse response
-    ) throws IOException {
+    BatchSignatureStartResponse start(BatchSignatureStartRequest request) throws IOException {
 
         // Get an instance of the PadesSignatureStarter class, responsible for receiving the
         // signature elements and start the signature process.
@@ -106,11 +97,7 @@ public class BatchSignatureController {
      * signature of each document in the batch.
      */
     @RequestMapping(value = "/batch-signature-complete", method = {RequestMethod.POST})
-    public @ResponseBody String complete(
-            BatchSignatureCompleteRequest request,
-            Model model,
-            HttpServletResponse response
-    ) throws IOException {
+    public @ResponseBody String complete(BatchSignatureCompleteRequest request) throws IOException {
 
         // Get an instance of the SignatureFinisher class, responsible for completing the signature
         // process.

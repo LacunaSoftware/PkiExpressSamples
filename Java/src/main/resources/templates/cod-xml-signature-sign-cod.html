@@ -17,7 +17,7 @@
         <span id="errorMsg" th:text="${errorMessage}"></span>
     </div>
 
-    <h2>XML Element Signature</h2>
+    <h2>COD XML signature (COD element)</h2>
 
     <div th:unless="${state} =='completed'">
 
@@ -40,8 +40,7 @@
             <input type="hidden" id="digestAlgorithmField" name="digestAlgorithm" th:value="${digestAlgorithm}" />
 
             <div class="form-group">
-                <label>File to sign</label>
-                <p>You are signing the <i>infNFe</i> node of <a href="/SampleNFe.xml">this sample XML</a>.</p>
+                <p>You are signing the <i>COD</i> element of <a href="/SampleCodEnvelope.xml">this sample COD XML envelope</a>.</p>
             </div>
 
             <!--
@@ -59,7 +58,7 @@
                 client-side computation necessary and only when that computation is finished we'll
                 submit the form programmatically (see signature-form.js).
             -->
-            <button id="signButton" type="button" class="btn btn-primary">Sign File</button>
+            <button id="signButton" type="button" class="btn btn-primary">Sign COD element</button>
             <button id="refreshButton" type="button" class="btn btn-default">Refresh Certificates</button>
 
         </form>
@@ -100,10 +99,10 @@
 
     <div th:if="${state} == 'completed'">
 
-        <!-- This page is shown when the signature is completed with signature. -->
-        <p>File signed sucessfully!</p>
+        <p>COD element signed successfully!</p>
         <p>
-            <a th:href="'/files/' + ${outputFile}" class="btn btn-default">Download the signed file</a>
+            <a th:href="'/cod-xml-signature-sign-codeh?userfile=' + ${outputFile}" class="btn btn-primary">Sign CODEH element</a>
+            <a th:href="'/files/' + ${outputFile}" class="btn btn-default">Download XML with signed COD element</a>
         </p>
 
     </div>
