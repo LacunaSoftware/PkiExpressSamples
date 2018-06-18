@@ -7,10 +7,10 @@
 
 <div class="container">
 
-    <!--/*
-        This section will be only shown if some error has occurred in the last signature attempt. If the user start a
-        new signature, this error message is cleared.
-     */-->
+    <!--
+        This section will be only shown if some error has occurred in the last signature attempt.
+        If the user start a new signature, this error message is cleared.
+     -->
     <div th:if="${errorMessage} != null" class="alert alert-danger alert-dismissible" role="alert" style="margin-top: 2%;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <label for="errorMsg"><span th:text="${errorTitle}"></span></label><br />
@@ -21,13 +21,16 @@
 
     <div th:unless="${state} =='completed'">
 
-        <!--/*
-            This form will be shown initially and when this page is rendered to perform the signature using Web PKI
-            component.
-        */-->
+        <!--
+            This form will be shown initially and when this page is rendered to perform the
+            signature using Web PKI component.
+        -->
         <form id="signForm" method="POST">
 
-            <!--/* Hidden fields used to pass data from the server-side to the javascript and vice-versa */-->
+            <!--
+                Hidden fields used to pass data from the server-side to the javascript
+                (see signature-form.js) and vice-versa.
+            -->
             <input type="hidden" id="stateField" name="state" th:value="${state}" />
             <input type="hidden" id="certThumbField" name="certThumb" th:value="${certThumb}" />
             <input type="hidden" id="certContentField" name="certContent" th:value="${certContent}" />
@@ -43,49 +46,54 @@
                 <p th:if="${userfile} == null">You are signing <a href="/SampleDocument.pdf">this sample document</a>.</p>
             </div>
 
-            <!--/* Render a select (combo box) to list the user's certificates. For now it will be empty, we'll populate it later on (see javascript below). */-->
+            <!--
+                Render a select (combo box) to list the user's certificates. For now it will be
+                empty, we'll populate it later on (see signature-form.js).
+            -->
             <div class="form-group">
                 <label for="certificateSelect">Choose a certificate</label>
                 <select id="certificateSelect" class="form-control"></select>
             </div>
 
-            <!--/*
-                Action buttons. Notice that the "Sign File" button is NOT a submit button. When the user clicks the button,
-                we must first use the Web PKI component to perform the client-side computation necessary and only when
-                that computation is finished we'll submit the form programmatically (see js/signature-form.js).
-            */-->
+            <!--
+                Action buttons. Notice that the "Sign File" button is NOT a submit button. When the
+                user clicks the button, we must first use the Web PKI component to perform the
+                client-side computation necessary and only when that computation is finished we'll
+                submit the form programmatically (see signature-form.js).
+            -->
             <button id="signButton" type="button" class="btn btn-primary">Sign File</button>
             <button id="refreshButton" type="button" class="btn btn-default">Refresh Certificates</button>
 
         </form>
 
-        <!--/*
-            The file below contains the JS lib for accessing the Web PKI component. For more information, see:
-            https://webpki.lacunasoftware.com/#/Documentation
-         */-->
+        <!--
+            The file below contains the JS lib for accessing the Web PKI component. For more
+            information, see: https://webpki.lacunasoftware.com/#/Documentation
+        -->
         <script src="/js/lacuna-web-pki-2.9.0.js"></script>
 
-        <!--/*
-            The file below contains the necessary calls to the Web PKI component. Once the necessary computations have been
-            done, the javascript code will submit our form.
-        */-->
+        <!--
+            The file below contains the necessary calls to the Web PKI component. Once the
+            necessary computations have been done, the javascript code will submit our form.
+        -->
         <script src="/js/signature-form.js"></script>
 
         <script>
 
             $(document).ready(function () {
-                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js)
+                // Once the page is ready, we call the init() function on the javascript code
+                // (see signature-form.js).
                 signatureForm.init({
-                    form: $('#signForm'),                       // the form that should be submitted when the operation is complete
-                    certificateSelect: $('#certificateSelect'), // the select element (combo box) to list the certificates
-                    refreshButton: $('#refreshButton'),         // the "refresh" button
-                    signButton: $('#signButton'),               // the button that initiates the operation
-                    stateField: $('#stateField'),               // the field "state"
-                    certThumbField: $('#certThumbField'),       // the field "certThumb", storing the signer's certificate thumbprint
-                    certContentField: $('#certContentField'),   // the field "certContent", storing the signer's certificate content
-                    toSignHashField: $('#toSignHashField'),     // the field "toSignHash"
-                    digestAlgorithmField: $('#digestAlgorithmField'),    // the field "digestAlgorithm"
-                    signatureField: $('#signatureField')        // the field "signature", computed by Web PKI component
+                    form: $('#signForm'),                             // The form that should be submitted when the operation is complete.
+                    certificateSelect: $('#certificateSelect'),       // The select element (combo box) to list the certificates.
+                    refreshButton: $('#refreshButton'),               // The "refresh" button.
+                    signButton: $('#signButton'),                     // The button that initiates the operation.
+                    stateField: $('#stateField'),                     // The field "state".
+                    certThumbField: $('#certThumbField'),             // The field "certThumb", storing the signer's certificate thumbprint.
+                    certContentField: $('#certContentField'),         // The field "certContent", storing the signer's certificate content.
+                    toSignHashField: $('#toSignHashField'),           // The field "toSignHash".
+                    digestAlgorithmField: $('#digestAlgorithmField'), // The field "digestAlgorithm".
+                    signatureField: $('#signatureField')              // The field "signature", computed by Web PKI component.
                 });
             });
 
@@ -94,7 +102,7 @@
 
     <div th:if="${state} == 'completed'">
 
-        <!--/* This page is shown when the signature is completed with signature */-->
+        <!-- This page is shown when the signature is completed with signature. -->
         <p>File signed sucessfully!</p>
 
         <h3>Actions:</h3>

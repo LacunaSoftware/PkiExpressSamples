@@ -1,6 +1,5 @@
 package sample.controller;
 
-
 import com.lacunasoftware.pkiexpress.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import sample.Application;
 import sample.util.Util;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,8 +24,7 @@ public class CadesSignatureController {
 	@RequestMapping(value = "/cades-signature", method = {RequestMethod.GET})
 	public String get(
 			@RequestParam(value = "userfile", required = false) String userfile,
-			Model model,
-			HttpServletResponse response
+			Model model
 	) throws IOException {
 
 		// Set the state as "initial" to be passed to javascript to perform the relative step.
@@ -76,7 +73,7 @@ public class CadesSignatureController {
 			@RequestParam(value = "digestAlgorithm", required = false) String digestAlgorithm,
 			@RequestParam(value = "signature", required = false) String signature,
 			Model model
-	) throws IOException {
+	) {
 
 		if (state.equals("start")) {
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+
 @SpringBootApplication
 public class Application {
 
@@ -22,9 +23,9 @@ public class Application {
 
 	public static void main(String[] args) throws IOException {
 
-		// Temporary folder used to store uploaded files and signed PDFs, CMSs and XMLs. The use of a temporary
-		// directory is solely for simplification purposes. In actual production code, the storage would typically be
-		// performed by your application's database.
+		// Temporary folder used to store uploaded files and signed PDFs, CMSs and XMLs. The use of
+		// a temporary directory is solely for simplification purposes. In actual production code,
+		// the storage would typically be performed by your application's database.
 		tempFolderPath = Files.createTempDirectory("PkiExpressSample");
 
 		ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);

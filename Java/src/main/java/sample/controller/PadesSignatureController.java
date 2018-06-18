@@ -1,6 +1,5 @@
 package sample.controller;
 
-
 import com.lacunasoftware.pkiexpress.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,12 +68,10 @@ public class PadesSignatureController {
 		@RequestParam(value = "fileToSign", required = false) String fileToSign,
 		@RequestParam(value = "certThumb", required = false) String certThumb,
 		@RequestParam(value = "certContent", required = false) String certContent,
-		@RequestParam(value = "toSignHash", required = false) String toSignHash,
 		@RequestParam(value = "transferFile", required = false) String transferFile,
-		@RequestParam(value = "digestAlgorithm", required = false) String digestAlgorithm,
 		@RequestParam(value = "signature", required = false) String signature,
 		Model model
-	) throws IOException {
+	) {
 
 		if (state.equals("start")) {
 

@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
+
 @Controller
 public class PrinterFriendlyVersionController {
 

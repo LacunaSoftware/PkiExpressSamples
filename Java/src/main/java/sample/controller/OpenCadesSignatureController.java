@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import sample.Application;
 import sample.util.Util;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 
 @Controller
 public class OpenCadesSignatureController {
@@ -22,8 +22,7 @@ public class OpenCadesSignatureController {
     @RequestMapping(value = "/open-cades-signature", method = {RequestMethod.GET})
     public String get(
             @RequestParam(value = "userfile") String userfile,
-            Model model,
-            HttpServletResponse response
+            Model model
     ) throws IOException {
 
         // Get an instance of the CadesSignatureExplorer class, used to open/validate PDF
