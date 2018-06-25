@@ -71,7 +71,7 @@ public class CadesSignatureServerKeyController {
             model.addAttribute("outputFile", filename);
             model.addAttribute("ext", Util.getFileExtension(userfile));
 
-        } catch(Exception ex) {
+        } catch (Exception ex) {
 
             // Get exception message to be rendered on signature page.
             model.addAttribute("errorMessage", ex.getMessage());
