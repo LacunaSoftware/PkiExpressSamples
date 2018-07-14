@@ -1,7 +1,8 @@
 <?php
 
 /*
- * This file perform a XML signature of an element of the XML in three steps using PKI Express and Web PKI.
+ * This file performs the second of the two signatures on the CODEH element of the document. After the signature, it
+ * will render a link to download the signed file.
  */
 
 require __DIR__ . '/vendor/autoload.php';
@@ -14,9 +15,9 @@ use Lacuna\PkiExpress\SignatureFinisher;
 // Recover the signature state from hidden field (if it is not set, the "initial" state is assumed).
 $state = $_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['state']) ? $_POST['state'] : 'initial';
 
-// If the URL argument "userfile" is filled, it means the user was redirected here by the file upload.php, this is
-// the "signature with file uploaded by user" case. We'll set the path of the file to be signed, which was saved in
-// the "app-data" folder by upload.php.
+// If the URL argument "userfile" is filled, it means the user was redirected here by the file
+// cod-xml-signature-sign-cod.php, this is the "COD (Certificacíon de Origen Digital) XML signature" case. We'll set
+// the path of the file to be signed, which was saved in the "app-data" folder by cod-xml-signature-sign-cod.php.
 $userfile = isset($_GET['userfile']) ? $_GET['userfile'] : null;
 if(!empty($userfile)) {
     if (!file_exists("app-data/$userfile")) {
@@ -36,7 +37,7 @@ $outputFile = null;
 if ($state == 'start') {
 
     // This block will be executed only when it's on the "start" step. In this sample, the state is set as "start"
-    // programatically after the user press the "Sign File" button (see method sign() on content/js/signature-form.js).
+    // programatically after the user press the "Sign File" button (see method sign() on signature-form.js).
     try {
 
         // Recover variables from the POST arguments to be used on this step.
@@ -48,24 +49,25 @@ if ($state == 'start') {
         // start the signature process.
         $signatureStarter = new XmlSignatureStarter();
 
-        // Set PKI default options (see Util.php).
+        // Set PKI default options (see util.php).
         setPkiDefaults($signatureStarter);
 
         // Set Base64-encoded certificate's content to signature starter.
         $signatureStarter->setCertificateBase64($certContent);
 
-        // Set the XML to be signed, a sample Brazilian fiscal invoice pre-generated.
+        // Set the data to sign, which in the case of this example is a fixed sample "COD envelope", but with the "COD"
+        // element already sign on cod-xml-signature-sign-cod.php file.
         $signatureStarter->setXmlToSign("app-data/$userfile");
 
-        // Set signature policy.
+        // Set the signature policy.
         $signatureStarter->signaturePolicy = StandardSignaturePolicies::COD_WITH_SHA1;
 
         // Set the ID of the element to be signed.
         $signatureStarter->toSignElementId = 'CODEH';
 
         // Start the signature process. Receive as response the following fields:
-        // - $toSignHash: The hash to be signed.
-        // - $digestAlgorithm: The digest algorithm that will inform the Web PKI component to compute the signature.
+        // - $toSignHash: The hash to be signed;
+        // - $digestAlgorithm: The digest algorithm that will inform the Web PKI component to compute the signature;
         // - $transferFile: A temporary file to be passed to "complete" step.
         $response = $signatureStarter->start();
 
@@ -83,88 +85,87 @@ if ($state == 'start') {
         $state = 'initial';
     }
 
-} else {
-    if ($state == 'complete') {
+} else if ($state == 'complete') {
 
-        // This block will be executed only when it's on the "complete" step. In this sample, the state is set as "complete"
-        // programatically after the Web PKI component perform the signature and submit the form (see method sign() on
-        // content/js/signature-form.js).
-        try {
+    // This block will be executed only when it's on the "complete" step. In this sample, the state is set as "complete"
+    // programatically after the Web PKI component perform the signature and submit the form (see method sign() on
+    // content/js/signature-form.js).
+    try {
 
-            // Recover variables from the POST arguments to be used on this step.
-            $certThumb = !empty($_POST['certThumb']) ? $_POST['certThumb'] : null;
-            $toSignHash = !empty($_POST['toSignHash']) ? $_POST['toSignHash'] : null;
-            $transferFile = !empty($_POST['transferFile']) ? $_POST['transferFile'] : null;
-            $digestAlgorithm = !empty($_POST['digestAlgorithm']) ? $_POST['digestAlgorithm'] : null;
-            $signature = !empty($_POST['signature']) ? $_POST['signature'] : null;
-            $userfile = !empty($_POST['userfile']) ? $_POST['userfile'] : null;
+        // Recover variables from the POST arguments to be used on this step.
+        $certThumb = !empty($_POST['certThumb']) ? $_POST['certThumb'] : null;
+        $toSignHash = !empty($_POST['toSignHash']) ? $_POST['toSignHash'] : null;
+        $transferFile = !empty($_POST['transferFile']) ? $_POST['transferFile'] : null;
+        $digestAlgorithm = !empty($_POST['digestAlgorithm']) ? $_POST['digestAlgorithm'] : null;
+        $signature = !empty($_POST['signature']) ? $_POST['signature'] : null;
+        $userfile = !empty($_POST['userfile']) ? $_POST['userfile'] : null;
 
-            // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
-            $signatureFinisher = new SignatureFinisher();
+        // Get an instance of the SignatureFinisher class, responsible for completing the signature process.
+        $signatureFinisher = new SignatureFinisher();
 
-            // Set PKI default options (see Util.php).
-            setPkiDefaults($signatureFinisher);
+        // Set PKI default options (see util.php).
+        setPkiDefaults($signatureFinisher);
 
-            // Set the XML to be signed. It's the same we used on "start" step.
-            $signatureFinisher->setFileToSign("app-data/$userfile");
+        // Set the XML to be signed. It's the same we used on "start" step.
+        $signatureFinisher->setFileToSign("app-data/$userfile");
 
-            // Set transfer file.
-            $signatureFinisher->setTransferFile($transferFile);
+        // Set the transfer file.
+        $signatureFinisher->setTransferFile($transferFile);
 
-            // Set the signature value.
-            $signatureFinisher->setSignature($signature);
+        // Set the signature value.
+        $signatureFinisher->setSignature($signature);
 
-            // Generate path for output file and add to signature finisher.
-            createAppData(); // make sure the "app-data" folder exists (util.php).
-            $outputFile = uniqid() . ".xml";
-            $signatureFinisher->setOutputFile("app-data/{$outputFile}");
+        // Generate path for output file and add to signature finisher.
+        createAppData(); // make sure the "app-data" folder exists (util.php).
+        $outputFile = uniqid() . ".xml";
+        $signatureFinisher->setOutputFile("app-data/{$outputFile}");
 
-            // Complete the signature process.
-            $signatureFinisher->complete();
+        // Complete the signature process.
+        $signatureFinisher->complete();
 
-            // Update signature state to "completed".
-            $state = "completed";
+        // Update signature state to "completed".
+        $state = "completed";
 
-        } catch (Exception $e) {
+    } catch (Exception $e) {
 
-            // Return to "initial" state rendering the error message.
-            $errorMessage = $e->getMessage();
-            $errorTitle = 'Signature Finalization Failed';
-            $state = 'initial';
-        }
-
+        // Return to "initial" state rendering the error message.
+        $errorMessage = $e->getMessage();
+        $errorTitle = 'Signature Finalization Failed';
+        $state = 'initial';
     }
+
 }
 
 ?><!DOCTYPE html>
 <html>
 <head>
     <title>XML signature</title>
-    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
+    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component). ?>
 
     <?php
-    // The file below contains the JS lib for accessing the Web PKI component. For more information, see:
-    // https://webpki.lacunasoftware.com/#/Documentation
+        // The file below contains the JS lib for accessing the Web PKI component. For more information, see:
+        // https://webpki.lacunasoftware.com/#/Documentation
     ?>
     <script src="content/js/lacuna-web-pki-2.9.0.js"></script>
 
     <?php
-    // The file below contains the logic for calling the Web PKI component. It is only an example, feel free to alter it
-    // to meet your application's needs. You can also bring the code into the javascript block below if you prefer.
+        // The file below contains the logic for calling the Web PKI component. It is only an example, feel
+        // free to alter it to meet your application's needs. You can also bring the code into the javascript
+        // block below if you prefer.
     ?>
     <script src="content/js/signature-form.js"></script>
 
 </head>
 <body>
 
-<?php include 'menu.php' // The top menu, this can be removed entirely ?>
+<?php include 'menu.php' // The top menu, this can be removed entirely. ?>
 
 
 <div class="container">
 
     <?php
-    // This section will be only shown if some error has occurred in the last signature attempt. If the user start
-    // a new signature, this error message is cleared.
+        // This section will be only shown if some error has occurred in the last signature attempt. If the
+        // user start a new signature, this error message is cleared.
     ?>
     <?php if (isset($errorMessage)) { ?>
 
@@ -182,12 +183,12 @@ if ($state == 'start') {
     <?php if ($state != 'completed') { ?>
 
         <?php
-        // This form will be shown initially and when this page is rendered to perform the signature using Web PKI
-        // component.
+            // This form will be shown initially and when this page is rendered to perform the signature
+            // using Web PKI component.
         ?>
         <form id="signForm" action="cod-xml-signature-sign-codeh.php" method="POST">
 
-            <?php // Hidden fields used to pass data from the server-side to the javascript and vice-versa ?>
+            <?php // Hidden fields used to pass data from the server-side to the javascript and vice-versa. ?>
             <input type="hidden" id="stateField" name="state" value="<?= $state ?>">
             <input type="hidden" id="certThumbField" name="certThumb" value="<?= $certThumb ?>">
             <input type="hidden" id="certContentField" name="certContent" value="<?= $certContent ?>">
@@ -204,8 +205,8 @@ if ($state == 'start') {
             </div>
 
             <?php
-            // Render a select (combo box) to list the user's certificates. For now it will be empty, we'll populate
-            // it later on (see signature-form.js).
+                // Render a select (combo box) to list the user's certificates. For now it will be empty,
+                // we'll populate it later on (see signature-form.js).
             ?>
             <div class="form-group">
                 <label for="certificateSelect">Choose a certificate</label>
@@ -213,9 +214,10 @@ if ($state == 'start') {
             </div>
 
             <?php
-            // Action buttons. Notice that the "Sign File" button is NOT a submit button. When the user clicks the
-            // button, we must first use the Web PKI component to perform the client-side computation necessary and
-            // only when that computation is finished we'll submit the form programmatically (see signature-form.js).
+                // Action buttons. Notice that the "Sign File" button is NOT a submit button. When the user
+                // clicks the button, we must first use the Web PKI component to perform the client-side
+                // computation necessary and only when that computation is finished we'll submit the form
+                // programmatically (see signature-form.js).
             ?>
             <button id="signButton" type="button" class="btn btn-primary">Sign File</button>
             <button id="refreshButton" type="button" class="btn btn-default">Refresh Certificates</button>
@@ -225,18 +227,19 @@ if ($state == 'start') {
         <script>
 
             $(document).ready(function () {
-                // Once the page is ready, we call the init() function on the javascript code (see signature-form.js).
+                // Once the page is ready, we call the init() function on the javascript code
+                // (see signature-form.js).
                 signatureForm.init({
-                    form: $('#signForm'),                       // the form that should be submitted when the operation is complete
-                    certificateSelect: $('#certificateSelect'), // the select element (combo box) to list the certificates
-                    refreshButton: $('#refreshButton'),         // the "refresh" button
-                    signButton: $('#signButton'),               // the button that initiates the operation
-                    stateField: $('#stateField'),               // the field $state
-                    certThumbField: $('#certThumbField'),       // the field $certThumb, storing the signer's certificate thumbprint
-                    certContentField: $('#certContentField'),   // the field $certContent, storing the signer's certificate content
-                    toSignHashField: $('#toSignHashField'),     // the field $toSignHash
-                    signatureField: $('#signatureField'),       // the field $signature, computed by Web PKI component
-                    digestAlgorithmField: $('#digestAlgorithmField')    // the field $digestAlgorithm
+                    form: $('#signForm'),                            // The form that should be submitted when the operation is complete.
+                    certificateSelect: $('#certificateSelect'),      // The <select> element (combo box) to list the certificates.
+                    refreshButton: $('#refreshButton'),              // The "refresh" button.
+                    signButton: $('#signButton'),                    // The button that initiates the operation.
+                    stateField: $('#stateField'),                    // The field $state.
+                    certThumbField: $('#certThumbField'),            // The field $certThumb, storing the signer's certificate thumbprint.
+                    certContentField: $('#certContentField'),        // The field $certContent, storing the signer's certificate content.
+                    toSignHashField: $('#toSignHashField'),          // The field $toSignHash.
+                    signatureField: $('#signatureField'),            // The field $signature, computed by Web PKI component.
+                    digestAlgorithmField: $('#digestAlgorithmField') // The field $digestAlgorithm.
                 });
             });
 
@@ -244,7 +247,7 @@ if ($state == 'start') {
 
     <?php } else { ?>
 
-    <?php // This page is shown when the signature is completed with success. ?>
+        <?php // This page is shown when the signature is completed with success. ?>
         <p>File signed successfully!</p>
         <p>
             <a href="app-data/<?= $outputFile ?>" class="btn btn-default">Download XML with signed COD and CODEH elements</a>
