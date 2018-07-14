@@ -1,7 +1,7 @@
-// ------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // This file contains logic for calling the Web PKI component to perform a signature of batch of
 // documents. It is only an example, feel free to alter is to meet your application's needs.
-// ------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 var batchSignatureForm = (function () {
 
     // The Javascript class "Queue" defined here helps to process the documents in the batch. You
@@ -56,23 +56,19 @@ var batchSignatureForm = (function () {
         };
     })();
 
-    var formElements = {};
-
     // Auxiliary global variables.
     var selectedCertThumbprint = null;
-    var selectedCertContent = null;
-    var batchDocIds = null;
-    var docList = null;
     var startQueue = null;
     var performQueue = null;
     var completeQueue = null;
+    var formElements = {};
 
     // Create an instance of the LacunaWebPKI object.
-    var pki = new LacunaWebPKI();
+    var pki = new LacunaWebPKI(_webPkiLicense);
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called once the page is loaded.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function init(fe) {
 
         formElements = fe;
@@ -81,20 +77,13 @@ var batchSignatureForm = (function () {
         formElements.signButton.click(sign);
         formElements.refreshButton.click(refresh);
 
-        // We'll use the Model.DocumentIds filled by the server to render a Javascript array. This
-        // will render something like this: var batchDocIds = [ 1,2,3,...,30 ];
-        batchDocIds = formElements.batchDocIds;
-
-        // Receive the document lists.
-        docList = formElements.docList;
-
         // Block the UI while we get things ready.
-        $.blockUI({ message: 'Inicializando ...' });
+        $.blockUI({ message: 'Initializing ...' });
 
         // Render documents to be signed.
-        for (var i = 0; i < batchDocIds.length; i++) {
-            var docId = batchDocIds[i];
-            docList.append($('<li />').append(
+        for (var i = 0; i < formElements.batchDocIds.length; i++) {
+            var docId = formElements.batchDocIds[i];
+            formElements.append($('<li />').append(
                 $('<a />').text('Document ' + docId).attr('href', 'content/0' + docId % 10 + '.pdf')
             )[0]);
         }
@@ -112,9 +101,9 @@ var batchSignatureForm = (function () {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called when the user clicks the "Refresh" button.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function refresh() {
         // Block the UI while we load the certificates.
         $.blockUI();
@@ -122,16 +111,16 @@ var batchSignatureForm = (function () {
         loadCertificates();
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function that loads the certificates, either on startup or when the user clicks the
     // "Refresh" button. At this point, the UI is already blocked.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function loadCertificates() {
 
         // Call the listCertificates() method to list the user's certificates.
         pki.listCertificates({
 
-            // ID of the <select> element to be populated with the certificates.
+            // The ID of the <select> element to be populated with the certificates.
             selectId: formElements.certificateSelect.attr('id'),
 
             // Function that will be called to get the text that should be displayed for each
@@ -148,9 +137,9 @@ var batchSignatureForm = (function () {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called when the user clicks the "Sign Batch" button.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function sign() {
 
         // Block the UI while we perform the signature.
@@ -163,35 +152,34 @@ var batchSignatureForm = (function () {
         pki.readCertificate(selectedCertThumbprint).success(function (certEncoded) {
 
             // Store the certificate content.
-            selectedCertContent = certEncoded;
+            formElements.selectedCertContent = certEncoded;
 
             // Call Web PKI to preauthorize the signatures, so that the user only sees one
             // confirmation dialog.
             pki.preauthorizeSignatures({
                 certificateThumbprint: selectedCertThumbprint,
-                // Number of signatures to be authorized by the user.
-                signatureCount: batchDocIds.length
+                signatureCount: formElements.batchDocIds.length // Number of signatures to be authorized by the user.
             }).success(startBatch); // Callback to be called if the user authorizes the signatures.
         });
 
 
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called when the user authorizes the signatures.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function startBatch() {
 
         /*
             For each document, we must perform 3 actions in sequence:
 
             1. Start the signature    : call the action Api/BatchSignature/Start to start the
-                signature and get the "to-sign-hash" content and the digest algorithm needed for
-                the signature computation.
+               signature and get the "to-sign-hash" content and the digest algorithm needed for
+               the signature computation.
             2. Perform the signature  : call Web PKI's method signHash with the information from
-                the start action.
+               the start action.
             3. Complete the signature : call the action Api/BatchSignature/Complete to notify that
-                the signature is complete.
+               the signature is complete.
 
             We'll use the Queue Javascript class defined above in order to perform these steps
             simultaneously.
@@ -203,18 +191,18 @@ var batchSignatureForm = (function () {
         completeQueue = new Queue();
 
         // Add all documents to the first ("start") queue.
-        for (var i = 0; i < batchDocIds.length; i++) {
-            startQueue.add({ index: i, docId: batchDocIds[i] });
+        for (var i = 0; i < formElements.batchDocIds.length; i++) {
+            startQueue.add({ index: i, docId: formElements.batchDocIds[i] });
         }
 
         /*
-            Process each queue placing the result on the next queue, forming a sort
-            of "assembly line":
+            Process each queue placing the result on the next queue, forming a sort of "assembly
+            line":
 
                  startQueue                              performQueue                               completeQueue
                 -------------                            -------------                              -------------
-                      XXXXXXX  ->  (startSignature)  ->             XX  ->  (performSignature)  ->            XXX  ->  (completeSignature)
-                -------------         2 threads          -------------          2 threads           -------------           2 threads
+                XXXXXXX      ->  (startSignature)  ->             XX  ->  (performSignature)  ->            XXX  ->  (completeSignature)
+                -------------       2 threads            -------------        2 threads             -------------           2 threads
          */
         startQueue.process(startSignature, { threads: 2, output: performQueue });
         performQueue.process(performSignature, { threads: 2, output: completeQueue });
@@ -225,15 +213,15 @@ var batchSignatureForm = (function () {
         // of threads will not enhance the performance significantly.
     }
 
-    // --------------------------------------------------------------------------------------------
-    // Function that performs the first step described above for each document, which is the
-    // to the action batch-signature-start.php in order to start the signature and get the
-    // information need for the signature computation and for the signature completion.
+    // ---------------------------------------------------------------------------------------------
+    // Function that performs the first step described above for each document, which is the to the
+    // action batch-signature-start.php in order to start the signature and get the information need
+    // for the signature computation and for the signature completion.
     //
     // This function is called by the Queue.process function, taking documents from the "start"
     // queue. Once we're done, we'll call the "done" callback passing the document, and the
     // Queue.process function will place the document on the "perform" queue to await processing.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function startSignature(step, done) {
         // Call the server asynchronously to start the signature.
         $.ajax({
@@ -241,7 +229,7 @@ var batchSignatureForm = (function () {
             method: 'POST',
             data: {
                 id: step.docId,
-                certContent: selectedCertContent
+                certContent: formElements.selectedCertContent
             },
             dataType: 'json',
             success: function (response) {
@@ -265,7 +253,7 @@ var batchSignatureForm = (function () {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function that performs the second step described above for each document, which is the call
     // to Web PKI's signHash function using the "to-sign-hash" and the digest algorithm acquired on
     // the first step.
@@ -273,7 +261,7 @@ var batchSignatureForm = (function () {
     // This function is called by the Queue.process function, taking documents from the "perform"
     // queue. Once we're done, we'll call the "done" callback passing the document, and the
     // Queue.process function will place the document on the "complete" queue to await processing.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function performSignature(step, done) {
         // Call signHash() on the Web PKI component passing the "to-sign-hash", the digest
         // algorithm and the certificate selected by the user.
@@ -294,14 +282,14 @@ var batchSignatureForm = (function () {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
-    // Function that performs the third step described above for each document, which is the call
-    // to the action batch-signature-complete.php order to complete the signature.
+    // ---------------------------------------------------------------------------------------------
+    // Function that performs the third step described above for each document, which is the call to
+    // the action batch-signature-complete.php order to complete the signature.
     //
     // This function is called by the Queue.process function, taking documents from the "complete"
     // queue. Once we're done, we'll call the "done" callback passing the document. Once all
     // documents are processed, the Queue.process will call the "onBatchCompleted" function.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function completeSignature(step, done) {
         // Call the server asynchronously to notify that the signature has been performed.
         $.ajax({
@@ -332,9 +320,9 @@ var batchSignatureForm = (function () {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called once the batch is completed.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function onBatchCompleted() {
         // Notify the user and unblock the UI.
         addAlert('info', 'Batch processing completed');
@@ -344,9 +332,9 @@ var batchSignatureForm = (function () {
         $.unblockUI();
     }
 
-    // --------------------------------------------------------------------------------------------
-    // Function that renders a documument as completed successfully.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    // Function that renders a document as completed successfully.
+    // ---------------------------------------------------------------------------------------------
     function renderSuccess(step) {
         var docLi = $('#docList li').eq(step.index);
         docLi.append(
@@ -360,9 +348,9 @@ var batchSignatureForm = (function () {
         );
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function that renders a documument as failed.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function renderFail(step, error) {
         addAlert('danger', 'An error has occurred while signing Document ' + step.docId + ': ' + error);
         var docLi = $('#docList li').eq(step.index);
@@ -373,9 +361,9 @@ var batchSignatureForm = (function () {
         );
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called if an error occurs on the Web PKI component.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function onWebPkiError(message, error, origin) {
 
         // Unblock the UI.
@@ -391,9 +379,9 @@ var batchSignatureForm = (function () {
         alert(message);
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called to add an alert on the page in case of some error occur.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function addAlert(type, message) {
         $('#messagesPanel').append(
             '<div class="alert alert-' + type + ' alert-dismissible">' +

@@ -1,22 +1,22 @@
-// ------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // This file contains logic for calling the Web PKI component to perform an authentication. It is
 // only an example, feel free to alter is to meet your application's needs.
-// ------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 var authenticationForm = (function () {
 
-    var pki = null;
+    // Auxiliary global variable.
     var formElements = {};
 
-    // --------------------------------------------------------------------------------------------
+    // Create an instance of the Lacuna object.
+    var pki = new LacunaWebPKI(_webPkiLicense);
+
+    // ---------------------------------------------------------------------------------------------
     // Initializes the signature form.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function init(fe) {
 
         // Receive form parameters received as arguments.
         formElements = fe;
-
-        // Instance Web PKI object.
-        pki = new LacunaWebPKI(_webPkiLicense);
 
         // Wireup of button clicks.
         formElements.signInButton.click(signIn);
@@ -31,16 +31,14 @@ var authenticationForm = (function () {
         // https://docs.lacunasoftware.com/en-us/articles/web-pki/get-started.html#coding-the-first-lines
         // http://webpki.lacunasoftware.com/Help/classes/LacunaWebPKI.html#method_init
         pki.init({
-            // As soon as the component is ready we'll load the certificates.
-            ready: loadCertificates,
-            // Generic error callback (see function declaration above).
-            defaultError: onWebPkiError
+            ready: loadCertificates,    // As soon as the component is ready we'll load the certificates.
+            defaultError: onWebPkiError // Generic error callback (see function declaration above).
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called when the user clicks the "Refresh" button.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function refresh() {
         // Block the UI while we load the certificates.
         $.blockUI();
@@ -48,22 +46,27 @@ var authenticationForm = (function () {
         loadCertificates();
     }
 
-    // --------------------------------------------------------------------------------------------
-    // Function that loads the certificates, either on startup or when the user clicks the
-    // "Refresh" button. At this point, the UI is already blocked.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    // Function that loads the certificates, either on startup or when the user clicks the "Refresh"
+    // button. At this point, the UI is already blocked.
+    // ---------------------------------------------------------------------------------------------
     function loadCertificates() {
 
-        // Call the listCertificates() method to list the user's certificates.
+        // Call the listCertificates() method to list the user's certificates. For more information
+        // see: http://webpki.lacunasoftware.com/Help/classes/LacunaWebPKI.html#method_listCertificates
         pki.listCertificates({
 
-            // ID of the <select> element to be populated with the certificates.
+            // The ID of the <select> element to be populated with the certificates.
             selectId: formElements.certificateSelect.attr('id'),
 
             // Function that will be called to get the text that should be displayed for each
             // option.
             selectOptionFormatter: function (cert) {
-                return cert.subjectName + ' (issued by ' + cert.issuerName + ')';
+                var s = cert.subjectName + ' (issued by ' + cert.issuerName + ')';
+                if (new Date() > cert.validityEnd) {
+                    s = '[EXPIRED] ' + s;
+                }
+                return s;
             }
 
         }).success(function () {
@@ -80,7 +83,7 @@ var authenticationForm = (function () {
     function signIn() {
 
         // Block the UI while we perform the signature.
-        $.blockUI();
+        $.blockUI({ message: 'Signing In ...' });
 
         // Get the thumbprint of the selected certificate.
         var selectedCertThumbprint = formElements.certificateSelect.val();
@@ -115,10 +118,12 @@ var authenticationForm = (function () {
 
         // Unblock the UI.
         $.unblockUI();
+
         // Log the error to the browser console (for debugging purposes).
         if (console) {
             console.log('An error has occurred on the signature browser component: ' + message, error);
         }
+
         // Show the message to the user. You might want to substitute the alert below with a more
         // user-friendly UI component to show the error.
         alert(message);
