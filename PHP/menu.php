@@ -39,6 +39,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="xml-element-signature.php">XML element signature</a></li>
                         <li><a href="xml-element-signature-server-key.php">XML element using a server key</a></li>
+                        <li><a href="cod-xml-signature.php">COD XML signature</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
