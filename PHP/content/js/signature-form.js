@@ -2,7 +2,7 @@
 // This file contains logic for calling the Web PKI component to perform a signature. It is only an
 // example, feel free to alter it to meet your application's needs.
 // -------------------------------------------------------------------------------------------------
-var signatureForm = (function() {
+var signatureForm = (function () {
 
     // Auxiliary global variable.
     var formElements = {};
@@ -25,7 +25,7 @@ var signatureForm = (function() {
             formElements.refreshButton.click(refresh);
 
             // Block the UI while we get things ready.
-            $.blockUI({ message: 'Initializing ...' });
+            $.blockUI({message: 'Initializing ...'});
 
             // Call the init() method on the LacunaWebPKI object, passing a callback for when the
             // component is ready to be used and another to be called when an error occurs on any
@@ -40,7 +40,7 @@ var signatureForm = (function() {
         } else if (formElements.stateField.val() === 'start') {
 
             // Block the UI while we get things ready.
-            $.blockUI({ message: 'Signing ...' });
+            $.blockUI({message: 'Signing ...'});
 
             // Call the init() method again to perform the signature.
             pki.init({
@@ -56,7 +56,7 @@ var signatureForm = (function() {
     // ---------------------------------------------------------------------------------------------
     function refresh() {
         // Block the UI while we load the certificates.
-        $.blockUI({ message: 'Refreshing ...' });
+        $.blockUI({message: 'Refreshing ...'});
         // Invoke the loading of the certificates.
         loadCertificates();
     }
@@ -91,13 +91,13 @@ var signatureForm = (function() {
 
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called when the user clicks the "Sign File" button.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function startSignature() {
 
         // Block the UI while we perform the signature.
-        $.blockUI({ message: 'Starting signature ...' });
+        $.blockUI({message: 'Starting signature ...'});
 
         // Get the thumbprint of the selected certificate.
         var selectedCertThumbprint = formElements.certificateSelect.val();
@@ -114,10 +114,10 @@ var signatureForm = (function() {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called when the page is rendered on the "start" state. This will happen after the
     // "start" step on server-side (see method init() above).
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function sign() {
 
         // Call signHash() on the Web PKI component passing the "to-sign-hash", the digest
@@ -136,9 +136,9 @@ var signatureForm = (function() {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called if an error occurs on the Web PKI component.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function onWebPkiError(message, error, origin) {
 
         // Unblock the UI.

@@ -55,8 +55,7 @@ $signature = $sigExplorer->open();
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="<?= $headingId ?>">
                     <h4 class="panel-title">
-                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-                           href="#<?= $collapseId ?>" aria-expanded="true" aria-controls="<?= $collapseId ?>">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#<?= $collapseId ?>" aria-expanded="true" aria-controls="<?= $collapseId ?>">
                             <?= $signer->certificate->subjectName->commonName ?>
                             <?php if ($signer->validationResults != null) { ?>
                                 <text>-</text>
@@ -69,37 +68,32 @@ $signature = $sigExplorer->open();
                         </a>
                     </h4>
                 </div>
-                <div id="<?= $collapseId ?>" class="panel-collapse collapse" role="tabpanel"
-                     aria-labelledby="<?= $headingId ?>">
+                <div id="<?= $collapseId ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<?= $headingId ?>">
                     <div class="panel-body">
                         <p>Signing time: <?= date("d/m/Y H:i", strtotime($signer->signingTime)) ?></p>
 
-                        <p>Message
-                            digest: <?= $signer->messageDigest->algorithm . " " . $signer->messageDigest->hexValue ?></p>
+                        <p>Message digest: <?= $signer->messageDigest->algorithm . " " . $signer->messageDigest->hexValue ?></p>
                         <?php if ($signer->signaturePolicy != null) { ?>
                             <p>Signature policy: <?= $signer->signaturePolicy->oid ?></p>
                         <?php } ?>
                         <p>
                             Signer information:
-                        <ul>
-                            <li>Subject: <?= $signer->certificate->subjectName->commonName ?></li>
-                            <li>Email: <?= $signer->certificate->emailAddress ?></li>
-                            <li>
-                                ICP-Brasil fields
-                                <ul>
-                                    <li>Tipo de
-                                        certificado: <?= $signer->certificate->pkiBrazil->certificateType ?></li>
-                                    <li>CPF: <?= $signer->certificate->pkiBrazil->cpfFormatted ?></li>
-                                    <li>Responsavel: <?= $signer->certificate->pkiBrazil->responsavel ?></li>
-                                    <li>Empresa: <?= $signer->certificate->pkiBrazil->companyName ?></li>
-                                    <li>CNPJ: <?= $signer->certificate->pkiBrazil->cnpjFormatted ?></li>
-                                    <li>
-                                        RG: <?= $signer->certificate->pkiBrazil->rgNumero . " " . $signer->certificate->pkiBrazil->rgEmissor . " " . $signer->certificate->pkiBrazil->rgEmissorUF ?></li>
-                                    <li>
-                                        OAB: <?= $signer->certificate->pkiBrazil->oabNumero . " " . $signer->certificate->pkiBrazil->oabUF ?></li>
-                                </ul>
-                            </li>
-                        </ul>
+                            <ul>
+                                <li>Subject: <?= $signer->certificate->subjectName->commonName ?></li>
+                                <li>Email: <?= $signer->certificate->emailAddress ?></li>
+                                <li>
+                                    ICP-Brasil fields
+                                    <ul>
+                                        <li>Tipo de certificado: <?= $signer->certificate->pkiBrazil->certificateType ?></li>
+                                        <li>CPF: <?= $signer->certificate->pkiBrazil->cpfFormatted ?></li>
+                                        <li>Responsavel: <?= $signer->certificate->pkiBrazil->responsavel ?></li>
+                                        <li>Empresa: <?= $signer->certificate->pkiBrazil->companyName ?></li>
+                                        <li>CNPJ: <?= $signer->certificate->pkiBrazil->cnpjFormatted ?></li>
+                                        <li>RG: <?= $signer->certificate->pkiBrazil->rgNumero . " " . $signer->certificate->pkiBrazil->rgEmissor . " " . $signer->certificate->pkiBrazil->rgEmissorUF ?></li>
+                                        <li>OAB: <?= $signer->certificate->pkiBrazil->oabNumero . " " . $signer->certificate->pkiBrazil->oabUF ?></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </p>
                         <?php if ($signer->validationResults != null) { ?>
                             <p>Validation results:<br/>

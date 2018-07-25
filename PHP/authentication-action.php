@@ -1,6 +1,7 @@
 <?php
-/*
- * This file completes the authentication, which was initialized on authentication.php
+
+/**
+ * This file completes the authentication, which was initialized on authentication.php.
  */
 
 require __DIR__ . '/vendor/autoload.php';
@@ -28,8 +29,8 @@ $auth->setCertificateBase64($certContent);
 // Set the signature.
 $auth->setSignature($signature);
 
-// Complete the authentication. Receive as response a AuthCompleteResult instance containing the following
-// fields:
+// Complete the authentication. Receive as response a AuthCompleteResult instance containing the
+// following fields:
 // - The certificate information;
 // - The validation results;
 $result = $auth->complete();
@@ -40,34 +41,39 @@ if (!$vr->isValid()) {
 
     // If the authentication was not successful, we render a page showing that what went wrong.
 
-    // The __toString() method of the ValidationResults object can be used to obtain the checks performed, but
-    // the string contains tabs and new line characters for formatting, which we'll convert the <br>'s and
-    // &nbsp;'s.
+    // The __toString() method of the ValidationResults object can be used to obtain the checks
+    // performed, but the string contains tabs and new line characters for formatting, which we'll
+    // convert the <br>'s and &nbsp;'s.
     $vrHtml = $vr;
     $vrHtml = str_replace("\n", '<br/>', $vrHtml);
     $vrHtml = str_replace("\t", '&nbsp;&nbsp;&nbsp;&nbsp;', $vrHtml);
 
 } else {
 
-    // If the authentication was successful, we render a page showing the signed in certificate on the page.
+    // If the authentication was successful, we render a page showing the signed in certificate on
+    // the page.
     $userCert = $result->certificate;
 
 }
 
-?><!DOCTYPE html>
+?>
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>Authentication</title>
-    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
+    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component). ?>
 </head>
 
 <body>
 
-<?php include 'menu.php' // The top menu, this can be removed entirely ?>
+<?php include 'menu.php' // The top menu, this can be removed entirely. ?>
 
 <div class="container">
 
-    <?php // We'll render different contents depending on whether the authentication succeeded or not. ?>
+    <?php
+    // We'll render different contents depending on whether the authentication succeeded or not.
+    ?>
     <?php if ($vr->isValid()) { ?>
 
         <h2>Authentication successful</h2>
@@ -85,8 +91,8 @@ if (!$vr->isValid()) {
                     <li>Responsavel: <?= $userCert->pkiBrazil->responsavel ?></li>
                     <li>Empresa: <?= $userCert->pkiBrazil->companyName ?></li>
                     <li>CNPJ: <?= $userCert->pkiBrazil->cnpj ?></li>
-                    <li>RG: <?= $userCert->pkiBrazil->rgNumero." ".$userCert->pkiBrazil->rgEmissor." ".$userCert->pkiBrazil->rgEmissorUF ?></li>
-                    <li>OAB: <?= $userCert->pkiBrazil->oabNumero." ".$userCert->pkiBrazil->oabUF ?></li>
+                    <li> RG: <?= $userCert->pkiBrazil->rgNumero . " " . $userCert->pkiBrazil->rgEmissor . " " . $userCert->pkiBrazil->rgEmissorUF ?></li>
+                    <li> OAB: <?= $userCert->pkiBrazil->oabNumero . " " . $userCert->pkiBrazil->oabUF ?></li>
                 </ul>
             </li>
         </ul>

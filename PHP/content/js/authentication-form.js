@@ -23,7 +23,7 @@ var authenticationForm = (function () {
         formElements.refreshButton.click(refresh);
 
         // Block the UI while we get things ready.
-        $.blockUI({ message: 'Initializing ...' });
+        $.blockUI({message: 'Initializing ...'});
 
         // Call the init() method on the LacunaWebPKI object, passing a callback for when the
         // component is ready to be used and another to be called when an error occurs on any of
@@ -53,7 +53,8 @@ var authenticationForm = (function () {
     function loadCertificates() {
 
         // Call the listCertificates() method to list the user's certificates. For more information
-        // see: http://webpki.lacunasoftware.com/Help/classes/LacunaWebPKI.html#method_listCertificates
+        // see:
+        // http://webpki.lacunasoftware.com/Help/classes/LacunaWebPKI.html#method_listCertificates
         pki.listCertificates({
 
             // The ID of the <select> element to be populated with the certificates.
@@ -77,13 +78,13 @@ var authenticationForm = (function () {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called when the user clicks the "Sign In" button.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function signIn() {
 
         // Block the UI while we perform the signature.
-        $.blockUI({ message: 'Signing In ...' });
+        $.blockUI({message: 'Signing In ...'});
 
         // Get the thumbprint of the selected certificate.
         var selectedCertThumbprint = formElements.certificateSelect.val();
@@ -111,9 +112,9 @@ var authenticationForm = (function () {
         });
     }
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     // Function called if an error occurs on the Web PKI component.
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     function onWebPkiError(message, error, origin) {
 
         // Unblock the UI.

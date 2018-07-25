@@ -6,21 +6,23 @@ use Lacuna\PkiExpress\TimestampAuthority;
 
 function setPkiDefaults(&$operator)
 {
-    // If you want the operator to trust in a custom trusted root, you need to inform to the operator class. You can
-    // trust on more than one roots by uncommenting the following lines:
+    // If you want the operator to trust in a custom trusted root, you need to inform to the
+    // operator class. You can trust on more than one roots by uncommenting the following lines:
     //$operator->addTrustedRoot($path1);
     //$operator->addTrustedRoot($path2);
     //$operator->addTrustedRoot($path3);
 
-    // If you want the operator to trust on Lacuna Test Root (default: false), uncomment the following line:
+    // If you want the operator to trust on Lacuna Test Root (default: false), uncomment the
+    // following line:
     //$operator->trustLacunaTestRoot = true;
 
-    // If you want the operator to perform its action on "OFFLINE MODE" (default: false), uncomment the following
-    // line:
+    // If you want the operator to perform its action on "OFFLINE MODE" (default: false), uncomment
+    // the following line:
     //$operator->offline = true;
 
-    // If you want to perform a signature with timestamp, set the timestamp authority. You can use REST PKI to do this
-    // (acquire access token on https://pki.rest), by uncommenting the following lines:
+    // If you want to perform a signature with timestamp, set the timestamp authority. You can use
+    // REST PKI to do this (acquire access token on https://pki.rest), by uncommenting the following
+    // lines:
     //$tsa = new TimestampAuthority('https://pki.rest/tsp/a402df41-8559-47b2-a05c-be555bf66310');
     //$tsa->setOAuthTokenAuthentication('SET YOU ACCESS TOKEN HERE');
     //$operator->timestampAuthority = $tsa;
@@ -109,12 +111,13 @@ function generateVerificationCode()
      * Configuration of the code generation
      * ------------------------------------
      *
-     * - CodeSize   : size of the code in characters
+     * - CodeSize   : Size of the code in characters;
      *
      * Entropy
      * -------
      *
-     * The resulting entropy of the code in bits is the size of the code times 4. Here are some suggestions:
+     * The resulting entropy of the code in bits is the size of the code times 4. Here are some
+     * suggestions:
      *
      * - 12 characters = 48 bits
      * - 16 characters = 64 bits
@@ -123,7 +126,7 @@ function generateVerificationCode()
      */
     $codeSize = 16;
 
-    // Generate the entropy with PHP's pseudo-random bytes generator function
+    // Generate the entropy with PHP's pseudo-random bytes generator function.
     $numBytes = floor($codeSize / 2);
     $randInt = openssl_random_pseudo_bytes($numBytes);
 

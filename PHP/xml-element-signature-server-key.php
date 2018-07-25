@@ -12,8 +12,8 @@ use Lacuna\PkiExpress\StandardSignaturePolicies;
 
 try {
 
-    // Get an instance of the XmlSigner class, responsible for receiving the signature elements and performing the local
-    // signature.
+    // Get an instance of the XmlSigner class, responsible for receiving the signature elements and
+    // performing the local signature.
     $signer = new XmlSigner();
 
     // Set PKI default options (see Util.php).
@@ -43,7 +43,7 @@ try {
 
 } catch (Exception $e) {
 
-    // Get exception message to be rendered on signature page
+    // Get exception message to be rendered on signature page.
     $errorMessage = $e->getMessage();
 }
 
@@ -51,17 +51,20 @@ try {
 <html>
 <head>
     <title>XML signature</title>
-    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component) ?>
+    <?php include 'includes.php' // jQuery and other libs (used only to provide a better user experience, but NOT required to use the Web PKI component). ?>
 </head>
 <body>
-<?php include 'menu.php' // The top menu, this can be removed entirely ?>
+<?php include 'menu.php' // The top menu, this can be removed entirely. ?>
 
 
 <div class="container">
 
     <?php if (!isset($errorMessage)) { ?>
 
-        <?php // If no errors have occurred, this page is shown for the user, with the link to the signed file. ?>
+        <?php
+        // If no errors have occurred, this page is shown for the user, with the link to the signed
+        // file.
+        ?>
         <h2>XML element signature with a server key</h2>
 
         <p>File signed successfully!</p>
@@ -72,8 +75,8 @@ try {
     <?php } else { ?>
 
         <?php
-        // If some error occurred, the error message is show with a "Try Again" button to return to the upload.php
-        // page.
+        // If some error occurred, the error message is show with a "Try Again" button to return to
+        // the upload.php page.
         ?>
         <div class="alert alert-danger" role="alert" style="margin-top: 2%;">
             <label for="errorMsg">Signature Failed</label><br/>

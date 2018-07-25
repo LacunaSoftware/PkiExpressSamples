@@ -5,7 +5,7 @@ function getVisualRepresentation($sampleNumber)
 
     switch ($sampleNumber) {
         case 1:
-            // Example #1: visual representation equivalent to content/vr.json
+            // Example #1: visual representation equivalent to content/vr.json.
             return array(
                 'text' => array(
                     'fontSize' => 13.0,

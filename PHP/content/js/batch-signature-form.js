@@ -78,7 +78,7 @@ var batchSignatureForm = (function () {
         formElements.refreshButton.click(refresh);
 
         // Block the UI while we get things ready.
-        $.blockUI({ message: 'Initializing ...' });
+        $.blockUI({message: 'Initializing ...'});
 
         // Render documents to be signed.
         for (var i = 0; i < formElements.batchDocIds.length; i++) {
@@ -192,7 +192,7 @@ var batchSignatureForm = (function () {
 
         // Add all documents to the first ("start") queue.
         for (var i = 0; i < formElements.batchDocIds.length; i++) {
-            startQueue.add({ index: i, docId: formElements.batchDocIds[i] });
+            startQueue.add({index: i, docId: formElements.batchDocIds[i]});
         }
 
         /*
@@ -204,9 +204,9 @@ var batchSignatureForm = (function () {
                 XXXXXXX      ->  (startSignature)  ->             XX  ->  (performSignature)  ->            XXX  ->  (completeSignature)
                 -------------       2 threads            -------------        2 threads             -------------           2 threads
          */
-        startQueue.process(startSignature, { threads: 2, output: performQueue });
-        performQueue.process(performSignature, { threads: 2, output: completeQueue });
-        completeQueue.process(completeSignature, { threads: 2, completed: onBatchCompleted });
+        startQueue.process(startSignature, {threads: 2, output: performQueue});
+        performQueue.process(performSignature, {threads: 2, output: completeQueue});
+        completeQueue.process(completeSignature, {threads: 2, completed: onBatchCompleted});
         // onBatchCompleted is a callback for when the last queue is completely processed.
 
         // Notice: the thread count on each call above is already optimized, increasing the number
