@@ -69,7 +69,7 @@ var signatureCompleteForm = (function () {
 		alert(message);
 
 		// Render the "Try again" button.
-		window.location = window.location;
+		formElements.tryAgainButton.show();
 	}
 
 	return {

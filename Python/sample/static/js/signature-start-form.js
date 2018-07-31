@@ -118,8 +118,7 @@ var signatureStartForm = (function () {
 		// user-friendly UI component to show the error.
 		alert(message);
 
-		// Redirect to the same page discarding POST params.
-		window.location = window.location;
+
 	}
 
 	return {

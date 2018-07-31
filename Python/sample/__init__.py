@@ -13,6 +13,7 @@ if sys.version_info[0] < 3:
 
 def create_app(config_obj=None):
     app = Flask(__name__)
+    app.secret_key = 'some_secret'
     app.config.from_object(config_obj)
 
     # Folders location

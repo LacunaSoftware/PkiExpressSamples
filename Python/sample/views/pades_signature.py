@@ -10,9 +10,12 @@ import uuid
 from flask import render_template
 from flask import request
 from flask import current_app
+from flask import flash
+from flask import redirect
+from flask import url_for
 from flask import Blueprint
+from pkiexpress import standard_signature_policies
 from pkiexpress import PadesSignatureStarter
-from pkiexpress import StandardSignaturePolicies
 from pkiexpress import SignatureFinisher
 
 from sample.utils import create_app_data
@@ -38,7 +41,7 @@ def index(userfile=None):
             current_app.config['APPDATA_FOLDER'], userfile)):
         return render_template('error.html', msg='File not found')
 
-    return render_template('pades_signature/start.html',
+    return render_template('pades_signature/index.html',
                            userfile=userfile)
 
 
@@ -68,7 +71,7 @@ def start():
 
         # Set signature policy.
         signature_starter.signature_policy = \
-            StandardSignaturePolicies.PADES_BASIC_WITH_LTV
+            standard_signature_policies.PADES_BASIC_WITH_LTV
 
         # Set PDF to be signed
         if userfile:
@@ -99,7 +102,7 @@ def start():
 
         # Render the field from start() method as hidden field to be used on the
         # javascript or on the "complete" step.
-        return render_template('pades_signature/complete.html',
+        return render_template('pades_signature/start.html',
                                to_sign_hash=response['toSignHash'],
                                digest_algorithm=response['digestAlgorithm'],
                                transfer_file=response['transferFile'],
@@ -107,7 +110,8 @@ def start():
                                userfile=userfile)
 
     except Exception as e:
-        return render_template('error.html', msg=e)
+        flash(str(e))
+        return redirect(url_for('pades_signature.index', userfile=userfile))
 
 
 @blueprint.route('/complete', methods=['POST'])
@@ -162,4 +166,5 @@ def complete():
                                filename=filename)
 
     except Exception as e:
-        return render_template('error.html', msg=e)
+        flash(str(e))
+        return redirect(url_for('pades_signature.index', userfile=userfile))

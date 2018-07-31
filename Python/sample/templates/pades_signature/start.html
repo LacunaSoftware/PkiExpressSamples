@@ -5,49 +5,38 @@
 
 	<h2>PAdES Signature</h2>
 
-	<form id="signForm" action="/pades-signature/start" method="post">
+	{% with errors = get_flashed_messages() %}
+		{% if errors %}
+
+			<div class="alert alert-danger alert-dismissible" role="alert" style="margin-top: 2%;">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<label for="errorMsg">Signature Initialization Failed</label><br/>
+				<span id="errorMsg">{{ errors[0] }}</span>
+		  </div>
+
+		{% endif %}
+	{% endwith %}
+
+	<form id="signForm" action="/pades-signature/complete" method="post">
 
 		<!--
 			Hidden fields to be used to pass data from the action to the
-			"signature start form" javascript (see signature-start-form.js) and
+			"signature start form" javascript (see signature-complete-form.js) and
 			vice-versa.
 		 -->
+		<input type="hidden" id="certThumb" name="certThumbField" value="{{ cert_thumb }}">
+		<input type="hidden" id="transferFile" name="transferFileField" value="{{ transfer_file }}">
+		<input type="hidden" id="toSignHash" name="toSignHashField" value="{{ to_sign_hash }}">
+		<input type="hidden" id="digestAlgorithm" name="digestAlgorithmField" value="{{ digest_algorithm }}">
 		<input type="hidden" id="userfile" name="userfileField" value="{{ userfile }}">
-		<input type="hidden" id="certContent" name="certContentField">
-		<input type="hidden" id="certThumb" name="certThumbField">
+		<input type="hidden" id="signature" name="signatureField">
 
-		<div class="form-group">
-			<label>File to sign</label>
-			{% if userfile %}
-				<p>You are signing <a href='/files/{{userfile}}'>this document</a>.</p>
-			{% else %}
-				<p>You are signing <a href='/static/SampleDocument.pdf'>this sample document</a>.</p>
-			{% endif %}
-		</div>
-
-		<!--
-
-		Render a select (combo box) to list the user's certificates. For now it
-		will be empty, we'll populate it later on (see signature-start-form.js).
-
-		 -->
-		<div class="form-group">
-			<label for="certificateSelect">Choose a certificate</label>
-			<select id="certificateSelect" class="form-control"></select>
-		</div>
-		<!--
-
-		Action buttons. Notice that the "Sign" button is NOT a submit
-		buttom. When the user clicks the button, we must first use the Web PKI
-		component to perform the client-side computation necessary and only when
-		that computation is finished we'll submit the form programmatically
-		(see signature-start-form.js).
-
-		-->
-		<button id="signButton" type="button" class="btn btn-primary">Sign File</button>
-		<button id="refreshButton" type="button" class="btn btn-default">Refresh Certificates</button>
+		{% if userfile %}
+			<a id="tryAgainButton" class="btn btn-default" style="display: none;" href="/pades-signature/{{ userfile }}">Try Again</a>
+		{% else %}
+			<a id="tryAgainButton" class="btn btn-default" style="display: none;" href="/pades-signature">Try Again</a>
+		{% endif %}
 	</form>
-
 
 </div>
 
@@ -70,18 +59,18 @@ an example, feel free to alter it to meet your application's needs. You can also
 bring the code into the javascript block below if you prefer.
 
 -->
-<script src="{{ url_for('static', filename='js/signature-start-form.js') }}"></script>
+<script src="{{ url_for('static', filename='js/signature-complete-form.js') }}"></script>
 <script>
 	$(document).ready(function () {
 		// Once the page is ready, we call the init() function on the javascript
-		// code (see signature-start-form.js)
-		signatureStartForm.init({
-			form: $('#signForm'),                       // The form that should be submitted when the operation is complete.
-			certificateSelect: $('#certificateSelect'), // The <select> element (combo box) to list the certificates.
-			signButton: $('#signButton'),               // The button that initiates the operation.
-			refreshButton: $('#refreshButton'),         // The "refresh" button.
-			certThumbField: $('#certThumb'),            // The "certificate thumbprint" hidden field reference.
-			certContentField: $('#certContent')         // The "certificate content" hidden field reference.
+		// code (see signature-complete-form.js)
+		signatureCompleteForm.init({
+			form: $('#signForm'),                         // The form that should be submitted when the operation is complete.
+			certThumbField: $('#certThumb'),              // The "certificate thumbprint" hidden field reference.
+			toSignHashField: $('#toSignHash'),            // The "to sign hash" hidden field reference.
+			digestAlgorithmField: $('#digestAlgorithm'),  // The "digest algorithm" hidden field reference.
+			signatureField: $('#signature'),              // The "signature" hidden field reference.
+			tryAgainButton: $('#tryAgainButton')          // The "Try Again" button reference.
 		});
 	});
 </script>

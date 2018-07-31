@@ -10,7 +10,7 @@ from flask import render_template
 from flask import current_app
 from flask import make_response
 from flask import Blueprint
-from pkiexpress import StandardSignaturePolicies
+from pkiexpress import standard_signature_policies
 from pkiexpress import PadesSigner
 
 from sample.utils import set_pki_defaults
@@ -41,7 +41,8 @@ def index(userfile):
         set_pki_defaults(signer)
 
         # Set signature policy.
-        signer.signature_policy = StandardSignaturePolicies.PADES_BASIC_WITH_LTV
+        signer.signature_policy = \
+            standard_signature_policies.PADES_BASIC_WITH_LTV
 
         # Set PDF to be signed.
         signer.set_pdf_to_sign_from_path(os.path.join(
@@ -78,4 +79,4 @@ def index(userfile):
         return response
 
     except Exception as e:
-        return render_template('error.html', msg=e)
+        return render_template('pades_signature.html', msg=e)
