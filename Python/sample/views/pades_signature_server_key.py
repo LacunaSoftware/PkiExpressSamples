@@ -79,4 +79,4 @@ def index(userfile):
         return response
 
     except Exception as e:
-        return render_template('pades_signature.html', msg=e)
+        return render_template('error.html', msg=e)
