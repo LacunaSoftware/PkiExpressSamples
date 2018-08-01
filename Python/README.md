@@ -3,7 +3,7 @@ PKI Express Python Sample
 
 This folder contains a web application written in Python using the Flask framework, that shows how to use the
 [PKI Express](http://docs.lacunasoftware.com/en-us/articles/pki-express/). The sample application
-should work on Python versions 2.7 and 3.5.
+should work on Python.
 
 > To use PKI Express, you'll need a license file. Please [contact us](https://www.lacunasoftware.com/en/home/purchase)
 > to get a free trial license.
@@ -27,9 +27,6 @@ Optionally, you can create and activate a "virtualenv" to avoid mixing library v
 
     virtualenv <venv>
     source bin/activate (on Windows: ./<venv>/Scripts/activate)
-    pip install -r requirements.txt
-    python manage.py runserver
-    deactivate
 
 ## Documentation
 
