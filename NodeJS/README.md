@@ -23,4 +23,4 @@ To run the sample:
 
 ## Documentation
 
-https://docs.lacunasoftware.com/articles/pki-express/php/
+https://docs.lacunasoftware.com/articles/pki-express/nodejs/
