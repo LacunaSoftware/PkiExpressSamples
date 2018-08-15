@@ -1,0 +1,14 @@
+extends layout
+
+block content
+
+	h2 PAdES Signature
+	
+	p File signed successfully!
+
+	h3 Actions:
+	ul
+		li
+			a(href=`/app-data/${outputFile}`) Download the signed file
+		li
+			a(href=`/pades-signature?userfile=${outputFile}`) Co-sign with another Certificate

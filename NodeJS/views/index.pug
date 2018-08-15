@@ -1,0 +1,18 @@
+extends layout
+
+block content
+	h2 PKI Express Samples
+	p Choose one of the following:
+	ul
+		li PAdES signature
+			ul
+				li
+					a(href='/pades-signature') Create a signature with a file already on server
+				li 
+					a(href='/upload?goto=pades-signature') Create a signature with a file uploaded by user
+				li
+					a(href='/upload?goto=pades-signature-server-key') Create a signature using a server key
+		li Sign a batch of files
+			ul
+				li
+					a(href='batch-signature') Simple batch signature
