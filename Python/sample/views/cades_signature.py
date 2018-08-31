@@ -7,25 +7,23 @@ Web PKI.
 import os
 import uuid
 
-from flask import render_template
-from flask import request
+from flask import Blueprint
 from flask import current_app
+from flask import render_template
 from flask import flash
 from flask import redirect
 from flask import url_for
-from flask import Blueprint
-from pkiexpress import standard_signature_policies
-from pkiexpress import PadesSignatureStarter
+from flask import request
+from pkiexpress import CadesSignatureStarter
 from pkiexpress import SignatureFinisher
+from pkiexpress import standard_signature_policies
 
+from sample.utils import set_pki_defaults
 from sample.utils import create_app_data
 from sample.utils import get_sample_doc_path
-from sample.utils import set_pki_defaults
-from sample.utils import get_pdf_stamp_path
-from sample.utils_pades import get_visual_representation
 
-blueprint = Blueprint('pades_signature', __name__,
-                      url_prefix='/pades-signature')
+blueprint = Blueprint('cades_signature', __name__,
+                      url_prefix='/cades-signature')
 
 
 @blueprint.route('/')
@@ -41,7 +39,7 @@ def index(userfile=None):
             current_app.config['APPDATA_FOLDER'], userfile)):
         return render_template('error.html', msg='File not found')
 
-    return render_template('pades_signature/index.html',
+    return render_template('cades_signature/index.html',
                            userfile=userfile)
 
 
@@ -62,36 +60,30 @@ def start():
         if request.form['userfileField'] != 'None':
             userfile = request.form['userfileField']
 
-        # Get an instance of the PadesSignatureStarter class, responsible for
+        # Get an instance of the CadesSignatureStarter class, responsible for
         # receiving the signature elements and start the signature process.
-        signature_starter = PadesSignatureStarter()
+        signature_starter = CadesSignatureStarter()
 
         # Set PKI default options (see utils.py).
         set_pki_defaults(signature_starter)
 
         # Set signature policy.
         signature_starter.signature_policy = \
-            standard_signature_policies.PADES_BASIC_WITH_LTV
+            standard_signature_policies.PKI_BRAZIL_CADES_ADR_BASICA
 
-        # Set PDF to be signed
+        # Set file to be signed. If the file is a CMS, PKI Express will
+        # recognize that and will co-sign that file.
         if userfile:
-            signature_starter.set_pdf_to_sign_from_path(
+            signature_starter.set_file_to_sign_from_path(
                 os.path.join(current_app.config['APPDATA_FOLDER'], userfile))
         else:
-            signature_starter.set_pdf_to_sign_from_path(get_sample_doc_path())
+            signature_starter.set_file_to_sign_from_path(get_sample_doc_path())
 
         # Set Base64-encoded certificate's content to signature starter.
         signature_starter.set_certificate_from_base64(cert_content)
 
-        # Set a file reference for the stamp file. Note that this file can be
-        # referenced later by "fref://{alias}" at the "url" field on the visual
-        # representation (see static/vr.json or get_visual_representation()
-        # method).
-        signature_starter.add_file_reference('stamp', get_pdf_stamp_path())
-
-        # Set the visual representation. We provided a dictionary that
-        # represents the visual representation JSON model.
-        signature_starter.set_visual_representation(get_visual_representation())
+        # Set 'encapsulated content' option (default: True).
+        signature_starter.encapsulated_content = True
 
         # Start the signature process. Receive as response the following fields:
         # - to_sign_hash:     The hash to be signed.
@@ -100,9 +92,9 @@ def start():
         # - transfer_file:    A temporary file to be passed to "complete" step.
         response = signature_starter.start()
 
-        # Render the field from start() method as hidden field to be used on the
-        # javascript or on the "complete" step.
-        return render_template('pades_signature/start.html',
+        # Render the field from start() method as hidden fields to be used on
+        # the javascript or on the "complete" step.
+        return render_template('cades_signature/start.html',
                                to_sign_hash=response['toSignHash'],
                                digest_algorithm=response['digestAlgorithm'],
                                transfer_file=response['transferFile'],
@@ -111,7 +103,7 @@ def start():
 
     except Exception as e:
         flash(str(e))
-        return redirect(url_for('pades_signature.index', userfile=userfile))
+        return redirect(url_for('cades_signature.index', userfile=userfile))
 
 
 @blueprint.route('/complete', methods=['POST'])
@@ -139,7 +131,8 @@ def complete():
         # Set PKI default options (see utils.py).
         set_pki_defaults(signature_finisher)
 
-        # Set PDF to be signed. It's the same file we used on "start" method.
+        # Set the file to be signed. It's the same file we used on "start"
+        # method.
         if userfile:
             signature_finisher.set_file_to_sign_from_path(
                 os.path.join(current_app.config['APPDATA_FOLDER'], userfile))
@@ -154,16 +147,16 @@ def complete():
 
         # Generate path for output file and add to the signature finisher.
         create_app_data()  # Guarantees that "app data" folder exists.
-        filename = '%s.pdf' % (str(uuid.uuid4()))
+        filename = '%s.p7s' % (str(uuid.uuid4()))
         signature_finisher.output_file = \
             os.path.join(current_app.config['APPDATA_FOLDER'], filename)
 
         # Complete the signature process.
         signature_finisher.complete()
 
-        return render_template('pades_signature/signature-info.html',
+        return render_template('cades_signature/signature-info.html',
                                filename=filename)
 
     except Exception as e:
         flash(str(e))
-        return redirect(url_for('pades_signature.index', userfile=userfile))
+        return redirect(url_for('cades_signature.index', userfile=userfile))

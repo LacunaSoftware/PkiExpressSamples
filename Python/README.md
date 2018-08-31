@@ -1,5 +1,5 @@
 PKI Express Python Sample
-======================
+========================
 
 This folder contains a web application written in Python using the Flask framework, that shows how to use the
 [PKI Express](http://docs.lacunasoftware.com/en-us/articles/pki-express/). The sample application
