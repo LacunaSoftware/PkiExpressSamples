@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
 
-	<h2>PAdES Signature</h2>
+	<h2>CAdES Signature</h2>
 
 	{% with errors = get_flashed_messages() %}
 		{% if errors %}
@@ -17,7 +17,7 @@
 		{% endif %}
 	{% endwith %}
 
-	<form id="signForm" action="/pades-signature/start" method="post">
+	<form id="signForm" action="/cades-signature/start" method="post">
 
 		<!--
 			Hidden fields to be used to pass data from the action to the

@@ -37,7 +37,7 @@ def index(userfile):
         # the signature elements and performing the local signature.
         signer = PadesSigner()
 
-        # Set PKI default options. (see utils.py)
+        # Set PKI default options (see utils.py).
         set_pki_defaults(signer)
 
         # Set signature policy.
