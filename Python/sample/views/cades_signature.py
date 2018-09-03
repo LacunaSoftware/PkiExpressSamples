@@ -1,6 +1,6 @@
 """
 
-This sample performs a PAdES signature in three steps using PKI Express and
+This sample performs a CAdES signature in three steps using PKI Express and
 Web PKI.
 
 """
@@ -118,7 +118,7 @@ def complete():
     userfile = None
     try:
 
-        # Recover variables form the POST arguments to be used on this step.
+        # Recover variables from the POST arguments to be used on this step.
         transfer_file = request.form['transferFileField']
         signature = request.form['signatureField']
         if request.form['userfileField'] != 'None':

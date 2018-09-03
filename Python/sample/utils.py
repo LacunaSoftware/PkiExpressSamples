@@ -55,3 +55,6 @@ def get_pdf_stamp_path():
 
 def get_sample_doc_path():
     return os.path.join(current_app.static_folder, 'SampleDocument.pdf')
+
+def get_sample_batch_doc_path(file_id):
+    return '%s/%02d.pdf' % (current_app.static_folder, (int(file_id) % 10))
