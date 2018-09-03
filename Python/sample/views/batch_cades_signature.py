@@ -109,6 +109,9 @@ def complete():
     # the signature process.
     signature_finisher = SignatureFinisher()
 
+    # Set PKI default options (see utils.py).
+    set_pki_defaults(signature_finisher)
+
     # Set the file to be signed. It's the same file we use don "start" method.
     signature_finisher.set_file_to_sign_from_path(
         get_sample_batch_doc_path(file_id))
