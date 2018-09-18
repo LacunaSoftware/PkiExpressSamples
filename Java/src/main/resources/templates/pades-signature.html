@@ -7,112 +7,113 @@
 
 <div class="container">
 
-    <!--/*
-        This section will be only shown if some error has occurred in the last signature attempt. If the user start a
-        new signature, this error message is cleared.
-     */-->
-    <div th:if="${errorMessage} != null" class="alert alert-danger alert-dismissible" role="alert" style="margin-top: 2%;">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <label for="errorMsg"><span th:text="${errorTitle}"></span></label><br />
-        <span id="errorMsg" th:text="${errorMessage}"></span>
-    </div>
+	<!--/*
+		This section will be only shown if some error has occurred in the last signature attempt.
+		If the user start a new signature, this error message is cleared.
+	*/-->
+	<div th:if="${errorMessage} != null" class="alert alert-danger alert-dismissible" role="alert" style="margin-top: 2%;">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<label for="errorMsg"><span th:text="${errorTitle}"></span></label><br />
+		<span id="errorMsg" th:text="${errorMessage}"></span>
+	</div>
 
-    <h2>PAdES Signature</h2>
+	<h2>PAdES Signature</h2>
 
-    <div th:unless="${state} =='completed'">
+	<div th:unless="${state} =='completed'">
 
-        <!--
-            This form will be shown initially and when this page is rendered to perform the
-            signature using Web PKI component.
-        -->
-        <form id="signForm" method="POST">
+		<!--
+			This form will be shown initially and when this page is rendered to perform the
+			signature using Web PKI component.
+		-->
+		<form id="signForm" method="POST">
 
-            <!--
-                Hidden fields used to pass data from the server-side to the javascript
-                (see signature-form.js) and vice-versa.
-             -->
-            <input type="hidden" id="stateField" name="state" th:value="${state}" />
-            <input type="hidden" id="certThumbField" name="certThumb" th:value="${certThumb}" />
-            <input type="hidden" id="certContentField" name="certContent" th:value="${certContent}" />
-            <input type="hidden" id="toSignHashField" name="toSignHash" th:value="${toSignHash}" />
-            <input type="hidden" id="transferFileField" name="transferFile" th:value="${transferFile}" />
-            <input type="hidden" id="signatureField" name="signature" th:value="${signature}" />
-            <input type="hidden" id="digestAlgorithmField" name="digestAlgorithm" th:value="${digestAlgorithm}" />
-            <input type="hidden" id="fileToSignField" name="fileToSign" th:value="${fileToSign}" />
+			<!--
+				Hidden fields used to pass data from the server-side to the javascript
+				(see signature-form.js) and vice-versa.
+			 -->
+			<input type="hidden" id="stateField" name="state" th:value="${state}" />
+			<input type="hidden" id="certThumbField" name="certThumb" th:value="${certThumb}" />
+			<input type="hidden" id="certContentField" name="certContent" th:value="${certContent}" />
+			<input type="hidden" id="toSignHashField" name="toSignHash" th:value="${toSignHash}" />
+			<input type="hidden" id="transferFileField" name="transferFile" th:value="${transferFile}" />
+			<input type="hidden" id="signatureField" name="signature" th:value="${signature}" />
+			<input type="hidden" id="digestAlgorithmField" name="digestAlgorithm" th:value="${digestAlgorithm}" />
+			<input type="hidden" id="fileToSignField" name="fileToSign" th:value="${fileToSign}" />
 
-            <div class="form-group">
-                <label>File to sign</label>
-                <p th:if="${userfile} != null">You are signing <a th:href="'/files/' + ${userfile}">this document</a>.</p>
-                <p th:if="${userfile} == null">You are signing <a href="/SampleDocument.pdf">this sample document</a>.</p>
-            </div>
+			<div class="form-group">
+				<label>File to sign</label>
+				<p th:if="${userfile} != null">You are signing <a th:href="'/files/' + ${userfile}">this document</a>.</p>
+				<p th:if="${userfile} == null">You are signing <a href="/SampleDocument.pdf">this sample document</a>.</p>
+			</div>
 
-            <!--
-                Render a select (combo box) to list the user's certificates. For now it will be
-                empty, we'll populate it later on (see signature-form.js).
-            -->
-            <div class="form-group">
-                <label for="certificateSelect">Choose a certificate</label>
-                <select id="certificateSelect" class="form-control"></select>
-            </div>
+			<!--
+				Render a select (combo box) to list the user's certificates. For now it will be
+				empty, we'll populate it later on (see signature-form.js).
+			-->
+			<div class="form-group">
+				<label for="certificateSelect">Choose a certificate</label>
+				<select id="certificateSelect" class="form-control"></select>
+			</div>
 
-            <!--
-                Action buttons. Notice that the "Sign File" button is NOT a submit button. When the
-                user clicks the button, we must first use the Web PKI component to perform the
-                client-side computation necessary and only when that computation is finished we'll
-                submit the form programmatically (see signature-form.js).
-            -->
-            <button id="signButton" type="button" class="btn btn-primary">Sign File</button>
-            <button id="refreshButton" type="button" class="btn btn-default">Refresh Certificates</button>
+			<!--
+				Action buttons. Notice that the "Sign File" button is NOT a submit button. When the
+				user clicks the button, we must first use the Web PKI component to perform the
+				client-side computation necessary and only when that computation is finished we'll
+				submit the form programmatically (see signature-form.js).
+			-->
+			<button id="signButton" type="button" class="btn btn-primary">Sign File</button>
+			<button id="refreshButton" type="button" class="btn btn-default">Refresh Certificates</button>
 
-        </form>
+		</form>
 
-        <!--
-            The file below contains the JS lib for accessing the Web PKI component. For more
-            information, see: https://webpki.lacunasoftware.com/#/Documentation
-         -->
-        <script src="/js/lacuna-web-pki-2.9.0.js"></script>
+		<!--
+			The file below contains the JS lib for accessing the Web PKI component. For more
+			information, see: https://webpki.lacunasoftware.com/#/Documentation
+		 -->
+		<script src="/js/lacuna-web-pki-2.9.0.js"></script>
 
-        <!--
-            The file below contains the necessary calls to the Web PKI component. Once the
-            necessary computations have been done, the javascript code will submit our form.
-        -->
-        <script src="/js/signature-form.js"></script>
+		<!--
+			The file below contains the necessary calls to the Web PKI component. Once the
+			necessary computations have been done, the javascript code will submit our form.
+		-->
+		<script src="/js/signature-form.js"></script>
 
-        <script>
+		<script>
 
-            $(document).ready(function () {
-                // Once the page is ready, we call the init() function on the javascript code
-                // (see signature-form.js).
-                signatureForm.init({
-                    form: $('#signForm'),                             // The form that should be submitted when the operation is complete.
-                    certificateSelect: $('#certificateSelect'),       // The select element (combo box) to list the certificates.
-                    refreshButton: $('#refreshButton'),               // The "refresh" button.
-                    signButton: $('#signButton'),                     // The button that initiates the operation.
-                    stateField: $('#stateField'),                     // The field "state".
-                    certThumbField: $('#certThumbField'),             // The field "certThumb", storing the signer's certificate thumbprint.
-                    certContentField: $('#certContentField'),         // The field "certContent", storing the signer's certificate content.
-                    toSignHashField: $('#toSignHashField'),           // The field "toSignHash".
-                    digestAlgorithmField: $('#digestAlgorithmField'), // The field "digestAlgorithm".
-                    signatureField: $('#signatureField')              // The field "signature", computed by Web PKI component.
-                });
-            });
+			$(document).ready(function () {
+				// Once the page is ready, we call the init() function on the javascript code
+				// (see signature-form.js).
+				signatureForm.init({
+					form: $('#signForm'),                             // The form that should be submitted when the operation is complete.
+					certificateSelect: $('#certificateSelect'),       // The select element (combo box) to list the certificates.
+					refreshButton: $('#refreshButton'),               // The "refresh" button.
+					signButton: $('#signButton'),                     // The button that initiates the operation.
+					stateField: $('#stateField'),                     // The field "state".
+					certThumbField: $('#certThumbField'),             // The field "certThumb", storing the signer's certificate thumbprint.
+					certContentField: $('#certContentField'),         // The field "certContent", storing the signer's certificate content.
+					toSignHashField: $('#toSignHashField'),           // The field "toSignHash".
+					digestAlgorithmField: $('#digestAlgorithmField'), // The field "digestAlgorithm".
+					signatureField: $('#signatureField')              // The field "signature", computed by Web PKI component.
+				});
+			});
 
-        </script>
-    </div>
+		</script>
+	</div>
 
-    <div th:if="${state} == 'completed'">
+	<div th:if="${state} == 'completed'">
 
-        <!-- This page is shown when the signature is completed with signature. -->
-        <p>File signed sucessfully!</p>
+		<!-- This page is shown when the signature is completed with signature. -->
+		<p>File signed sucessfully!</p>
 
-        <h3>Actions:</h3>
-        <ul>
-            <li><a th:href="'/files/' + ${outputFile}">Download the signed file</a></li>
-            <li><a th:href="'/printer-friendly-version?fileId=' + ${outputFile}">Download a printer-friendly version of the signed file</a></li>
-            <li><a th:href="'/open-pades-signature?userfile=' + ${outputFile}">Open/validate the signed file</a></li>
-            <li><a th:href="'/pades-signature?userfile=' + ${outputFile}">Co-sign with another certificate</a></li>
-        </ul>
-    </div>
+		<h3>Actions:</h3>
+		<ul>
+			<li><a th:href="'/files/' + ${outputFile}">Download the signed file</a></li>
+			<li><a th:href="'/stamp-pdf?fileId=' + ${outputFile}">Download and add a timestamp to the signed file</a></li>
+			<li><a th:href="'/printer-friendly-version?fileId=' + ${outputFile}">Download a printer-friendly version of the signed file</a></li>
+			<li><a th:href="'/open-pades-signature?userfile=' + ${outputFile}">Open/validate the signed file</a></li>
+			<li><a th:href="'/pades-signature?userfile=' + ${outputFile}">Co-sign with another certificate</a></li>
+		</ul>
+	</div>
 
 </div>
 </body>
