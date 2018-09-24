@@ -32,7 +32,6 @@ public class StampPdfController {
 			response.setStatus(404);
 			return;
 		}
-		Path filePath = Application.getTempFolderPath().resolve(fileId);
 
 		// Get an instance of the PadesTimestamper class, used to timestamp a PDF file.
 		PadesTimestamper stamper = new PadesTimestamper();
@@ -41,7 +40,7 @@ public class StampPdfController {
 		Util.setPkiDefaults(stamper);
 
 		// Set the PDF to be timestamped.
-		stamper.setPdf(Application.getTempFolderPath().resolve(filePath));
+		stamper.setPdf(Application.getTempFolderPath().resolve(fileId));
 
 		// Generate path for output file and add the stamper.
 		String outputFile = UUID.randomUUID() + ".pdf";
