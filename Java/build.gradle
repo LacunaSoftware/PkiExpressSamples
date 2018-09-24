@@ -26,11 +26,7 @@ jar {
 }
 
 dependencies {
-	compile("com.lacunasoftware.pkiexpress:pki-express:1.6.0")
+	compile("com.lacunasoftware.pkiexpress:pki-express:1.7.0")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile("commons-io:commons-io:2.4")
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4.1'
 }

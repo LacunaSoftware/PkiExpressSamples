@@ -178,7 +178,7 @@ public class PadesSignatureController {
 
 				// Return to "initial" state rendering the error message.
 				model.addAttribute("errorMessage", ex.getMessage());
-				model.addAttribute("errorTitle", "Signature Initialization Failed");
+				model.addAttribute("errorTitle", "Signature Finalization Failed");
 				model.addAttribute("state", "initial");
 				model.addAttribute("fileToSign", fileToSign);
 			}
