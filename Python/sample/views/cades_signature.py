@@ -16,6 +16,7 @@ from flask import url_for
 from flask import request
 from pkiexpress import CadesSignatureStarter
 from pkiexpress import SignatureFinisher
+from pkiexpress import CertificateReader
 from pkiexpress import standard_signature_policies
 
 from sample.utils import set_pki_defaults
@@ -152,9 +153,10 @@ def complete():
             os.path.join(current_app.config['APPDATA_FOLDER'], filename)
 
         # Complete the signature process.
-        signature_finisher.complete()
+        signer_cert = signature_finisher.complete(get_cert=True)
 
         return render_template('cades_signature/signature-info.html',
+                               signer_cert=signer_cert,
                                filename=filename)
 
     except Exception as e:

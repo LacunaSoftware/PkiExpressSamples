@@ -12,6 +12,7 @@ from flask import make_response
 from flask import Blueprint
 from pkiexpress import standard_signature_policies
 from pkiexpress import PadesSigner
+from pkiexpress import CertificateReader
 
 from sample.utils import set_pki_defaults
 from sample.utils import get_pdf_stamp_path
@@ -71,10 +72,12 @@ def index(userfile):
                                           output_file)
 
         # Perform the signature.
-        signer.sign()
+        signer_cert = signer.sign(get_cert=True)
 
         response = make_response(render_template(
-            'pades_signature_server_key/index.html', filename=output_file))
+            'pades_signature_server_key/index.html',
+            signer_cert=signer_cert,
+            filename=output_file))
         response.headers = get_expired_page_headers()
         return response
 

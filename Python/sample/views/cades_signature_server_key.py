@@ -52,16 +52,18 @@ def index(userfile):
         signer.encapsulated_content = True
 
         # Generate path for output file and add to signer object.
-        create_app_data()  # Guarantees taht "app data" folder exists.
+        create_app_data()  # Guarantees that "app_data" folder exists.
         output_file = '%s.p7s' % (str(uuid.uuid4()))
         signer.output_file = os.path.join(current_app.config['APPDATA_FOLDER'],
                                           output_file)
 
         # Perform the signature.
-        signer.sign()
+        signer_cert = signer.sign(get_cert=True)
 
         response = make_response(render_template(
-            'cades_signature_server_key/index.html', filename=output_file))
+            'cades_signature_server_key/index.html',
+            signer_cert=signer_cert,
+            filename=output_file))
         response.headers = get_expired_page_headers()
         return response
 
