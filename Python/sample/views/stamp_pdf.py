@@ -37,8 +37,8 @@ def get(filename):
     # Generate path for output file and add to the stamper.
     create_app_data() # Guarantees that "app_data" folder exists.
     output_file = '%s.pdf' % str(uuid.uuid4())
-    stamper.output_file_path = os.path.join(current_app.config['APPDATA_FOLDER'],
-                                            output_file)
+    stamper.output_file_path = os.path.join(
+        current_app.config['APPDATA_FOLDER'], output_file)
 
     # Add a timestmap to the PDF file.
     stamper.stamp()

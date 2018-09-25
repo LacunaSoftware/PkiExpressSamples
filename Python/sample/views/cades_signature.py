@@ -16,7 +16,6 @@ from flask import url_for
 from flask import request
 from pkiexpress import CadesSignatureStarter
 from pkiexpress import SignatureFinisher
-from pkiexpress import CertificateReader
 from pkiexpress import standard_signature_policies
 
 from sample.utils import set_pki_defaults

@@ -12,7 +12,6 @@ from flask import make_response
 from flask import Blueprint
 from pkiexpress import standard_signature_policies
 from pkiexpress import PadesSigner
-from pkiexpress import CertificateReader
 
 from sample.utils import set_pki_defaults
 from sample.utils import get_pdf_stamp_path

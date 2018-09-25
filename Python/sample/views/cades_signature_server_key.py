@@ -6,11 +6,16 @@ This sample performs a local CAdES signature in one step usign PKI Express.
 import os
 import uuid
 
-from flask import Blueprint, render_template, current_app, make_response
-from pkiexpress import CadesSigner, standard_signature_policies
+from flask import Blueprint
+from flask import render_template
+from flask import current_app
+from flask import make_response
+from pkiexpress import CadesSigner
+from pkiexpress import standard_signature_policies
 
-from sample.utils import set_pki_defaults, create_app_data, \
-    get_expired_page_headers
+from sample.utils import set_pki_defaults
+from sample.utils import create_app_data
+from sample.utils import get_expired_page_headers
 
 blueprint = Blueprint('cades_signature_server_key', __name__,
                       url_prefix='/cades-signature-server-key')

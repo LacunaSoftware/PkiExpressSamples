@@ -17,7 +17,6 @@ from flask import Blueprint
 from pkiexpress import standard_signature_policies
 from pkiexpress import PadesSignatureStarter
 from pkiexpress import SignatureFinisher
-from pkiexpress import CertificateReader
 
 from sample.utils import create_app_data
 from sample.utils import get_sample_doc_path

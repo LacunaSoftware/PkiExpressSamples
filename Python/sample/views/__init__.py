@@ -21,5 +21,3 @@ blueprints = {
     stamp_pdf,
     upload,
 }
-
-
