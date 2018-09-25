@@ -159,9 +159,10 @@ def complete():
             os.path.join(current_app.config['APPDATA_FOLDER'], filename)
 
         # Complete the signature process.
-        signature_finisher.complete()
+        signer_cert = signature_finisher.complete(get_cert=True)
 
         return render_template('pades_signature/signature-info.html',
+                               signer_cert=signer_cert,
                                filename=filename)
 
     except Exception as e:
