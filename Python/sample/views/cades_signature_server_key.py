@@ -6,11 +6,16 @@ This sample performs a local CAdES signature in one step usign PKI Express.
 import os
 import uuid
 
-from flask import Blueprint, render_template, current_app, make_response
-from pkiexpress import CadesSigner, standard_signature_policies
+from flask import Blueprint
+from flask import render_template
+from flask import current_app
+from flask import make_response
+from pkiexpress import CadesSigner
+from pkiexpress import standard_signature_policies
 
-from sample.utils import set_pki_defaults, create_app_data, \
-    get_expired_page_headers
+from sample.utils import set_pki_defaults
+from sample.utils import create_app_data
+from sample.utils import get_expired_page_headers
 
 blueprint = Blueprint('cades_signature_server_key', __name__,
                       url_prefix='/cades-signature-server-key')
@@ -52,16 +57,18 @@ def index(userfile):
         signer.encapsulated_content = True
 
         # Generate path for output file and add to signer object.
-        create_app_data()  # Guarantees taht "app data" folder exists.
+        create_app_data()  # Guarantees that "app_data" folder exists.
         output_file = '%s.p7s' % (str(uuid.uuid4()))
         signer.output_file = os.path.join(current_app.config['APPDATA_FOLDER'],
                                           output_file)
 
         # Perform the signature.
-        signer.sign()
+        signer_cert = signer.sign(get_cert=True)
 
         response = make_response(render_template(
-            'cades_signature_server_key/index.html', filename=output_file))
+            'cades_signature_server_key/index.html',
+            signer_cert=signer_cert,
+            filename=output_file))
         response.headers = get_expired_page_headers()
         return response
 
