@@ -157,7 +157,7 @@ if ($state == 'start') {
     // The file below contains the JS lib for accessing the Web PKI component. For more information, see:
     // https://webpki.lacunasoftware.com/#/Documentation
     ?>
-    <script src="content/js/lacuna-web-pki-2.9.0.js"></script>
+    <script src="content/js/lacuna-web-pki-2.11.0.js"></script>
 
     <?php
     // The file below contains the logic for calling the Web PKI component. It is only an example, feel free to alter it
