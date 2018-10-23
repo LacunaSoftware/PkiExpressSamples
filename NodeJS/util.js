@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
 const { TimestampAuthority } = require('pki-express');
 
 let appRoot = process.cwd();
@@ -56,12 +58,128 @@ class Util {
 		return path.join(appRoot, 'public', `0${id % 10}.pdf`);
 	}
 
+	static getIcpBrasilLogoContent() {
+		let imagePath = path.join(appRoot, 'public', 'icp-brasil.png');
+		return fs.readFileSync(imagePath);
+	}
+
+	static getValidationResultIcon(isValid) {
+		let imagePath = path.join(appRoot, 'public', isValid ? 'ok.png' : 'not-ok.png');
+		return fs.readFileSync(imagePath);
+	}
+
 	static range(start, end) {
 		let array = [...new Array(end - start + 1).keys()];
 		for (let i = 0; i < array.length; i++) {
 			array[i] += start;
 		}
 		return array;
+	}
+
+	static joinStringPt(strings) {
+		let text = '';
+		let size = strings.length;
+		let index = 0;
+		for (let s of strings) {
+			if (index > 0) {
+				if (index < size - 1) {
+					text += ', ';
+				} else {
+					text += ' e ';
+				}
+			}
+			text += s;
+			++index;
+		}
+		return text;
+	}
+
+	static getDescription(cert) {
+		let text = '';
+		text += Util.getDisplayName(cert);
+		if (cert.pkiBrazil.cpf) {
+			text += ` (CPF ${cert.pkiBrazil.cpfFormatted})`;
+		}
+		if (cert.pkiBrazil.cnpj) {
+			text += `, empresa ${cert.pkiBrazil.companyName} (CNPJ ${cert.pkiBrazil.cnpjFormatted})`
+		}
+		return text;
+	}
+
+	static getDisplayName(cert) {
+		if (cert.pkiBrazil.responsavel) {
+			return cert.pkiBrazil.responsavel;
+		}
+		return cert.subjectName.commonName;
+	}
+
+	static generateVerificationCode() {
+		/*
+		 * ------------------------------------
+		 * Configuration of the code generation
+		 *
+		 * - CodeSize : size of the code in characters
+		 *
+		 * Entropy
+		 * -------
+		 *
+		 * The resulting entropy of the code in bits is the size of the code times
+		 * 5. Here are some suggestions:
+		 *
+		 * - 12 characters = 60 bits
+		 * - 16 characters = 80 bits
+		 * - 20 characters = 100 bits
+		 * - 25 characters = 125 bits
+		 */
+		const verificationCodeSize = 16;
+
+		// Generate the entropy with Node.js Crypto's cryptographically strong
+		// pseudo-random generation function.
+		let bytes = Buffer.alloc(Math.ceil(verificationCodeSize * 5 / 8));
+		crypto.randomFillSync(bytes);
+		return bytes.toString('hex').toUpperCase();
+	}
+
+	static formatVerificationCode(code) {
+		/*
+		 * ------------------------------------
+		 * Configuration of the code generation
+		 *
+		 * - CodeGroups : number of groups to separate the code (must be a proper
+		 *                divisor of the code size)
+		 *
+		 * Examples
+		 * --------
+		 *
+		 * - CodeSize = 12, CodeGroups = 3 : XXXX-XXXX-XXXX
+		 * - CodeSize = 12, CodeGroups = 4 : XXX-XXX-XXX-XXX
+		 * - CodeSize = 16, CodeGroups = 4 : XXXX-XXXX-XXXX-XXXX
+		 * - CodeSize = 20, CodeGroups = 4 : XXXXX-XXXXX-XXXXX-XXXXX
+		 * - CodeSize = 20, CodeGroups = 5 : XXXX-XXXX-XXXX-XXXX-XXXX
+		 * - CodeSize = 25, CodeGroups = 5 : XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+		 */
+		const verificationCodeGroups = 4;
+
+		// Return the code separated in groups.
+		let charPerGroup = (code.length - (code.length % verificationCodeGroups)) / verificationCodeGroups;
+		let text = '';
+		for (let i = 0; i < code.length; i++) {
+			if (i !== 0 && (i % charPerGroup) === 0) {
+				text += '-';
+			}
+			text += code[i];
+		}
+		return text;
+	}
+
+	static parseVerificationCode(code) {
+		let text = '';
+		for (let i = 0; i < code.length; i++) {
+			if (code[i] !== '-') {
+				text += code[i];
+			}
+		}
+		return text;
 	}
 }
 
