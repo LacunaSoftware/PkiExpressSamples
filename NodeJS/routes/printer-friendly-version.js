@@ -118,11 +118,10 @@ function generatePrinterFriendlyVersion(pdfPath, verificationCode) {
 		// Call the open() method, which returns the signature file's information.
 		sigExplorer.open().then((signature) => {
 
-			// 2. Create PDF with the verification information form uploaded
-			//    PDF.
+			// 2. Create PDF with the verification information from uploaded PDF.
 
-			// Get an instance of the PDF Marker class, used to apply marks on
-			// the PDF.
+			// Get an instance of the PDF Marker class, used to apply marks on the
+			// PDF.
 			let pdfMarker = new PdfMarker();
 			// Set PKI default options (see util.js).
 			Util.setPkiDefaults(pdfMarker);
@@ -143,7 +142,7 @@ function generatePrinterFriendlyVersion(pdfPath, verificationCode) {
 			let pdf = new PdfHelper();
 
 			// ICP-Brasil logo on bottom-right corner of every page (except on
-			// the page which will be created at the end of the document)
+			// the page which will be created at the end of the document).
 			pdfMarker.marks.push(
 				pdf.mark()
 					.onAllPages()
@@ -292,9 +291,10 @@ function generatePrinterFriendlyVersion(pdfPath, verificationCode) {
 			fs.readFile(path.join(appRoot, 'public', 'app-data', outputFile), (err, pfvContent) => {
 				if (err) {
 					reject(err);
-				} else {
-					resolve(pfvContent);
+					return;
 				}
+
+				resolve(pfvContent);
 			});
 
 		}).catch(err => reject(err));

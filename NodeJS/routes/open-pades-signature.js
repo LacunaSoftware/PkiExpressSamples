@@ -35,16 +35,14 @@ router.get('/', (req, res, next) => {
 	sigExplorer.setSignatureFileFromPathSync(path.join(appRoot, 'public', 'app-data', req.query['userfile']));
 
 	// Call the open() method, which returns the signature file's information.
-	sigExplorer.open()
-		.then(signature => {
+	sigExplorer.open().then(signature => {
 
-			// Render the signature opening page.
-			res.render('open-pades-signature', {
-				signature: signature
-			});
+		// Render the signature opening page.
+		res.render('open-pades-signature', {
+			signature: signature
+		});
 
-		})
-		.catch(err => next(err));
+	}).catch(err => next(err));
 
 });
 

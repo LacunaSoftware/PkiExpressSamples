@@ -28,9 +28,7 @@ router.get('/', (req, res, next) => {
 		// Invalid code given!
 		// Small delay to slow down brute-force attacks (if you want to extra
 		// careful you might want to add a CAPTCHA to the process).
-		setTimeout(() => {
-			res.status(404).send();
-		}, 200);
+		setTimeout(() => res.status(404).send(), 200);
 		return;
 	}
 
@@ -45,17 +43,15 @@ router.get('/', (req, res, next) => {
 	// Set the PDF file to be inspected.
 	sigExplorer.setSignatureFileFromPathSync(path.join(appRoot, 'public', 'app-data', fileId));
 	// Call the open() method, which returns the signature file's information.
-	sigExplorer.open()
-		.then(signature => {
+	sigExplorer.open().then(signature => {
 
-			// Render the signature opening page.
-			res.render('check', {
-				signature: signature,
-				fileId: fileId
-			});
+		// Render the signature opening page.
+		res.render('check', {
+			signature: signature,
+			fileId: fileId
+		});
 
-		})
-		.catch(err => next(err));
+	}).catch(err => next(err));
 
 });
 
