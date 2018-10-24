@@ -2,11 +2,15 @@ extends layout
 
 block content
 
-    h2 PAdES Signature with Server Key
+	h2 PAdES Signature with Server Key
 
-    p File signed successfully!
+	p File signed successfully!
 
-    h3 Actions:
-    ul
-        li
-            a(href=`/app-data/${outputFile}`) Download the signed file
+	h3 Actions:
+	ul
+		li
+			a(href=`/app-data/${outputFile}`) Download the signed file
+		li
+			a(href=`/printer-friendly-version?file=${outputFile}`, target='_blank') Download a printer-friendly version of the signed file
+		li
+			a(href=`/open-pades-signature?userfile=${outputFile}`) Open/validate the signed file
