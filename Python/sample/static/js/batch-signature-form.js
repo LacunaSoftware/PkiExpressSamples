@@ -65,7 +65,7 @@ var batchSignatureForm = (function () {
 	var formElements = null;
 
 	// Create an instance of the LacunaWebPKI object.
-	var pki = new LacunaWebPKI();
+	var pki = new LacunaWebPKI(_webPkiLicense);
 
 	// -------------------------------------------------------------------------------------------------------
 	// Function called once the page is loaded.
