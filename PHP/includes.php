@@ -11,6 +11,7 @@ $config = getConfig();
 <script src="content/js/jquery-1.11.3.js"></script>
 <script src="content/js/jquery.blockUI.js"></script>
 <script src="content/js/bootstrap.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <script>
     var _webPkiLicense = '<?= $config['webPki']['license']; ?>';

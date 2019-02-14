@@ -12,6 +12,9 @@ var authenticationForm = (function () {
     // --------------------------------------------------------------------------------------------
     function init(fe) {
 
+        // blockUI mobile compatible
+        $.blockUI.defaults.bindEvents = false;
+
         // Receive form parameters received as arguments.
         formElements = fe;
 

@@ -77,6 +77,9 @@ var batchSignatureForm = (function () {
 
         formElements = fe;
 
+        // blockUI mobile compatible
+        $.blockUI.defaults.bindEvents = false;
+
         // Wireup of button clicks.
         formElements.signButton.click(sign);
         formElements.refreshButton.click(refresh);
