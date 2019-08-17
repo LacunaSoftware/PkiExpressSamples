@@ -67,7 +67,7 @@ public class SignaturePackageController {
         String verificationCode = StorageMock.getVerificationCode(session, fileId);
         if (verificationCode == null) {
             // If not, generate and register it.
-            verificationCode = Util.generateVerificationCode();
+            verificationCode = AlphaCode.generate();
             StorageMock.setVerificationCode(session, fileId, verificationCode);
         }
 
@@ -86,7 +86,7 @@ public class SignaturePackageController {
         // The verification code is generated without hyphens to save storage space and avoid
         // copy-and-paste problems. On the PDF generation, we use the "formatted" version, with
         // hyphen. (which will later be discarded on the verification page)
-        String formattedVerificationCode = Util.formatVerificationCode(verificationCode);
+        String formattedVerificationCode = AlphaCode.format(verificationCode);
 
         // Build the verification link from the constant "VerificationLinkFormat" (see above) and
         // the formatted verification code.

@@ -26,7 +26,7 @@ jar {
 }
 
 dependencies {
-	compile("com.lacunasoftware.pkiexpress:pki-express:1.8.0")
+	compile("com.lacunasoftware.pkiexpress:pki-express:1.10.1")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile("commons-io:commons-io:2.4")
 }

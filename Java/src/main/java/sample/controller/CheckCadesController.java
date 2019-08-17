@@ -2,6 +2,7 @@ package sample.controller;
 
 import com.lacunasoftware.pkiexpress.CadesSignature;
 import com.lacunasoftware.pkiexpress.CadesSignatureExplorer;
+import com.lacunasoftware.pkiexpress.AlphaCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,7 @@ public class CheckCadesController {
         // On PrinterFriendlyVersionController, we stored the unformatted version of the
         // verification code (without hyphens) but used the formatted version (with hyphens) on
         // the printer-friendly PDF. Now, we remove the hyphens before looking it up.
-        String verificationCode = Util.parseVerificationCode(code);
+        String verificationCode = AlphaCode.parse(code);
 
         // Get document associated with verification code and the extension of the signed file.
         String fileId = StorageMock.lookupVerificationCode(session, verificationCode);
