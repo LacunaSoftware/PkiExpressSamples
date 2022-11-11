@@ -67,6 +67,10 @@ public class Util {
 		return new ClassPathResource("/static/SampleDocument.pdf").getFile().toPath();
 	}
 
+	public static Path getSampleDocSignedPath() throws IOException {
+		return new ClassPathResource("/static/SampleDocument-Signed.pdf").getFile().toPath();
+	}
+
     public static byte[] getSampleNFe() throws IOException {
         Resource resource = new ClassPathResource("/static/SampleNFe.xml");
         InputStream fileStream = resource.getInputStream();

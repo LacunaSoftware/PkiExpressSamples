@@ -93,6 +93,9 @@ public class PadesSignatureController {
 				// Set PDF to be signed.
 				signatureStarter.setPdfToSign(fileToSign);
 
+
+				signatureStarter.setTrustLacunaTestRoot(true);
+
 				// Set Base64-encoded certificate's content to signature starter.
 				signatureStarter.setCertificateBase64(certContent);
 
@@ -151,6 +154,8 @@ public class PadesSignatureController {
 
 				// Set transfer file.
 				signatureFinisher.setTransferFilePath(transferFile);
+
+				signatureFinisher.setTrustLacunaTestRoot(true);
 
 				// Set the signature value.
 				signatureFinisher.setSignature(signature);

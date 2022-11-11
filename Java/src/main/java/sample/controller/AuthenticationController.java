@@ -76,6 +76,8 @@ public class AuthenticationController {
         // Set the Base64-encoded certificate content.
         auth.setCertificateBase64(certContent);
 
+        auth.setTrustLacunaTestRoot(true);
+
         // Set the signature.
         auth.setSignature(signature);
 
